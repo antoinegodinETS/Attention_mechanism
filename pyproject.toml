@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "attnvit"
+version = "0.1.0"
+description = "SYS819: full, shifted-window and axial attention in one ViT trained from scratch"
+readme = "README.md"
+requires-python = ">=3.11"
+# torch is deliberately not pinned to a CPU or CUDA build here.
+# Install the right wheel for the machine first (see README.md), then `pip install -e .[dev]`.
+dependencies = [
+    "torch>=2.5",
+    "torchvision",
+    "numpy",
+    "pillow",
+    "pyyaml",
+    "pandas",
+    "matplotlib",
+    "einops",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "timm"]
+data = ["imagehash"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

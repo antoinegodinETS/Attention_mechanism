@@ -218,3 +218,12 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# SYS819 project: large data, runs and weights stay out of git (and out of OneDrive).
+# Anchored to the repo root so src/attnvit/data/ is not ignored.
+/data/
+/runs/
+/checkpoints/
+*.pt
+*.npy
+.venv/
