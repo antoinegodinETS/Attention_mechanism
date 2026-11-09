@@ -23,6 +23,9 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 RUNS_ENV = "SYS819_RUNS"
 DEFAULT_RUNS_ROOT = "~/runs/sys819"
 TAG_RE = re.compile(r"^[A-Za-z0-9_.]+$")
+# Hyperparameter-search runs are tagged ``search`` or ``search.<anything>`` (e.g. ``search.t3``).
+# They select hyperparameters on the validation split and must never see the test split.
+SEARCH_TAG = "search"
 
 # Fields that do not change what a run computes; they may differ when a run is resumed.
 NON_SEMANTIC_KEYS = {"device", "eval_batch_size", "data.num_workers"}
@@ -102,6 +105,22 @@ class ExperimentConfig:
 
 class ConfigError(ValueError):
     pass
+
+
+class SearchTestSplitError(RuntimeError):
+    """A hyperparameter-search run tried to evaluate the test split."""
+
+
+def is_search_run(cfg: ExperimentConfig) -> bool:
+    """True for runs tagged ``search`` or ``search.<...>`` (hyperparameter search)."""
+    return cfg.tag == SEARCH_TAG or cfg.tag.startswith(SEARCH_TAG + ".")
+
+
+def check_test_allowed(cfg: ExperimentConfig) -> None:
+    """Raise :class:`SearchTestSplitError` if ``cfg`` is a search run (called before any test evaluation)."""
+    if is_search_run(cfg):
+        raise SearchTestSplitError(f"run tagged {cfg.tag!r} is a hyperparameter-search run: "
+                                   "it must not evaluate the test split")
 
 
 # -- dict <-> dataclass ---------------------------------------------------------------------
@@ -273,6 +292,13 @@ def validate(cfg: ExperimentConfig) -> None:
         errors.append("augment.label_smoothing must be in [0, 1)")
     if cfg.device not in ("auto", "cpu", "cuda") and not cfg.device.startswith("cuda:"):
         errors.append(f"device must be auto, cpu or cuda[:N], got {cfg.device!r}")
+    if is_search_run(cfg):
+        if cfg.eval_test:
+            errors.append(f"tag {cfg.tag!r} marks a search run, which must not set eval_test")
+        leaked = {d.train_split, d.val_split} & {d.test_split, "test"}
+        if leaked:
+            errors.append(f"tag {cfg.tag!r} marks a search run, which must not train or validate on "
+                          f"the test split ({', '.join(sorted(leaked))})")
     if errors:
         raise ConfigError("; ".join(errors))
 

@@ -50,6 +50,7 @@ from torch.utils.data import DataLoader, Dataset, Sampler
 from .config import (
     ConfigError,
     ExperimentConfig,
+    check_test_allowed,
     dump_yaml,
     load_config,
     run_id,
@@ -110,10 +111,13 @@ def load_datasets(cfg: ExperimentConfig, *, augment: bool = True) -> DataBundle:
         def make(split, transform=None):
             return get_dataset(d.name, d.res, split, transform=transform)
 
+    def load_test():
+        check_test_allowed(cfg)  # search runs never see the test split
+        return make(d.test_split)
+
     train = make(d.train_split, tf)
     val = make(d.val_split)
-    return DataBundle(train, val, len(train.classes), list(train.mean), list(train.std),
-                      lambda: make(d.test_split))
+    return DataBundle(train, val, len(train.classes), list(train.mean), list(train.std), load_test)
 
 
 class EpochSampler(Sampler[int]):
@@ -534,6 +538,7 @@ class Trainer:
 
         test_loss = test_acc = None
         if cfg.eval_test:
+            check_test_allowed(cfg)
             test_loss, test_acc = evaluate(model, eval_loader(data.load_test(), cfg, dev), normalize, dev,
                                            self.use_amp)
             self.log(f"test loss {test_loss:.4f} acc {test_acc:.4f}")

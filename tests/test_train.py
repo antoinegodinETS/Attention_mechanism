@@ -254,3 +254,37 @@ def test_unknown_dataset_is_reported_by_get_dataset(tiny_cfg):
     # The training loop reads real data through get_dataset; imagenette was dropped from it.
     with pytest.raises(ValueError, match="unknown dataset 'imagenette'"):
         load_datasets(tiny_cfg("data.name=imagenette"))
+
+
+# -- the test-split guard for hyperparameter-search runs ------------------------------------
+
+
+def test_search_runs_cannot_request_the_test_split(tiny_cfg):
+    from attnvit.config import is_search_run
+
+    assert is_search_run(tiny_cfg("tag=search.t3")) and is_search_run(tiny_cfg("tag=search"))
+    assert not is_search_run(tiny_cfg("tag=searching")) and not is_search_run(tiny_cfg("tag=final"))
+    with pytest.raises(ConfigError, match="must not set eval_test"):
+        tiny_cfg("tag=search.t0", "eval_test=true")
+    with pytest.raises(ConfigError, match="must not train or validate on the test split"):
+        tiny_cfg("tag=search.t0", "data.val_split=test")
+    tiny_cfg("tag=final", "eval_test=true")  # final runs may
+
+
+def test_search_guard_fires_even_if_validation_is_bypassed(tiny_cfg, tmp_path):
+    """A search config forced past validate() still cannot evaluate the test split."""
+    import dataclasses
+
+    from attnvit.config import SearchTestSplitError
+
+    ok = tiny_cfg("tag=final", "eval_test=true", "optim.epochs=1")
+    with pytest.raises(SearchTestSplitError):
+        load_datasets(dataclasses.replace(ok, tag="search.t0")).load_test()
+    bad = dataclasses.replace(ok, tag="search.t0")  # eval_test=true and a search tag
+    trainer = Trainer(bad, runs_root_dir=tmp_path, log=quiet)
+    with pytest.raises(SearchTestSplitError):
+        trainer.run()
+    assert not trainer.summary_path.exists()
+    # The same configuration under a final tag evaluates the test split normally.
+    trainer, status = train(ok, tmp_path)
+    assert status == "done" and read_json(trainer.summary_path)["test_acc"] is not None
