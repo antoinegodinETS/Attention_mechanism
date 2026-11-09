@@ -1,0 +1,352 @@
+"""Phase 5: random hyperparameter search on CIFAR-10 (45k/5k split, validation only).
+
+Eight trials per mechanism, 30 epochs each. Trial ``i`` has the same hyperparameters and the
+same training seed (``seed = i``) for every mechanism, so the three mechanisms get the same
+budget and see the same configurations. The space (project plan, "Phase 5"):
+
+- learning rate   log-uniform on [3e-4, 3e-3]
+- weight decay    log-uniform on [0.01, 0.1]
+- drop-path       uniform choice in {0, 0.05, 0.1}
+- warmup          uniform choice in {5, 10} epochs
+
+Everything else is ``configs/base.yaml`` (architecture, augmentation, batch 128, AdamW). With
+``optim.epochs=30`` the warmup and the cosine decay are defined over the trial's own 30 epochs.
+Search runs are tagged ``search.t<i>``; the training code refuses to evaluate the test split for
+them (``attnvit.config.check_test_allowed``) and ``collect`` checks that none did.
+
+Subcommands::
+
+    python scripts/hpsearch.py generate          # trial list + one queue file per mechanism
+    python scripts/hpsearch.py generate --check  # fail if the committed files differ
+    python scripts/hpsearch.py collect           # $SYS819_RUNS -> results/hpsearch_cifar10.csv
+    python scripts/hpsearch.py select            # the CSV -> configs/final/<mechanism>.yaml
+
+Values are drawn from ``random.Random(SEARCH_SEED)``, in trial order and in the order lr,
+weight decay, drop-path, warmup; continuous values are rounded to 3 significant digits.
+
+Selection: per mechanism, the trial with the highest validation accuracy at epoch 30 (the last
+epoch, not the best one, since the final runs do not stop early). Ties go to the higher best
+validation accuracy over the 30 epochs, then to the lower trial index.
+"""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import io
+import math
+import random
+import sys
+from pathlib import Path
+
+import yaml
+
+from attnvit.config import (
+    REPO_ROOT,
+    ConfigError,
+    is_search_run,
+    load_config,
+    run_id,
+    runs_root,
+    to_dict,
+)
+from attnvit.utils import read_json, read_jsonl
+
+SEARCH_SEED = 819
+N_TRIALS = 8
+MECHANISMS = ("full", "windows", "axial")
+SEARCH_EPOCHS = 30
+FINAL_EPOCHS = 100
+BASE_CONFIG = "configs/base.yaml"
+LR_RANGE = (3e-4, 3e-3)
+WD_RANGE = (0.01, 0.1)
+DROP_PATH_CHOICES = (0.0, 0.05, 0.1)
+WARMUP_CHOICES = (5, 10)
+
+# Hyperparameter name -> config key.
+HP_KEYS = {
+    "lr": "optim.lr",
+    "weight_decay": "optim.weight_decay",
+    "drop_path": "model.drop_path",
+    "warmup_epochs": "optim.warmup_epochs",
+}
+
+TRIALS_FILE = REPO_ROOT / "configs" / "search" / "cifar10_trials.csv"
+QUEUE_DIR = REPO_ROOT / "configs" / "queue"
+RESULTS_FILE = REPO_ROOT / "results" / "hpsearch_cifar10.csv"
+FINAL_DIR = REPO_ROOT / "configs" / "final"
+
+RESULT_COLUMNS = [
+    "trial", "mechanism", "seed", "lr", "weight_decay", "drop_path", "warmup_epochs", "run_id", "status",
+    "epochs", "val_acc_epoch30", "best_val_acc", "best_epoch", "train_time_s", "compute_time_s",
+    "wall_time_s", "gpu",
+]
+
+
+# -- generate -------------------------------------------------------------------------------
+
+
+def _round3(x: float) -> float:
+    return float(f"{x:.3g}")
+
+
+def _log_uniform(rng: random.Random, lo: float, hi: float) -> float:
+    return _round3(math.exp(math.log(lo) + rng.random() * (math.log(hi) - math.log(lo))))
+
+
+def _choice(rng: random.Random, options):
+    return options[int(rng.random() * len(options))]
+
+
+def sample_trials(n: int = N_TRIALS, seed: int = SEARCH_SEED) -> list[dict]:
+    """``n`` trial dicts (trial, seed and the four hyperparameters), deterministic in ``seed``."""
+    rng = random.Random(seed)
+    trials = []
+    for i in range(n):
+        trials.append({
+            "trial": i,
+            "seed": i,
+            "lr": _log_uniform(rng, *LR_RANGE),
+            "weight_decay": _log_uniform(rng, *WD_RANGE),
+            "drop_path": _choice(rng, DROP_PATH_CHOICES),
+            "warmup_epochs": _choice(rng, WARMUP_CHOICES),
+        })
+    return trials
+
+
+def trial_tag(trial: int) -> str:
+    return f"search.t{trial}"
+
+
+def trial_overrides(trial: dict, mechanism: str) -> list[str]:
+    """The key=value overrides of ``configs/base.yaml`` for one trial of one mechanism."""
+    return [f"tag={trial_tag(trial['trial'])}", f"seed={trial['seed']}", f"model.mechanism={mechanism}",
+            f"optim.epochs={SEARCH_EPOCHS}"] + [f"{HP_KEYS[k]}={trial[k]}" for k in HP_KEYS]
+
+
+def queue_path(mechanism: str, queue_dir: Path = QUEUE_DIR) -> Path:
+    return Path(queue_dir) / f"phase5_hpsearch_{mechanism}.txt"
+
+
+def render_trials_csv(trials: list[dict]) -> str:
+    buf = io.StringIO()
+    w = csv.DictWriter(buf, fieldnames=["trial", "seed", *HP_KEYS], lineterminator="\n")
+    w.writeheader()
+    w.writerows(trials)
+    return buf.getvalue()
+
+
+def render_queue(trials: list[dict], mechanism: str) -> str:
+    lines = [
+        f"# Phase 5: random hyperparameter search on CIFAR-10, mechanism {mechanism}.",
+        f"# Generated by `python scripts/hpsearch.py generate` (search seed {SEARCH_SEED}); do not edit by hand.",
+        f"# {len(trials)} trials x {SEARCH_EPOCHS} epochs on the 45k/5k split; trial i is identical for every",
+        "# mechanism (configs/search/cifar10_trials.csv). Validation only: search.* runs never see the test split.",
+        f"#     python -m attnvit.queue {queue_path(mechanism).relative_to(REPO_ROOT).as_posix()}",
+        "# On Rorqual: scripts/rorqual/hpsearch.sbatch (one job per mechanism).",
+        "",
+    ]
+    for t in trials:
+        lines.append(" ".join([BASE_CONFIG, *trial_overrides(t, mechanism)]))
+    return "\n".join(lines) + "\n"
+
+
+def generated_files(trials_file: Path = TRIALS_FILE, queue_dir: Path = QUEUE_DIR) -> dict[Path, str]:
+    trials = sample_trials()
+    files = {Path(trials_file): render_trials_csv(trials)}
+    for m in MECHANISMS:
+        files[queue_path(m, queue_dir)] = render_queue(trials, m)
+    return files
+
+
+def cmd_generate(args) -> int:
+    files = generated_files(args.trials_file, args.queue_dir)
+    if args.check:
+        stale = [p for p, text in files.items() if not p.exists() or p.read_text(encoding="utf-8") != text]
+        for p in stale:
+            print(f"out of date: {p}")
+        return 1 if stale else 0
+    for p, text in files.items():
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(text, encoding="utf-8")
+        print(f"wrote {p}")
+    return 0
+
+
+def read_trials(path: Path = TRIALS_FILE) -> list[dict]:
+    with open(path, encoding="utf-8") as f:
+        rows = list(csv.DictReader(f))
+    return [{"trial": int(r["trial"]), "seed": int(r["seed"]), "lr": float(r["lr"]),
+             "weight_decay": float(r["weight_decay"]), "drop_path": float(r["drop_path"]),
+             "warmup_epochs": int(r["warmup_epochs"])} for r in rows]
+
+
+# -- collect --------------------------------------------------------------------------------
+
+
+def trial_config(trial: dict, mechanism: str):
+    cfg = load_config(REPO_ROOT / BASE_CONFIG, trial_overrides(trial, mechanism))
+    assert is_search_run(cfg) and not cfg.eval_test
+    return cfg
+
+
+def _get(d: dict, dotted: str):
+    for k in dotted.split("."):
+        d = d[k]
+    return d
+
+
+def collect_row(trial: dict, mechanism: str, root: Path) -> dict:
+    """One CSV row for one trial; raises if the run's files contradict the trial."""
+    cfg = trial_config(trial, mechanism)
+    rid = run_id(cfg)
+    run_dir = root / rid
+    row = {k: trial[k] for k in ("trial", "seed", *HP_KEYS)}
+    row.update(mechanism=mechanism, run_id=rid)
+    cfg_file = run_dir / "config.yaml"
+    if cfg_file.exists():
+        with open(cfg_file, encoding="utf-8") as f:
+            saved = yaml.safe_load(f)
+        expected = to_dict(cfg)
+        for key in [*HP_KEYS.values(), "optim.epochs", "seed", "model.mechanism", "eval_test"]:
+            if _get(saved, key) != _get(expected, key):
+                raise ValueError(f"{cfg_file}: {key} is {_get(saved, key)!r}, trial {trial['trial']} "
+                                 f"expects {_get(expected, key)!r}")
+    summary_file = run_dir / "summary.json"
+    if not summary_file.exists():
+        row["status"] = "partial" if (run_dir / "metrics.jsonl").exists() else "missing"
+        return row
+    s = read_json(summary_file)
+    if s.get("test_acc") is not None or s.get("test_loss") is not None:
+        raise ValueError(f"{summary_file}: search run {rid} evaluated the test split")
+    epochs = {r["epoch"]: r for r in read_jsonl(run_dir / "metrics.jsonl")}
+    if s["epochs"] != SEARCH_EPOCHS or SEARCH_EPOCHS not in epochs:
+        raise ValueError(f"{run_dir}: expected {SEARCH_EPOCHS} epochs, summary says {s['epochs']}")
+    row.update(
+        status="done",
+        epochs=s["epochs"],
+        val_acc_epoch30=epochs[SEARCH_EPOCHS]["val_acc"],
+        best_val_acc=s["best_val_acc"],
+        best_epoch=s["best_epoch"],
+        train_time_s=round(s["train_time_s"], 1),
+        compute_time_s=round(s["compute_time_s"], 1),
+        wall_time_s=round(s["wall_time_s"], 1),
+        gpu=s.get("gpu") or "",
+    )
+    return row
+
+
+def collect(trials: list[dict], root: Path) -> list[dict]:
+    return [collect_row(t, m, root) for m in MECHANISMS for t in trials]
+
+
+def write_results(rows: list[dict], path: Path) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with open(path, "w", encoding="utf-8", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=RESULT_COLUMNS, lineterminator="\n")
+        w.writeheader()
+        for r in rows:
+            w.writerow({k: r.get(k, "") for k in RESULT_COLUMNS})
+
+
+def read_results(path: Path) -> list[dict]:
+    with open(path, encoding="utf-8") as f:
+        return list(csv.DictReader(f))
+
+
+def cmd_collect(args) -> int:
+    root = runs_root(args.runs_root)
+    rows = collect(read_trials(args.trials_file), root)
+    write_results(rows, args.out)
+    done = sum(r["status"] == "done" for r in rows)
+    print(f"runs root {root}")
+    for r in rows:
+        acc = f"val@{SEARCH_EPOCHS} {float(r['val_acc_epoch30']):.4f}" if r["status"] == "done" else ""
+        print(f"{r['status']:8s} {r['run_id']}  {acc}".rstrip())
+    print(f"wrote {args.out}: {done}/{len(rows)} trials done")
+    return 0 if done == len(rows) else 1
+
+
+# -- select ---------------------------------------------------------------------------------
+
+
+def select_best(rows: list[dict]) -> dict[str, dict]:
+    """Per mechanism, the row with the highest val accuracy at epoch 30.
+
+    Ties: higher best val accuracy, then lower trial index. Every trial must be done.
+    """
+    chosen = {}
+    for m in MECHANISMS:
+        mine = [r for r in rows if r["mechanism"] == m]
+        if len(mine) != N_TRIALS or any(r["status"] != "done" for r in mine):
+            n_done = sum(r["status"] == "done" for r in mine)
+            raise ValueError(f"{m}: {n_done}/{N_TRIALS} trials done; run the search and collect first")
+        chosen[m] = max(mine, key=lambda r: (float(r["val_acc_epoch30"]), float(r["best_val_acc"]),
+                                             -int(r["trial"])))
+    return chosen
+
+
+def final_config(row: dict):
+    """The phase 6 configuration for a chosen trial: its hyperparameters, 100 epochs, test once."""
+    m = row["mechanism"]
+    overrides = [f"model.mechanism={m}", f"optim.epochs={FINAL_EPOCHS}", "tag=final", "seed=0",
+                 "eval_test=true"] + [f"{HP_KEYS[k]}={row[k]}" for k in HP_KEYS]
+    return load_config(REPO_ROOT / BASE_CONFIG, overrides)
+
+
+def render_final(row: dict) -> str:
+    cfg = final_config(row)
+    header = [
+        f"# Phase 6 configuration for {row['mechanism']} attention, chosen by the phase 5 search",
+        "# (`python scripts/hpsearch.py select`; do not edit by hand).",
+        f"# Trial {row['trial']} of {N_TRIALS} (run {row['run_id']}): validation accuracy "
+        f"{float(row['val_acc_epoch30']):.4f} at epoch {SEARCH_EPOCHS}, best {float(row['best_val_acc']):.4f} "
+        f"(epoch {row['best_epoch']}).",
+        f"# Search: results/hpsearch_cifar10.csv. Rule: highest val accuracy at epoch {SEARCH_EPOCHS}; ties go to",
+        "# the higher best val accuracy, then the lower trial index.",
+        f"# The chosen lr, weight decay, drop-path and warmup (in epochs) are kept; epochs become {FINAL_EPOCHS}",
+        "# and the test split is evaluated once at the end. Phase 6 queue lines override seed and the",
+        "# dataset (data.name, data.res) for the CIFAR-10-HR conditions.",
+    ]
+    return "\n".join(header) + "\n" + yaml.safe_dump(to_dict(cfg), sort_keys=False)
+
+
+def cmd_select(args) -> int:
+    chosen = select_best(read_results(args.results))
+    out_dir = Path(args.out_dir)
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for m, row in chosen.items():
+        path = out_dir / f"{m}.yaml"
+        path.write_text(render_final(row), encoding="utf-8")
+        hp = ", ".join(f"{k}={row[k]}" for k in HP_KEYS)
+        print(f"{m:8s} trial {row['trial']}  val@{SEARCH_EPOCHS} {float(row['val_acc_epoch30']):.4f}  {hp}  -> {path}")
+    return 0
+
+
+# -- CLI ------------------------------------------------------------------------------------
+
+
+def main(argv=None) -> int:
+    p = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
+    sub = p.add_subparsers(dest="cmd", required=True)
+    g = sub.add_parser("generate", help="write the trial list and the per-mechanism queue files")
+    g.add_argument("--check", action="store_true", help="only check that the committed files are up to date")
+    g.add_argument("--trials-file", type=Path, default=TRIALS_FILE)
+    g.add_argument("--queue-dir", type=Path, default=QUEUE_DIR)
+    c = sub.add_parser("collect", help="read every trial's run folder into the results CSV")
+    c.add_argument("--runs-root", default=None, help="runs root (default $SYS819_RUNS or ~/runs/sys819)")
+    c.add_argument("--trials-file", type=Path, default=TRIALS_FILE)
+    c.add_argument("--out", type=Path, default=RESULTS_FILE)
+    s = sub.add_parser("select", help="write configs/final/<mechanism>.yaml from the results CSV")
+    s.add_argument("--results", type=Path, default=RESULTS_FILE)
+    s.add_argument("--out-dir", type=Path, default=FINAL_DIR)
+    args = p.parse_args(argv)
+    try:
+        return {"generate": cmd_generate, "collect": cmd_collect, "select": cmd_select}[args.cmd](args)
+    except (ValueError, ConfigError) as e:
+        print(f"error: {e}", file=sys.stderr)
+        return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main())
