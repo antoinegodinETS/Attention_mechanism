@@ -1,0 +1,4 @@
+# Phase 2: one 100-epoch full-attention baseline on CIFAR-10 (45k/5k split), seed 0.
+# Target: roughly 80-85 % validation accuracy. Run with:
+#     python -m attnvit.queue configs/queue/phase2_sanity.txt
+configs/base.yaml tag=sanity seed=0

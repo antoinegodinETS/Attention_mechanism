@@ -1,0 +1,55 @@
+# Reference recipe shared by every mechanism (mirrors the defaults in src/attnvit/config.py).
+# Other configs start with `base: base.yaml` and override what they change; command lines and
+# queue lines override single keys with key=value (e.g. model.mechanism=full seed=1).
+tag: base
+seed: 0
+device: auto            # auto: CUDA when available
+amp: true               # fp16 autocast + GradScaler on CUDA (ignored on CPU)
+eval_test: false        # test split evaluated once at the end; only for final runs
+eval_batch_size: 256
+
+data:
+  name: cifar10         # get_dataset() name: cifar10, cifar10_hr, imagenette; or synthetic
+  res: 32
+  train_split: train    # 45k of the 50k CIFAR-10 training images
+  val_split: val        # the other 5k (10 %)
+  test_split: test
+  num_workers: 4
+  synthetic_size: 256
+  synthetic_classes: 10
+
+model:
+  mechanism: full       # registered in attnvit.models.attention
+  head: auto            # auto: CLS token for full, average pooling for windows and axial
+  patch_size: 4
+  dim: 192
+  depth: 9
+  num_heads: 3
+  mlp_ratio: 2.0
+  drop_path: 0.1        # stochastic depth, linear from 0 at the first block
+  attn_kernel: sdpa     # naive materialises the attention matrix (memory benchmark only)
+  sdpa_backend: efficient
+  attn: {}              # mechanism-specific arguments (window size, ...)
+
+augment:                # one fixed recipe for all mechanisms
+  crop_padding: 0.125   # random crop after padding by res/8 (4 px at 32 px)
+  hflip: true
+  randaugment_ops: 2
+  randaugment_magnitude: 9
+  mixup_alpha: 0.8
+  cutmix_alpha: 1.0
+  mix_prob: 1.0
+  switch_prob: 0.5
+  label_smoothing: 0.1
+
+optim:
+  epochs: 100
+  batch_size: 128       # effective batch per optimizer step
+  accum_steps: 1        # micro-batch = batch_size / accum_steps
+  lr: 1.0e-3
+  min_lr: 1.0e-5
+  weight_decay: 0.05
+  warmup_epochs: 10
+  beta1: 0.9
+  beta2: 0.999
+  grad_clip: null
