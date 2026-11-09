@@ -1,0 +1,4 @@
+timestamp,device,gpu,torch,mechanism,res,patch,tokens,params,batch_size,micro_batch,accum_steps,amp_fp16,attn_kernel,sdpa_backend,status,step_ms_median,step_ms_p10,step_ms_p90,eval_ms_median,images_per_s,peak_mem_mib,peak_mem_reserved_mib,steps_per_epoch,est_epoch_s,est_run_h_100ep,est_run_h_50ep
+2026-11-09T14:25:10-0500,cuda,NVIDIA H100 80GB HBM3,2.14.1,full,32,4,64,2697610,128,128,1,True,sdpa,efficient,ok,10.824,10.743,10.931,5.569,11825.3,517.0,634.0,351,3.91,0.109,0.054
+2026-11-09T14:25:10-0500,cuda,NVIDIA H100 80GB HBM3,2.14.1,full,160,4,1600,2992522,128,128,1,True,sdpa,efficient,ok,135.704,135.597,135.873,69.808,943.2,10184.0,10748.0,351,49.03,1.362,0.681
+2026-11-09T14:25:10-0500,cuda,NVIDIA H100 80GB HBM3,2.14.1,full,160,8,400,2789770,128,128,1,True,sdpa,efficient,ok,27.518,27.492,27.592,13.309,4651.5,2734.2,2964.0,351,9.93,0.276,0.138
