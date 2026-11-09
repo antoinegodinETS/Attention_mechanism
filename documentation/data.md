@@ -102,13 +102,14 @@ no internet access, so the arrays are built on Nibi and copied over.
    in more than 16 Unix groups may be refused access to the NFS3 mount.
 4. **Environment on Nibi** (login node, once): clone the repository and create the venv.
    `scripts/rorqual/setup_env.sh` follows the standard Alliance software stack and is expected to
-   work on Nibi too (not verified). If the wheelhouse has no `imagehash`, run
-   `pip install imagehash` in the venv; Nibi has internet access.
+   work on Nibi too. The wheelhouse ships `imagehash` 4.1.0, which calls `PIL.Image.ANTIALIAS`
+   (removed in Pillow 10) and crashes the build; the script then upgrades `imagehash` alone to
+   >= 4.3 from PyPI (Nibi login nodes have internet access).
 
    ```bash
    git clone <repo-url> ~/src/Attention_mechanism && cd ~/src/Attention_mechanism
    bash scripts/rorqual/setup_env.sh                  # or PYTHON_MODULE=python/3.X bash ...
-   source ~/venvs/sys819-attention/bin/activate && python -c "import imagehash" || pip install imagehash
+   source ~/venvs/sys819-attention/bin/activate && python -c "import imagehash; print(imagehash.__version__)"  # >= 4.3
    ```
 
 5. **Quick check** (lists the candidates and prints per-class counts and missing synsets, then
@@ -147,8 +148,8 @@ no internet access, so the arrays are built on Nibi and copied over.
    alternative.
 
 **Not verified on Nibi** (no cluster access from this machine): the Python module version, that
-`$SCRATCH` is set (the job falls back to `/scratch/$USER`), the runtime and memory figures, and
-whether `imagehash` is in the wheelhouse.
+`$SCRATCH` is set (the job falls back to `/scratch/$USER`), and the runtime and memory figures.
+The wheelhouse's `imagehash` is 4.1.0, too old (see step 4).
 
 ### Release and synset coverage
 
