@@ -235,3 +235,9 @@ def test_peak_memory_reports_allocated_and_reserved(monkeypatch):
     assert (peak_memory_mib(cuda), peak_reserved_memory_mib(cuda)) == (3.0, 5.0)
     cpu = torch.device("cpu")
     assert peak_memory_mib(cpu) is None and peak_reserved_memory_mib(cpu) is None
+
+
+def test_unknown_dataset_is_reported_by_get_dataset(tiny_cfg):
+    # The training loop reads real data through get_dataset; imagenette was dropped from it.
+    with pytest.raises(ValueError, match="unknown dataset 'imagenette'"):
+        load_datasets(tiny_cfg("data.name=imagenette"))

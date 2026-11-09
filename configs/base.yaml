@@ -9,7 +9,7 @@ eval_test: false        # test split evaluated once at the end; only for final r
 eval_batch_size: 256
 
 data:
-  name: cifar10         # get_dataset() name: cifar10, cifar10_hr, imagenette; or synthetic
+  name: cifar10         # get_dataset() name: cifar10 or cifar10_hr; or synthetic
   res: 32
   train_split: train    # 45k of the 50k CIFAR-10 training images
   val_split: val        # the other 5k (10 %)

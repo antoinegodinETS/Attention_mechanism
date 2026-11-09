@@ -105,13 +105,7 @@ def load_datasets(cfg: ExperimentConfig, *, augment: bool = True) -> DataBundle:
             return SyntheticImages(d.synthetic_size, d.res, d.synthetic_classes, seed=SYNTHETIC_DATA_SEED,
                                    split=split, transform=transform)
     else:
-        try:
-            from .data import get_dataset
-        except ImportError:
-            raise RuntimeError(
-                "attnvit.data.get_dataset is not available: the phase 1 data loaders are not on this "
-                "branch yet. Use data.name=synthetic until they land."
-            ) from None
+        from .data import get_dataset
 
         def make(split, transform=None):
             return get_dataset(d.name, d.res, split, transform=transform)
