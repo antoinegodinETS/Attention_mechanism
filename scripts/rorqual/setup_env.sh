@@ -38,4 +38,4 @@ pip install --no-index --no-deps --no-build-isolation -e "$REPO_DIR"
 
 python -c "import torch, attnvit; print('torch', torch.__version__, '| attnvit', attnvit.__version__)"
 echo "Virtualenv ready: $VENV_DIR"
-echo "Next: sbatch --account=def-<sponsor> scripts/rorqual/check_env.sbatch"
+echo "Next: source scripts/rorqual/env.sh && sbatch scripts/rorqual/check_env.sbatch"
