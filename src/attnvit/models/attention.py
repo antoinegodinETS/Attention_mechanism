@@ -6,10 +6,13 @@ kernel=..., sdpa_backend=..., **attn_kwargs)`` whose ``forward(x, H, W)`` maps `
 ``H * W`` rows in row-major order, preceded by ``num_prefix`` extra tokens (the CLS token, so
 0 or 1). Mechanisms that need the 2-D grid (shifted windows, axial) reshape the patch tokens
 and run :class:`MultiHeadAttention` on token groups, so all of them share one attention call.
+A mechanism may also define ``check_grid(H, W)``, which the model calls once at construction
+to reject a patch grid it cannot handle.
 
 A mechanism registers itself with :func:`register_mechanism`, which also records the
 classification head its original paper uses (``"cls"`` or ``"gap"``) and whether it accepts
-prefix tokens. Phase 3 only adds two classes decorated with ``@register_mechanism(...)``.
+prefix tokens. Registered: ``full`` (ViT, CLS head), ``windows`` (flat Swin, average pooling),
+``axial`` (average pooling) and ``axial_shared`` (the parameter-matched axial ablation).
 """
 
 from __future__ import annotations
@@ -157,3 +160,146 @@ class FullAttention(nn.Module):
 
     def forward(self, x: torch.Tensor, H: int, W: int) -> torch.Tensor:
         return self.attn(x)
+
+
+def _check_grid(x: torch.Tensor, H: int, W: int, name: str) -> None:
+    if x.shape[1] != H * W:
+        raise ValueError(f"{name} takes only the H * W = {H * W} patch tokens (no CLS token), got {x.shape[1]}")
+
+
+def window_partition(x: torch.Tensor, M: int) -> torch.Tensor:
+    """``(B, H, W, d)`` -> ``(B * (H/M) * (W/M), M * M, d)``: non-overlapping M x M windows, row-major."""
+    B, H, W, d = x.shape
+    return x.view(B, H // M, M, W // M, M, d).permute(0, 1, 3, 2, 4, 5).reshape(-1, M * M, d)
+
+
+def window_reverse(windows: torch.Tensor, M: int, H: int, W: int) -> torch.Tensor:
+    """Inverse of :func:`window_partition`: ``(B * nW, M * M, d)`` -> ``(B, H, W, d)``."""
+    d = windows.shape[-1]
+    B = windows.shape[0] // ((H // M) * (W // M))
+    return windows.view(B, H // M, W // M, M, M, d).permute(0, 1, 3, 2, 4, 5).reshape(B, H, W, d)
+
+
+def shifted_window_mask(H: int, W: int, M: int, shift: int, device=None) -> torch.Tensor:
+    """Boolean mask ``(nW, M * M, M * M)`` for shifted windows, True where attention is allowed.
+
+    After the cyclic shift by ``-shift`` the last row and column of windows hold tokens from
+    opposite edges of the image. Label the shifted grid with the 3 x 3 regions of Swin (the
+    bulk, the ``M - shift`` band and the wrapped ``shift`` band in each direction); two tokens
+    of one window may attend to each other only when they carry the same label, i.e. when they
+    were neighbours before the shift.
+    """
+    labels = torch.zeros(H, W, dtype=torch.long, device=device)
+    bands = (slice(0, -M), slice(-M, -shift), slice(-shift, None))
+    for i, hs in enumerate(bands):
+        for j, ws in enumerate(bands):
+            labels[hs, ws] = 3 * i + j
+    win = window_partition(labels.view(1, H, W, 1), M).squeeze(-1)  # (nW, M*M)
+    return win[:, :, None] == win[:, None, :]
+
+
+@register_mechanism("windows", head="gap")
+class ShiftedWindowAttention(nn.Module):
+    """Swin's (shifted) window attention in a flat model: W-MSA on even blocks, SW-MSA on odd ones.
+
+    The ``H x W`` patch grid is cut into non-overlapping ``M x M`` windows and every window runs
+    :class:`MultiHeadAttention` on its ``M^2`` tokens. On odd blocks (``layer_idx % 2 == 1``) the
+    grid is first rolled by ``-floor(M/2)`` in both directions, so windows straddle the previous
+    block's window borders, and :func:`shifted_window_mask` stops tokens wrapped across the image
+    edge from attending to each other; the result is rolled back. No patch merging and no relative
+    position bias (the model has learned absolute position embeddings). When ``M`` equals the grid
+    there is one window and, as in Swin, no shift: the layer is full attention.
+    Cost per layer: ``4 N d^2 + 2 M^2 N d`` multiply-adds (Report 1).
+    """
+
+    def __init__(self, dim: int, num_heads: int, *, layer_idx: int = 0, depth: int = 1, kernel: str = "sdpa",
+                 sdpa_backend: str = "auto", qkv_bias: bool = True, window_size: int = 4, shift: bool = True):
+        super().__init__()
+        if window_size < 1:
+            raise ValueError(f"window_size must be >= 1, got {window_size}")
+        self.window_size = window_size
+        self.shift_size = window_size // 2 if shift and layer_idx % 2 == 1 else 0
+        self.attn = MultiHeadAttention(dim, num_heads, qkv_bias=qkv_bias, kernel=kernel, sdpa_backend=sdpa_backend)
+        self._masks: dict = {}
+
+    def check_grid(self, H: int, W: int) -> None:
+        M = self.window_size
+        if H % M or W % M:
+            raise ValueError(f"window size {M} does not divide the {H}x{W} patch grid; pick a window size "
+                             f"that divides it (M = 4 fits 8x8 at 32 px / P4, 40x40 at 160 px / P4, "
+                             f"20x20 at 160 px / P8)")
+
+    def _shift(self, H: int, W: int) -> int:
+        return 0 if (H, W) == (self.window_size, self.window_size) else self.shift_size
+
+    def _mask(self, H: int, W: int, device) -> torch.Tensor:
+        key = (H, W, str(device))
+        if key not in self._masks:
+            self._masks[key] = shifted_window_mask(H, W, self.window_size, self.shift_size, device)
+        return self._masks[key]
+
+    def forward(self, x: torch.Tensor, H: int, W: int) -> torch.Tensor:
+        _check_grid(x, H, W, "windows")
+        self.check_grid(H, W)
+        B, N, d = x.shape
+        M, s = self.window_size, self._shift(H, W)
+        g = x.view(B, H, W, d)
+        mask = None
+        if s:
+            g = torch.roll(g, shifts=(-s, -s), dims=(1, 2))
+            m = self._mask(H, W, x.device)  # (nW, M*M, M*M)
+            mask = m.unsqueeze(0).expand(B, -1, -1, -1).reshape(-1, 1, M * M, M * M)
+        y = window_reverse(self.attn(window_partition(g, M), mask), M, H, W)
+        if s:
+            y = torch.roll(y, shifts=(s, s), dims=(1, 2))
+        return y.reshape(B, N, d)
+
+
+@register_mechanism("axial", head="gap")
+class AxialAttention(nn.Module):
+    """Axial attention: a column pass then a row pass, each with its own QKV and output projections.
+
+    The column pass attends within each column of the ``H x W`` patch grid (``W`` groups of ``H``
+    tokens), the row pass within each row of the column pass's output (``H`` groups of ``W``
+    tokens). Each pass alone reaches exactly one column or row; their composition reaches every
+    token in one layer. The two projection sets give 1.5x the attention parameters of full
+    attention (Report 1); :class:`SharedAxialAttention` is the parameter-matched ablation.
+    Cost per layer: ``2 (4 N d^2 + 2 N sqrt(N) d)`` multiply-adds on a square grid (Report 1).
+    """
+
+    def __init__(self, dim: int, num_heads: int, *, layer_idx: int = 0, depth: int = 1, kernel: str = "sdpa",
+                 sdpa_backend: str = "auto", qkv_bias: bool = True):
+        super().__init__()
+        self.col = MultiHeadAttention(dim, num_heads, qkv_bias=qkv_bias, kernel=kernel, sdpa_backend=sdpa_backend)
+        self.row = MultiHeadAttention(dim, num_heads, qkv_bias=qkv_bias, kernel=kernel, sdpa_backend=sdpa_backend)
+
+    def column_pass(self, g: torch.Tensor) -> torch.Tensor:
+        """``(B, H, W, d)`` -> ``(B, H, W, d)``, attention along H within each column."""
+        B, H, W, d = g.shape
+        cols = g.permute(0, 2, 1, 3).reshape(B * W, H, d)
+        return self.col(cols).view(B, W, H, d).permute(0, 2, 1, 3)
+
+    def row_pass(self, g: torch.Tensor) -> torch.Tensor:
+        """``(B, H, W, d)`` -> ``(B, H, W, d)``, attention along W within each row."""
+        B, H, W, d = g.shape
+        return self.row(g.reshape(B * H, W, d)).view(B, H, W, d)
+
+    def forward(self, x: torch.Tensor, H: int, W: int) -> torch.Tensor:
+        _check_grid(x, H, W, "axial")
+        B, N, d = x.shape
+        return self.row_pass(self.column_pass(x.view(B, H, W, d))).reshape(B, N, d)
+
+
+@register_mechanism("axial_shared", head="gap")
+class SharedAxialAttention(AxialAttention):
+    """Parameter-matched axial ablation: both passes share one set of projections.
+
+    Same compute as :class:`AxialAttention`, same attention parameter count as full attention
+    (``4 d^2 + 4 d``). Registered for the optional ablation only; no default run uses it.
+    """
+
+    def __init__(self, dim: int, num_heads: int, *, layer_idx: int = 0, depth: int = 1, kernel: str = "sdpa",
+                 sdpa_backend: str = "auto", qkv_bias: bool = True):
+        nn.Module.__init__(self)
+        self.col = MultiHeadAttention(dim, num_heads, qkv_bias=qkv_bias, kernel=kernel, sdpa_backend=sdpa_backend)
+        self.row = self.col

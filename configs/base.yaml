@@ -29,7 +29,7 @@ model:
   drop_path: 0.1        # stochastic depth, linear from 0 at the first block
   attn_kernel: sdpa     # naive materialises the attention matrix (memory benchmark only)
   sdpa_backend: efficient
-  attn: {}              # mechanism-specific arguments (window size, ...)
+  attn: {}              # mechanism-specific arguments, e.g. model.attn.window_size=4 (windows' default)
 
 augment:                # one fixed recipe for all mechanisms
   crop_padding: 0.125   # random crop after padding by res/8 (4 px at 32 px)

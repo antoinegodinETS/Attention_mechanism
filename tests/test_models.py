@@ -6,8 +6,11 @@ import torch.nn.functional as F
 
 from attnvit.models import (
     MECHANISMS,
+    AxialAttention,
     FullAttention,
     MultiHeadAttention,
+    SharedAxialAttention,
+    ShiftedWindowAttention,
     VisionTransformer,
     get_mechanism,
     naive_attention,
@@ -23,9 +26,20 @@ def small_vit(**kw):
 
 
 def test_full_is_registered_with_cls_head():
+    # Each technique's own head: CLS for full attention (ViT), average pooling for windows and axial.
     spec = get_mechanism("full")
     assert spec.cls is FullAttention
     assert spec.head == "cls" and spec.supports_prefix_tokens
+    for name, cls in [("windows", ShiftedWindowAttention), ("axial", AxialAttention),
+                      ("axial_shared", SharedAxialAttention)]:
+        spec = get_mechanism(name)
+        assert spec.cls is cls
+        assert spec.head == "gap" and not spec.supports_prefix_tokens
+        model = small_vit(mechanism=name)
+        assert model.head_type == "gap" and model.num_prefix == 0 and model.cls_token is None
+        with pytest.raises(ValueError, match="CLS token"):
+            small_vit(mechanism=name, head="cls")
+    assert small_vit(mechanism="full").head_type == "cls"
     with pytest.raises(ValueError, match="unknown attention mechanism"):
         get_mechanism("nope")
 
@@ -112,9 +126,10 @@ def test_naive_matches_sdpa(mask_kind):
     assert torch.allclose(naive_attention(q, k, v, mask), ref, atol=1e-5)
 
 
-def test_naive_and_sdpa_models_agree_forward_and_backward():
+@pytest.mark.parametrize("mechanism", ["full", "windows", "axial"])
+def test_naive_and_sdpa_models_agree_forward_and_backward(mechanism):
     torch.manual_seed(0)
-    model = small_vit(drop_path=0.0)
+    model = small_vit(drop_path=0.0, mechanism=mechanism)
     x = torch.randn(4, 3, 32, 32)
     y = torch.randint(0, 10, (4,))
     out = {}
@@ -130,10 +145,11 @@ def test_naive_and_sdpa_models_agree_forward_and_backward():
         assert torch.allclose(a, b, atol=1e-5)
 
 
-def test_naive_kernel_from_constructor():
+@pytest.mark.parametrize("mechanism", ["full", "windows", "axial"])
+def test_naive_kernel_from_constructor(mechanism):
     torch.manual_seed(0)
-    a = small_vit(attn_kernel="sdpa").eval()
-    b = small_vit(attn_kernel="naive").eval()
+    a = small_vit(attn_kernel="sdpa", mechanism=mechanism).eval()
+    b = small_vit(attn_kernel="naive", mechanism=mechanism).eval()
     b.load_state_dict(a.state_dict())
     x = torch.randn(2, 3, 32, 32)
     assert torch.allclose(a(x), b(x), atol=1e-5)

@@ -119,6 +119,9 @@ class VisionTransformer(nn.Module):
             )
             for i in range(depth)
         )
+        for block in self.blocks:  # e.g. a window size that does not divide the grid
+            if hasattr(block.attn, "check_grid"):
+                block.attn.check_grid(self.grid, self.grid)
         self.norm = nn.LayerNorm(dim)
         self.head = nn.Linear(dim, num_classes)
         self._init_weights()

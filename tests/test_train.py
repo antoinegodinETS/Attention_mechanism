@@ -54,6 +54,19 @@ def test_overfits_256_images(tiny_cfg, tmp_path):
     assert (trainer.run_dir / "config.yaml").exists()
 
 
+@pytest.mark.parametrize("mechanism, extra", [("windows", ["model.attn.window_size=2"]), ("axial", [])])
+def test_new_mechanisms_overfit_256_images(tiny_cfg, tmp_path, mechanism, extra):
+    # The tiny model's 4x4 grid (P8) would be one M = 4 window, i.e. full attention; M = 2 keeps
+    # four windows per image and a shift of 1 on the second block.
+    cfg = tiny_cfg(*NO_AUGMENT, "optim.epochs=25", "optim.lr=2e-3", "optim.weight_decay=0",
+                   "model.drop_path=0", f"model.mechanism={mechanism}", "tag=overfit", *extra)
+    trainer, status = train(cfg, tmp_path)
+    assert status == "done"
+    s = read_json(trainer.summary_path)
+    assert s["final_val_acc"] >= 0.95, s
+    assert s["head"] == "gap"
+
+
 def test_same_seed_same_losses(tiny_cfg, tmp_path):
     cfg = tiny_cfg("optim.epochs=2")  # full augmentation recipe on
     a, _ = train(cfg, tmp_path / "a")
