@@ -31,12 +31,16 @@ sys819_activate() {
 }
 
 # Copy datasets from project space to the node-local disk and point SYS819_DATA there.
-#     sys819_stage_data cifar10 [cifar10_hr]
+#     sys819_stage_data cifar10 [cifar10_hr[:<res>]]
+# cifar10_hr:32 copies only images_32.npy of the image arrays (plus labels and build_info).
 sys819_stage_data() {
     local dest="${SLURM_TMPDIR:?sys819_stage_data runs inside a Slurm job}/sys819-data"
-    local name
+    local arg name res
     mkdir -p "$dest"
-    for name in "$@"; do
+    for arg in "$@"; do
+        name="${arg%%:*}"
+        res=""
+        [ "$name" = "$arg" ] || res="${arg#*:}"
         if [ ! -d "$SYS819_DATA_STORE/$name" ]; then
             echo "error: $SYS819_DATA_STORE/$name not found (see README, 'Datasets')" >&2
             return 1
@@ -46,7 +50,16 @@ sys819_stage_data() {
             cp -r "$SYS819_DATA_STORE/cifar10/cifar-10-batches-py" "$dest/cifar10/"
         else
             mkdir -p "$dest/$name"
-            find "$SYS819_DATA_STORE/$name" -maxdepth 1 -type f -exec cp {} "$dest/$name/" \;
+            if [ -n "$res" ]; then
+                if [ ! -f "$SYS819_DATA_STORE/$name/images_$res.npy" ]; then
+                    echo "error: $SYS819_DATA_STORE/$name/images_$res.npy not found" >&2
+                    return 1
+                fi
+                find "$SYS819_DATA_STORE/$name" -maxdepth 1 -type f \
+                    \( ! -name 'images_*.npy' -o -name "images_$res.npy" \) -exec cp {} "$dest/$name/" \;
+            else
+                find "$SYS819_DATA_STORE/$name" -maxdepth 1 -type f -exec cp {} "$dest/$name/" \;
+            fi
         fi
     done
     export SYS819_DATA="$dest"
