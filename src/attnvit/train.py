@@ -11,6 +11,11 @@ Determinism: the model is initialised from ``seed``; every epoch reseeds the glo
 sampler, the DataLoader workers and the mixup generator from ``(seed, epoch)``. A run resumed
 from ``last.pt`` therefore continues exactly as an uninterrupted one would (bitwise on CPU).
 
+Timing: ``epoch_time_s`` is the training part of an epoch, data loading included. It splits into
+``data_wait_s``, the host time spent blocked waiting for the next batch from the DataLoader, and
+``compute_time_s = epoch_time_s - data_wait_s``. Mechanisms are compared on the compute time;
+the loader-inclusive time is reported beside it (a starved loader is a property of the node).
+
 Interruption: SIGUSR1 (Slurm's warning before the time limit, ``--signal=B:USR1@300``) stops
 the run cleanly. If the current epoch is expected to end within ``stop_grace_s`` it is finished
 and checkpointed first; otherwise the partial epoch is dropped and ``last.pt`` (the previous
@@ -133,6 +138,25 @@ def _worker_init(worker_id: int) -> None:
     seed = torch.initial_seed() % 2**32  # set by the DataLoader from its seeded generator
     random.seed(seed)
     np.random.seed(seed)
+
+
+class TimedIterator:
+    """Iterates ``iterable`` and adds the time spent blocked in ``iter``/``next`` to ``wait_s``."""
+
+    def __init__(self, iterable):
+        t0 = time.perf_counter()
+        self._it = iter(iterable)  # starts the DataLoader workers
+        self.wait_s = time.perf_counter() - t0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        t0 = time.perf_counter()
+        try:
+            return next(self._it)
+        finally:
+            self.wait_s += time.perf_counter() - t0
 
 
 def train_loader(ds: Dataset, cfg: ExperimentConfig, epoch: int, steps: int, device: torch.device) -> DataLoader:
@@ -385,7 +409,7 @@ class Trainer:
         val_loader = eval_loader(data.val, cfg, dev)
         n_params = sum(p.numel() for p in model.parameters())
 
-        state = {"epoch": 0, "global_step": 0, "train_time_s": 0.0, "eval_time_s": 0.0, "wall_time_s": 0.0,
+        state = {"epoch": 0, "global_step": 0, "train_time_s": 0.0, "data_wait_s": 0.0, "eval_time_s": 0.0, "wall_time_s": 0.0,
                  "peak_mem_mib": None, "best_val_acc": None, "best_epoch": None, "chunks": 0,
                  "last_val": None}
         if self.ckpt_path.exists():
@@ -422,7 +446,8 @@ class Trainer:
             finishing = False
             dropped = False
             lr = o.lr
-            for x, y in loader:
+            batches = TimedIterator(loader)
+            for x, y in batches:
                 buf.append((x.to(dev, non_blocking=True), y.to(dev, non_blocking=True)))
                 if len(buf) < o.accum_steps:
                     continue
@@ -456,6 +481,8 @@ class Trainer:
                 return "interrupted"
 
             epoch_time = timer.elapsed()
+            data_wait = min(batches.wait_s, epoch_time)
+            compute_time = epoch_time - data_wait
             peak = peak_memory_mib(dev)
             eval_timer = Timer(dev)
             val_loss, val_acc = evaluate(model, val_loader, normalize, dev, self.use_amp)
@@ -464,6 +491,7 @@ class Trainer:
 
             state["epoch"] = epoch + 1
             state["train_time_s"] += epoch_time
+            state["data_wait_s"] += data_wait
             state["eval_time_s"] += eval_time
             if peak is not None:
                 state["peak_mem_mib"] = max(state["peak_mem_mib"] or 0.0, peak)
@@ -480,6 +508,8 @@ class Trainer:
                 "val_loss": val_loss,
                 "val_acc": val_acc,
                 "epoch_time_s": epoch_time,
+                "data_wait_s": data_wait,
+                "compute_time_s": compute_time,
                 "eval_time_s": eval_time,
                 "images_per_s": seen / epoch_time if epoch_time > 0 else None,
                 "peak_mem_mib": peak,
@@ -491,7 +521,7 @@ class Trainer:
                                "run_id": self.run_id}, self.ckpt_path)
             peak_txt = f" | peak {peak:.0f} MiB" if peak is not None else ""
             self.log(f"epoch {epoch + 1}/{o.epochs} loss {record['train_loss']:.4f} acc {record['train_acc']:.4f} "
-                     f"| val loss {val_loss:.4f} acc {val_acc:.4f} | {epoch_time:.1f} s (+{eval_time:.1f} s eval)"
+                     f"| val loss {val_loss:.4f} acc {val_acc:.4f} | {epoch_time:.1f} s ({data_wait:.1f} s data wait, +{eval_time:.1f} s eval)"
                      f"{peak_txt} | lr {lr:.2e}")
             epochs_this_call += 1
             if stop.received is not None:
@@ -545,6 +575,9 @@ class Trainer:
             "test_loss": test_loss,
             "train_time_s": state["train_time_s"],
             "time_per_epoch_s": state["train_time_s"] / max(epochs, 1),
+            "data_wait_s": state["data_wait_s"],
+            "compute_time_s": state["train_time_s"] - state["data_wait_s"],
+            "compute_time_per_epoch_s": (state["train_time_s"] - state["data_wait_s"]) / max(epochs, 1),
             "eval_time_s": state["eval_time_s"],
             "wall_time_s": state["wall_time_s"],
             "peak_mem_mib": state["peak_mem_mib"],

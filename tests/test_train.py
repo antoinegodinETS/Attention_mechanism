@@ -2,6 +2,7 @@
 
 import os
 import signal
+import time
 
 import pytest
 import torch
@@ -9,7 +10,8 @@ import torch
 from attnvit.config import ConfigError
 from attnvit.data.augment import MixupCutmix, Normalize
 from attnvit.data import data_root
-from attnvit.train import Trainer, build_model, load_datasets, smoke_check, train_step
+from attnvit.data.synthetic import SyntheticImages
+from attnvit.train import Trainer, TimedIterator, build_model, load_datasets, smoke_check, train_step
 from attnvit.utils import read_json, read_jsonl
 
 from conftest import NO_AUGMENT
@@ -171,3 +173,38 @@ def test_real_cifar10_wiring(tiny_cfg):
     assert x.dtype == torch.uint8 and x.shape == (3, 32, 32)
     assert data.train.transform is not None and data.val.transform is None
     assert 0 < smoke_check(cfg) < 10
+
+
+def test_timed_iterator_counts_only_the_wait():
+    def slow():
+        for i in range(3):
+            time.sleep(0.02)
+            yield i
+
+    it = TimedIterator(slow())
+    for _ in it:
+        time.sleep(0.03)  # "compute" between batches is not waiting
+    assert 0.06 <= it.wait_s < 0.09
+
+
+def test_data_wait_and_compute_time_are_logged(tiny_cfg, tmp_path, monkeypatch):
+    # A slow dataset: every training image costs 2 ms to load, so most of the epoch is data wait.
+    original = SyntheticImages.__getitem__
+
+    def slow_getitem(self, i):
+        if self.transform is not None:  # the training split only
+            time.sleep(0.002)
+        return original(self, i)
+
+    monkeypatch.setattr(SyntheticImages, "__getitem__", slow_getitem)
+    trainer, status = train(tiny_cfg("optim.epochs=2"), tmp_path)
+    assert status == "done"
+    rows = read_jsonl(trainer.metrics_path)
+    for r in rows:
+        assert r["data_wait_s"] + r["compute_time_s"] == pytest.approx(r["epoch_time_s"])
+        assert r["data_wait_s"] >= 256 * 0.002 and r["compute_time_s"] > 0
+    s = read_json(trainer.summary_path)
+    assert s["data_wait_s"] == pytest.approx(sum(r["data_wait_s"] for r in rows))
+    assert s["compute_time_s"] == pytest.approx(sum(r["compute_time_s"] for r in rows))
+    assert s["data_wait_s"] + s["compute_time_s"] == pytest.approx(s["train_time_s"])
+    assert s["compute_time_per_epoch_s"] == pytest.approx(s["compute_time_s"] / 2)
