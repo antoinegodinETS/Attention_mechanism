@@ -213,16 +213,22 @@ def train_step(model, optimizer, scaler, micro_batches, *, normalize: Normalize,
                use_amp: bool, grad_clip: float | None = None):
     """One optimizer step over ``micro_batches`` (a list of uint8 images and labels on the device).
 
+    Mixup/cutmix is applied once, to the whole effective batch, which is then split back into
+    micro-batches of the original sizes: the same images are paired and the same random draws
+    are used whatever ``accum_steps`` is, so accumulation does not change the training recipe.
+
     Returns device tensors ``(sum of per-sample losses, number correct)`` and the sample count;
     the caller decides when to synchronise.
     """
     optimizer.zero_grad(set_to_none=True)
     accum = len(micro_batches)
-    loss_sum = torch.zeros((), device=micro_batches[0][1].device)
+    sizes = [len(y) for _, y in micro_batches]
+    labels = torch.cat([y for _, y in micro_batches])
+    images, targets = mixer(normalize(torch.cat([x for x, _ in micro_batches])), labels)
+    loss_sum = torch.zeros((), device=labels.device)
     correct = torch.zeros((), device=loss_sum.device, dtype=torch.long)
     n = 0
-    for x, y in micro_batches:
-        x, target = mixer(normalize(x), y)
+    for x, target, y in zip(images.split(sizes), targets.split(sizes), labels.split(sizes)):
         with torch.autocast(x.device.type, dtype=torch.float16, enabled=use_amp):
             logits = model(x)
         loss = soft_cross_entropy(logits, target)

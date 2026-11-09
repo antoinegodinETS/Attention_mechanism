@@ -125,15 +125,23 @@ def test_sigusr1_finishes_a_short_epoch_first(tiny_cfg, tmp_path):
     assert train(cfg, tmp_path)[1] == "done"
 
 
-def test_gradient_accumulation_matches_full_batch(tiny_cfg):
+@pytest.mark.parametrize("mix", [
+    pytest.param({"prob": 0.0}, id="no-mix"),
+    pytest.param({"prob": 1.0, "cutmix_alpha": 0.0}, id="mixup"),
+    pytest.param({"prob": 1.0, "mixup_alpha": 0.0}, id="cutmix"),
+    pytest.param({"prob": 1.0}, id="mixup-or-cutmix"),
+])
+def test_gradient_accumulation_matches_full_batch(tiny_cfg, mix):
+    # Mixing is applied once per optimizer step, so accumulating micro-batches must give the
+    # gradient of the full batch even with mixup/cutmix on (same mixer seed for every split).
     cfg = tiny_cfg(*NO_AUGMENT, "model.drop_path=0")
     torch.manual_seed(0)
     x = torch.randint(0, 256, (32, 3, 32, 32), dtype=torch.uint8)
     y = torch.randint(0, 10, (32,))
     norm = Normalize([0.5] * 3, [0.25] * 3)
-    mixer = MixupCutmix(10, prob=0.0, label_smoothing=0.1)
     grads = []
     for chunks in (1, 2, 4):
+        mixer = MixupCutmix(10, label_smoothing=0.1, seed=7, **mix)
         torch.manual_seed(0)
         model = build_model(cfg, 10)
         opt = torch.optim.SGD(model.parameters(), lr=0.0)  # keep the weights, inspect the grads
