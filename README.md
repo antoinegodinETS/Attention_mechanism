@@ -13,7 +13,8 @@ The full plan, phases and decisions are in [`documentation/project-plan.md`](doc
 ```
 src/attnvit/       package: data/ (datasets, get_dataset, augment), models/ (ViT, attention),
                    train.py, queue.py, config.py, cost.py (analytic and counted FLOPs)
-configs/           base.yaml (the reference recipe) and queue/ (one run per line)
+configs/           base.yaml (the reference recipe), queue/ (one run per line), search/ (the phase 5
+                   trial list) and final/ (the configuration chosen per mechanism)
 scripts/           check_env, calibrate, benchmark_cost, make_cost_figure, status, dataset builders;
                    rorqual/ and nibi/ hold the cluster scripts
 data_splits/       committed split indices, synset mapping and manifests (see its README)
@@ -213,3 +214,33 @@ sbatch scripts/rorqual/smoke.sbatch       # 3g.40gb MIG slice: 2-epoch smoke run
 ```
 
 Each except the cost benchmark copies CIFAR-10 from `$SYS819_DATA_STORE` to the node-local `$SLURM_TMPDIR` first.
+
+## Hyperparameter search (phase 5)
+
+`scripts/hpsearch.py` runs the random search on CIFAR-10 (45k/5k split): 8 trials per mechanism,
+30 epochs each, learning rate and weight decay log-uniform on [3e-4, 3e-3] and [0.01, 0.1],
+drop-path in {0, 0.05, 0.1}, warmup in {5, 10} epochs; everything else is `configs/base.yaml`.
+Trial `i` has the same hyperparameters and seed (`i`) for every mechanism. Search runs are tagged
+`search.t<i>`: the training code refuses to evaluate the test split for them.
+
+```bash
+python scripts/hpsearch.py generate     # configs/search/cifar10_trials.csv + configs/queue/phase5_hpsearch_<mech>.txt
+python scripts/hpsearch.py collect      # every trial's run folder -> results/hpsearch_cifar10.csv
+python scripts/hpsearch.py select       # best val accuracy at epoch 30 -> configs/final/<mech>.yaml
+```
+
+The trial list and queues are committed (`generate --check` verifies them; the search seed is
+fixed). `select` keeps, per mechanism, the trial with the highest validation accuracy at epoch 30;
+ties go to the higher best validation accuracy, then to the lower trial index. It writes the full
+configuration with 100 epochs and a final test evaluation, ready for phase 6.
+
+On Rorqual, one job per mechanism on a 1g.10gb MIG slice (each resubmits itself if it hits its
+time limit):
+
+```bash
+source ~/SYS819/scripts/rorqual/env.sh
+for m in full windows axial; do
+    sbatch --job-name=sys819-hps-$m --export=ALL,SYS819_MECH=$m "$SYS819_REPO/scripts/rorqual/hpsearch.sbatch"
+done
+for m in full windows axial; do python scripts/status.py configs/queue/phase5_hpsearch_$m.txt; done
+```
