@@ -1,0 +1,1360 @@
+synset,label,class,words,depth,cinic_images
+n02686121,0,airplane,airbus,2,1209
+n02690373,0,airplane,airliner,1,1009
+n02691156,0,airplane,"airplane, aeroplane, plane",0,1203
+n02704645,0,airplane,"amphibian, amphibious aircraft",1,646
+n02842573,0,airplane,biplane,1,1147
+n02867715,0,airplane,bomber,1,1018
+n03174079,0,airplane,delta wing,1,267
+n03215191,0,airplane,dive bomber,2,292
+n03227505,0,airplane,"double-prop, double-propeller plane, twin-prop, twin-propeller-plane",2,0
+n03321419,0,airplane,"fanjet, fan-jet, turbofan, turbojet",2,157
+n03335030,0,airplane,"fighter, fighter aircraft, attack aircraft",1,1140
+n03365231,0,airplane,"floatplane, pontoon plane",2,952
+n03373611,0,airplane,flying boat,2,452
+n03490784,0,airplane,hangar queen,1,16
+n03577672,0,airplane,interceptor,2,1028
+n03595860,0,airplane,"jet, jet plane, jet-propelled plane",1,998
+n03596543,0,airplane,jetliner,2,1331
+n03604311,0,airplane,"jumbojet, jumbo jet",2,922
+n03608074,0,airplane,kamikaze,2,0
+n03783873,0,airplane,monoplane,1,186
+n03798610,0,airplane,"multiengine airplane, multiengine plane",1,343
+n03809312,0,airplane,"narrowbody aircraft, narrow-body aircraft, narrow-body",2,518
+n04012084,0,airplane,propeller plane,1,965
+n04012482,0,airplane,"propjet, turboprop, turbo-propeller plane",2,556
+n04062644,0,airplane,reconnaissance plane,1,28
+n04160586,0,airplane,"seaplane, hydroplane",1,1044
+n04222723,0,airplane,"single prop, single-propeller plane",2,646
+n04230487,0,airplane,ski-plane,1,233
+n04308273,0,airplane,stealth bomber,2,742
+n04308397,0,airplane,stealth fighter,2,825
+n04389999,0,airplane,tanker plane,1,9
+n04503499,0,airplane,twinjet,2,216
+n04583620,0,airplane,"widebody aircraft, wide-body aircraft, wide-body, twin-aisle airplane",2,902
+n02701002,1,automobile,ambulance,1,798
+n02814533,1,automobile,"beach wagon, station wagon, wagon, estate car, beach waggon, station waggon, waggon",1,711
+n02831335,1,automobile,berlin,2,590
+n02907194,1,automobile,brougham,2,0
+n02924554,1,automobile,"bus, jalopy, heap",1,0
+n02930766,1,automobile,"cab, hack, taxi, taxicab",1,701
+n02958343,1,automobile,"car, auto, automobile, machine, motorcar",0,667
+n03079136,1,automobile,"compact, compact car",1,579
+n03100240,1,automobile,convertible,1,939
+n03119396,1,automobile,coupe,1,760
+n03141065,1,automobile,"cruiser, police cruiser, patrol car, police car, prowl car, squad car",1,665
+n03268790,1,automobile,"electric, electric automobile, electric car",1,590
+n03342961,1,automobile,finisher,2,81
+n03404012,1,automobile,funny wagon,2,129
+n03421669,1,automobile,gas guzzler,1,377
+n03472937,1,automobile,gypsy cab,2,45
+n03493219,1,automobile,hardtop,1,123
+n03498781,1,automobile,hatchback,1,574
+n03539103,1,automobile,horseless carriage,1,209
+n03543394,1,automobile,"hot rod, hot-rod",1,619
+n03594945,1,automobile,"jeep, landrover",1,758
+n03670208,1,automobile,"limousine, limo",1,880
+n03680512,1,automobile,loaner,1,514
+n03769967,1,automobile,minicab,2,0
+n03770085,1,automobile,minicar,1,270
+n03770679,1,automobile,minivan,1,818
+n03777568,1,automobile,Model T,1,661
+n03870105,1,automobile,pace car,1,573
+n03881534,1,automobile,panda car,2,47
+n04037443,1,automobile,"racer, race car, racing car",1,763
+n04097373,1,automobile,"roadster, runabout, two-seater",1,580
+n04166281,1,automobile,"sedan, saloon",1,991
+n04201733,1,automobile,shooting brake,2,1012
+n04285008,1,automobile,"sports car, sport car",1,582
+n04285965,1,automobile,"sport utility, sport utility vehicle, S.U.V., SUV",1,974
+n04302988,1,automobile,Stanley Steamer,1,200
+n04322801,1,automobile,stock car,2,773
+n04322924,1,automobile,stock car,1,0
+n04347119,1,automobile,"subcompact, subcompact car",1,551
+n04459122,1,automobile,"touring car, phaeton, tourer",1,121
+n04516354,1,automobile,"used-car, secondhand car",1,775
+n01503061,2,bird,bird,0,60
+n01503976,2,bird,"dickeybird, dickey-bird, dickybird, dicky-bird",1,30
+n01514668,2,bird,cock,1,40
+n01514752,2,bird,"gamecock, fighting cock",2,21
+n01514859,2,bird,hen,1,32
+n01514926,2,bird,nester,1,1
+n01515078,2,bird,night bird,1,2
+n01515217,2,bird,night raven,2,2
+n01515303,2,bird,bird of passage,1,19
+n01515583,2,bird,protoavis,1,0
+n01516212,2,bird,"archaeopteryx, archeopteryx, Archaeopteryx lithographica",1,0
+n01516609,2,bird,Sinornis,1,0
+n01517036,2,bird,Ibero-mesornis,1,0
+n01517389,2,bird,archaeornis,1,0
+n01517565,2,bird,"ratite, ratite bird, flightless bird",1,22
+n01517966,2,bird,"carinate, carinate bird, flying bird",1,24
+n01518878,2,bird,"ostrich, Struthio camelus",2,45
+n01519563,2,bird,cassowary,2,26
+n01519873,2,bird,"emu, Dromaius novaehollandiae, Emu novaehollandiae",2,40
+n01520576,2,bird,"kiwi, apteryx",2,20
+n01521399,2,bird,"rhea, Rhea americana",2,25
+n01521756,2,bird,"rhea, nandu, Pterocnemia pennata",2,28
+n01522450,2,bird,"elephant bird, aepyornis",2,0
+n01523105,2,bird,moa,2,0
+n01523248,2,bird,"giant moa, Dinornis giganteus",3,0
+n01523493,2,bird,"anomalopteryx, Anomalopteryx oweni",3,0
+n01524359,2,bird,"passerine, passeriform bird",1,23
+n01524761,2,bird,nonpasserine bird,1,2
+n01525720,2,bird,"oscine, oscine bird",2,14
+n01526521,2,bird,"songbird, songster",3,40
+n01526766,2,bird,"honey eater, honeysucker",3,6
+n01527194,2,bird,accentor,3,24
+n01527347,2,bird,"hedge sparrow, sparrow, dunnock, Prunella modularis",4,38
+n01527617,2,bird,lark,3,27
+n01527917,2,bird,"skylark, Alauda arvensis",4,38
+n01528396,2,bird,wagtail,3,28
+n01528654,2,bird,"pipit, titlark, lark",3,33
+n01528845,2,bird,"meadow pipit, Anthus pratensis",4,27
+n01529672,2,bird,finch,3,50
+n01530439,2,bird,"chaffinch, Fringilla coelebs",4,28
+n01530575,2,bird,"brambling, Fringilla montifringilla",4,30
+n01531178,2,bird,"goldfinch, Carduelis carduelis",4,44
+n01531344,2,bird,"linnet, lintwhite, Carduelis cannabina",4,23
+n01531512,2,bird,"siskin, Carduelis spinus",4,27
+n01531639,2,bird,"red siskin, Carduelis cucullata",4,0
+n01531811,2,bird,"redpoll, Carduelis flammea",4,33
+n01531971,2,bird,"redpoll, Carduelis hornemanni",4,29
+n01532325,2,bird,"New World goldfinch, goldfinch, yellowbird, Spinus tristis",4,46
+n01532511,2,bird,"pine siskin, pine finch, Spinus pinus",4,34
+n01532829,2,bird,"house finch, linnet, Carpodacus mexicanus",4,36
+n01533000,2,bird,"purple finch, Carpodacus purpureus",4,26
+n01533339,2,bird,"canary, canary bird",4,27
+n01533481,2,bird,"common canary, Serinus canaria",5,29
+n01533651,2,bird,serin,4,24
+n01533893,2,bird,"crossbill, Loxia curvirostra",4,47
+n01534155,2,bird,"bullfinch, Pyrrhula pyrrhula",4,39
+n01534433,2,bird,"junco, snowbird",4,32
+n01534582,2,bird,"dark-eyed junco, slate-colored junco, Junco hyemalis",5,30
+n01534762,2,bird,New World sparrow,4,7
+n01535140,2,bird,"vesper sparrow, grass finch, Pooecetes gramineus",5,15
+n01535469,2,bird,"white-throated sparrow, whitethroat, Zonotrichia albicollis",5,28
+n01535690,2,bird,"white-crowned sparrow, Zonotrichia leucophrys",5,28
+n01536035,2,bird,"chipping sparrow, Spizella passerina",5,36
+n01536186,2,bird,"field sparrow, Spizella pusilla",5,36
+n01536334,2,bird,"tree sparrow, Spizella arborea",5,35
+n01536644,2,bird,"song sparrow, Melospiza melodia",5,25
+n01536780,2,bird,"swamp sparrow, Melospiza georgiana",5,39
+n01537134,2,bird,bunting,4,38
+n01537544,2,bird,"indigo bunting, indigo finch, indigo bird, Passerina cyanea",5,35
+n01537895,2,bird,"ortolan, ortolan bunting, Emberiza hortulana",5,16
+n01538059,2,bird,"reed bunting, Emberiza schoeniclus",5,27
+n01538200,2,bird,"yellowhammer, yellow bunting, Emberiza citrinella",5,28
+n01538362,2,bird,"yellow-breasted bunting, Emberiza aureola",5,7
+n01538630,2,bird,"snow bunting, snowbird, snowflake, Plectrophenax nivalis",5,31
+n01538955,2,bird,honeycreeper,3,33
+n01539272,2,bird,banana quit,4,2
+n01539573,2,bird,"sparrow, true sparrow",2,36
+n01539925,2,bird,"English sparrow, house sparrow, Passer domesticus",3,33
+n01540090,2,bird,"tree sparrow, Passer montanus",3,36
+n01540233,2,bird,"grosbeak, grossbeak",4,31
+n01540566,2,bird,"evening grosbeak, Hesperiphona vespertina",5,25
+n01540832,2,bird,"hawfinch, Coccothraustes coccothraustes",5,27
+n01541102,2,bird,"pine grosbeak, Pinicola enucleator",5,34
+n01541386,2,bird,"cardinal, cardinal grosbeak, Richmondena Cardinalis, Cardinalis cardinalis, redbird",4,27
+n01541760,2,bird,"pyrrhuloxia, Pyrrhuloxia sinuata",4,24
+n01541922,2,bird,towhee,4,44
+n01542168,2,bird,"chewink, cheewink, Pipilo erythrophthalmus",5,12
+n01542433,2,bird,"green-tailed towhee, Chlorura chlorura",5,10
+n01542786,2,bird,"weaver, weaverbird, weaver finch",3,30
+n01543175,2,bird,"baya, Ploceus philippinus",4,14
+n01543383,2,bird,"whydah, whidah, widow bird",4,11
+n01543632,2,bird,"Java sparrow, Java finch, ricebird, Padda oryzivora",4,18
+n01543936,2,bird,"avadavat, amadavat",4,4
+n01544208,2,bird,"grassfinch, grass finch",4,9
+n01544389,2,bird,"zebra finch, Poephila castanotis",5,39
+n01544704,2,bird,"honeycreeper, Hawaiian honeycreeper",4,25
+n01545010,2,bird,mamo,5,0
+n01545574,2,bird,lyrebird,2,8
+n01546039,2,bird,"scrubbird, scrub-bird, scrub bird",2,19
+n01546506,2,bird,broadbill,2,30
+n01546921,2,bird,tyrannid,2,3
+n01547832,2,bird,"New World flycatcher, flycatcher, tyrant flycatcher, tyrant bird",3,38
+n01548301,2,bird,"kingbird, Tyrannus tyrannus",4,28
+n01548492,2,bird,"Arkansas kingbird, western kingbird",5,27
+n01548694,2,bird,"Cassin's kingbird, Tyrannus vociferans",5,17
+n01548865,2,bird,eastern kingbird,5,36
+n01549053,2,bird,"grey kingbird, gray kingbird, petchary, Tyrannus domenicensis domenicensis",5,28
+n01549430,2,bird,"pewee, peewee, peewit, pewit, wood pewee, Contopus virens",4,35
+n01549641,2,bird,"western wood pewee, Contopus sordidulus",5,20
+n01549886,2,bird,"phoebe, phoebe bird, Sayornis phoebe",4,34
+n01550172,2,bird,"vermillion flycatcher, firebird, Pyrocephalus rubinus mexicanus",4,26
+n01550761,2,bird,"cotinga, chatterer",4,4
+n01551080,2,bird,"cock of the rock, Rupicola rupicola",5,22
+n01551300,2,bird,"cock of the rock, Rupicola peruviana",5,17
+n01551711,2,bird,manakin,3,31
+n01552034,2,bird,bellbird,5,12
+n01552333,2,bird,"umbrella bird, Cephalopterus ornatus",5,0
+n01552813,2,bird,ovenbird,3,30
+n01553142,2,bird,"antbird, ant bird",3,17
+n01553527,2,bird,ant thrush,4,10
+n01553762,2,bird,ant shrike,4,1
+n01554017,2,bird,"spotted antbird, Hylophylax naevioides",4,0
+n01554448,2,bird,"woodhewer, woodcreeper, wood-creeper, tree creeper",3,38
+n01555004,2,bird,pitta,3,29
+n01555305,2,bird,"scissortail, scissortailed flycatcher, Muscivora-forficata",4,15
+n01555809,2,bird,"Old World flycatcher, true flycatcher, flycatcher",3,24
+n01556182,2,bird,"spotted flycatcher, Muscicapa striata, Muscicapa grisola",4,23
+n01556514,2,bird,"thickhead, whistler",4,8
+n01557185,2,bird,thrush,3,31
+n01557962,2,bird,"missel thrush, mistle thrush, mistletoe thrush, Turdus viscivorus",4,20
+n01558149,2,bird,"song thrush, mavis, throstle, Turdus philomelos",4,24
+n01558307,2,bird,"fieldfare, snowbird, Turdus pilaris",4,32
+n01558461,2,bird,"redwing, Turdus iliacus",4,27
+n01558594,2,bird,"blackbird, merl, merle, ouzel, ousel, European blackbird, Turdus merula",4,33
+n01558765,2,bird,"ring ouzel, ring blackbird, ring thrush, Turdus torquatus",4,17
+n01558993,2,bird,"robin, American robin, Turdus migratorius",4,37
+n01559160,2,bird,"clay-colored robin, Turdus greyi",4,4
+n01559477,2,bird,"hermit thrush, Hylocichla guttata",4,36
+n01559639,2,bird,"veery, Wilson's thrush, Hylocichla fuscescens",4,18
+n01559804,2,bird,"wood thrush, Hylocichla mustelina",4,29
+n01560105,2,bird,"nightingale, Luscinia megarhynchos",4,26
+n01560280,2,bird,"thrush nightingale, Luscinia luscinia",4,29
+n01560419,2,bird,bulbul,5,22
+n01560636,2,bird,"Old World chat, chat",4,14
+n01560793,2,bird,"stonechat, Saxicola torquata",5,34
+n01560935,2,bird,"whinchat, Saxicola rubetra",5,42
+n01561181,2,bird,solitaire,4,1
+n01561452,2,bird,"redstart, redtail",4,26
+n01561732,2,bird,wheatear,4,26
+n01562014,2,bird,bluebird,4,35
+n01562265,2,bird,"robin, redbreast, robin redbreast, Old World robin, Erithacus rubecola",4,28
+n01562451,2,bird,"bluethroat, Erithacus svecicus",4,19
+n01563128,2,bird,warbler,3,31
+n01563449,2,bird,gnatcatcher,4,24
+n01563746,2,bird,kinglet,4,35
+n01563945,2,bird,"goldcrest, golden-crested kinglet, Regulus regulus",5,27
+n01564101,2,bird,"gold-crowned kinglet, Regulus satrata",5,1
+n01564217,2,bird,"ruby-crowned kinglet, ruby-crowned wren, Regulus calendula",5,41
+n01564394,2,bird,"Old World warbler, true warbler",4,32
+n01564773,2,bird,"blackcap, Silvia atricapilla",5,42
+n01564914,2,bird,"greater whitethroat, whitethroat, Sylvia communis",4,26
+n01565078,2,bird,"lesser whitethroat, whitethroat, Sylvia curruca",4,50
+n01565345,2,bird,"wood warbler, Phylloscopus sibilatrix",5,14
+n01565599,2,bird,"sedge warbler, sedge bird, sedge wren, reedbird, Acrocephalus schoenobaenus",5,38
+n01565930,2,bird,wren warbler,5,27
+n01566207,2,bird,"tailorbird, Orthotomus sutorius",5,16
+n01566645,2,bird,"babbler, cackler",3,32
+n01567133,2,bird,"New World warbler, wood warbler",4,33
+n01567678,2,bird,"parula warbler, northern parula, Parula americana",5,25
+n01567879,2,bird,"Wilson's warbler, Wilson's blackcap, Wilsonia pusilla",5,31
+n01568132,2,bird,flycatching warbler,5,1
+n01568294,2,bird,"American redstart, redstart, Setophaga ruticilla",6,22
+n01568720,2,bird,"Cape May warbler, Dendroica tigrina",5,30
+n01568892,2,bird,"yellow warbler, golden warbler, yellowbird, Dendroica petechia",5,23
+n01569060,2,bird,"Blackburn, Blackburnian warbler, Dendroica fusca",5,17
+n01569262,2,bird,"Audubon's warbler, Audubon warbler, Dendroica auduboni",5,16
+n01569423,2,bird,"myrtle warbler, myrtle bird, Dendroica coronata",5,21
+n01569566,2,bird,"blackpoll, Dendroica striate",5,16
+n01569836,2,bird,"New World chat, chat",5,19
+n01569971,2,bird,"yellow-breasted chat, Icteria virens",6,17
+n01570267,2,bird,"ovenbird, Seiurus aurocapillus",5,30
+n01570421,2,bird,water thrush,5,22
+n01570676,2,bird,yellowthroat,5,45
+n01570839,2,bird,"common yellowthroat, Maryland yellowthroat, Geothlypis trichas",6,29
+n01571126,2,bird,bird of paradise,3,0
+n01571410,2,bird,"riflebird, Ptloris paradisea",4,0
+n01571904,2,bird,"New World oriole, American oriole, oriole",3,32
+n01572328,2,bird,"northern oriole, Icterus galbula",4,32
+n01572489,2,bird,"Baltimore oriole, Baltimore bird, hangbird, firebird, Icterus galbula galbula",5,34
+n01572654,2,bird,"Bullock's oriole, Icterus galbula bullockii",5,36
+n01572782,2,bird,"orchard oriole, Icterus spurius",4,38
+n01573074,2,bird,"meadowlark, lark",4,32
+n01573240,2,bird,"eastern meadowlark, Sturnella magna",5,28
+n01573360,2,bird,"western meadowlark, Sturnella neglecta",5,24
+n01573627,2,bird,"cacique, cazique",4,10
+n01573898,2,bird,"bobolink, ricebird, reedbird, Dolichonyx oryzivorus",4,23
+n01574045,2,bird,"New World blackbird, blackbird",4,33
+n01574390,2,bird,"grackle, crow blackbird",5,27
+n01574560,2,bird,"purple grackle, Quiscalus quiscula",6,15
+n01574801,2,bird,"rusty blackbird, rusty grackle, Euphagus carilonus",5,10
+n01575117,2,bird,cowbird,5,45
+n01575401,2,bird,"red-winged blackbird, redwing, Agelaius phoeniceus",5,35
+n01575745,2,bird,"Old World oriole, oriole",3,33
+n01576076,2,bird,"golden oriole, Oriolus oriolus",4,24
+n01576358,2,bird,fig-bird,4,7
+n01576695,2,bird,starling,3,32
+n01577035,2,bird,"common starling, Sturnus vulgaris",4,30
+n01577458,2,bird,"rose-colored starling, rose-colored pastor, Pastor sturnus, Pastor roseus",4,0
+n01577659,2,bird,"myna, mynah, mina, minah, myna bird, mynah bird",4,33
+n01577941,2,bird,"crested myna, Acridotheres tristis",5,17
+n01578180,2,bird,"hill myna, Indian grackle, grackle, Gracula religiosa",5,22
+n01578575,2,bird,corvine bird,3,13
+n01579028,2,bird,crow,4,32
+n01579149,2,bird,"American crow, Corvus brachyrhyncos",5,32
+n01579260,2,bird,"raven, Corvus corax",4,41
+n01579410,2,bird,"rook, Corvus frugilegus",4,17
+n01579578,2,bird,"jackdaw, daw, Corvus monedula",4,33
+n01579729,2,bird,chough,4,21
+n01580077,2,bird,jay,4,32
+n01580379,2,bird,Old World jay,5,1
+n01580490,2,bird,"common European jay, Garullus garullus",6,0
+n01580772,2,bird,New World jay,5,0
+n01580870,2,bird,"blue jay, jaybird, Cyanocitta cristata",6,35
+n01581166,2,bird,"Canada jay, grey jay, gray jay, camp robber, whisker jack, Perisoreus canadensis",5,30
+n01581434,2,bird,"Rocky Mountain jay, Perisoreus canadensis capitalis",6,6
+n01581730,2,bird,nutcracker,4,16
+n01581874,2,bird,"common nutcracker, Nucifraga caryocatactes",5,10
+n01581984,2,bird,"Clark's nutcracker, Nucifraga columbiana",5,29
+n01582220,2,bird,magpie,4,31
+n01582398,2,bird,"European magpie, Pica pica",5,20
+n01582498,2,bird,"American magpie, Pica pica hudsonia",5,13
+n01582856,2,bird,Australian magpie,3,32
+n01583209,2,bird,butcherbird,4,16
+n01583495,2,bird,"currawong, bell magpie",4,32
+n01583828,2,bird,"piping crow, piping crow-shrike, Gymnorhina tibicen",4,25
+n01584225,2,bird,"wren, jenny wren",2,30
+n01584695,2,bird,"winter wren, Troglodytes troglodytes",3,30
+n01584853,2,bird,"house wren, Troglodytes aedon",3,28
+n01585121,2,bird,marsh wren,3,37
+n01585287,2,bird,"long-billed marsh wren, Cistothorus palustris",4,20
+n01585422,2,bird,"sedge wren, short-billed marsh wren, Cistothorus platensis",4,19
+n01585715,2,bird,"rock wren, Salpinctes obsoletus",3,33
+n01586020,2,bird,"Carolina wren, Thryothorus ludovicianus",3,28
+n01586374,2,bird,cactus wren,3,31
+n01586941,2,bird,"mockingbird, mocker, Mimus polyglotktos",3,28
+n01587278,2,bird,"blue mockingbird, Melanotis caerulescens",3,0
+n01587526,2,bird,"catbird, grey catbird, gray catbird, Dumetella carolinensis",3,33
+n01587834,2,bird,"thrasher, mocking thrush",3,43
+n01588002,2,bird,"brown thrasher, brown thrush, Toxostoma rufums",4,23
+n01588431,2,bird,New Zealand wren,3,1
+n01588725,2,bird,"rock wren, Xenicus gilviventris",4,17
+n01588996,2,bird,"rifleman bird, Acanthisitta chloris",4,1
+n01589286,2,bird,"creeper, tree creeper",3,24
+n01589718,2,bird,"brown creeper, American creeper, Certhia americana",4,19
+n01589893,2,bird,"European creeper, Certhia familiaris",4,16
+n01590220,2,bird,"wall creeper, tichodrome, Tichodroma muriaria",4,1
+n01590583,2,bird,"nuthatch, nutcracker",3,0
+n01591005,2,bird,"European nuthatch, Sitta europaea",4,34
+n01591123,2,bird,"red-breasted nuthatch, Sitta canadensis",4,32
+n01591301,2,bird,"white-breasted nuthatch, Sitta carolinensis",4,38
+n01591697,2,bird,"titmouse, tit",3,45
+n01592084,2,bird,chickadee,4,36
+n01592257,2,bird,"black-capped chickadee, blackcap, Parus atricapillus",5,39
+n01592387,2,bird,"tufted titmouse, Parus bicolor",4,44
+n01592540,2,bird,"Carolina chickadee, Parus carolinensis",5,29
+n01592694,2,bird,"blue tit, tomtit, Parus caeruleus",4,29
+n01593028,2,bird,"bushtit, bush tit",4,36
+n01593282,2,bird,"wren-tit, Chamaea fasciata",4,6
+n01593553,2,bird,"verdin, Auriparus flaviceps",4,4
+n01594004,2,bird,"fairy bluebird, bluebird",3,30
+n01594372,2,bird,swallow,3,44
+n01594787,2,bird,"barn swallow, chimney swallow, Hirundo rustica",4,36
+n01594968,2,bird,"cliff swallow, Hirundo pyrrhonota",4,41
+n01595168,2,bird,"tree swallow, tree martin, Hirundo nigricans",4,36
+n01595450,2,bird,"white-bellied swallow, tree swallow, Iridoprocne bicolor",4,45
+n01595624,2,bird,martin,4,11
+n01595974,2,bird,"house martin, Delichon urbica",5,25
+n01596273,2,bird,"bank martin, bank swallow, sand martin, Riparia riparia",5,35
+n01596608,2,bird,"purple martin, Progne subis",5,12
+n01597022,2,bird,"wood swallow, swallow shrike",3,29
+n01597336,2,bird,tanager,3,29
+n01597737,2,bird,"scarlet tanager, Piranga olivacea, redbird, firebird",4,37
+n01597906,2,bird,"western tanager, Piranga ludoviciana",4,22
+n01598074,2,bird,"summer tanager, summer redbird, Piranga rubra",4,35
+n01598271,2,bird,"hepatic tanager, Piranga flava hepatica",4,6
+n01598588,2,bird,shrike,3,32
+n01598988,2,bird,butcherbird,4,27
+n01599159,2,bird,"European shrike, Lanius excubitor",5,22
+n01599269,2,bird,"northern shrike, Lanius borealis",5,30
+n01599388,2,bird,"white-rumped shrike, Lanius ludovicianus excubitorides",5,11
+n01599556,2,bird,"loggerhead shrike, Lanius lucovicianus",4,25
+n01599741,2,bird,"migrant shrike, Lanius ludovicianus migrans",4,3
+n01600085,2,bird,bush shrike,4,24
+n01600341,2,bird,"black-fronted bush shrike, Chlorophoneus nigrifrons",5,0
+n01600657,2,bird,"bowerbird, catbird",3,34
+n01601068,2,bird,"satin bowerbird, satin bird, Ptilonorhynchus violaceus",4,24
+n01601410,2,bird,"great bowerbird, Chlamydera nuchalis",4,0
+n01601694,2,bird,"water ouzel, dipper",3,33
+n01602080,2,bird,"European water ouzel, Cinclus aquaticus",4,3
+n01602209,2,bird,"American water ouzel, Cinclus mexicanus",4,7
+n01602630,2,bird,vireo,3,17
+n01602832,2,bird,"red-eyed vireo, Vireo olivaceous",4,17
+n01603000,2,bird,"solitary vireo, Vireo solitarius",4,8
+n01603152,2,bird,"blue-headed vireo, Vireo solitarius solitarius",4,10
+n01603600,2,bird,waxwing,3,43
+n01603812,2,bird,"cedar waxwing, cedarbird, Bombycilla cedrorun",4,26
+n01603953,2,bird,"Bohemian waxwing, Bombycilla garrulus",4,36
+n01604330,2,bird,"bird of prey, raptor, raptorial bird",1,28
+n01604968,2,bird,"Accipitriformes, order Accipitriformes",2,13
+n01605630,2,bird,hawk,2,44
+n01606097,2,bird,eyas,3,7
+n01606177,2,bird,"tiercel, tercel, tercelet",3,16
+n01606522,2,bird,"goshawk, Accipiter gentilis",3,28
+n01606672,2,bird,"sparrow hawk, Accipiter nisus",3,31
+n01606809,2,bird,"Cooper's hawk, blue darter, Accipiter cooperii",3,39
+n01606978,2,bird,"chicken hawk, hen hawk",3,6
+n01607309,2,bird,buteonine,3,0
+n01607429,2,bird,"redtail, red-tailed hawk, Buteo jamaicensis",3,7
+n01607600,2,bird,"rough-legged hawk, roughleg, Buteo lagopus",3,24
+n01607812,2,bird,"red-shouldered hawk, Buteo lineatus",3,35
+n01607962,2,bird,"buzzard, Buteo buteo",3,28
+n01608265,2,bird,"honey buzzard, Pernis apivorus",3,31
+n01608432,2,bird,kite,3,33
+n01608814,2,bird,"black kite, Milvus migrans",4,29
+n01609062,2,bird,"swallow-tailed kite, swallow-tailed hawk, Elanoides forficatus",4,26
+n01609391,2,bird,"white-tailed kite, Elanus leucurus",4,19
+n01609751,2,bird,harrier,3,35
+n01609956,2,bird,"marsh harrier, Circus Aeruginosus",4,29
+n01610100,2,bird,"Montagu's harrier, Circus pygargus",4,17
+n01610226,2,bird,"marsh hawk, northern harrier, hen harrier, Circus cyaneus",4,33
+n01610552,2,bird,"harrier eagle, short-toed eagle",3,25
+n01610955,2,bird,falcon,3,40
+n01611472,2,bird,"peregrine, peregrine falcon, Falco peregrinus",4,29
+n01611674,2,bird,"falcon-gentle, falcon-gentil",5,0
+n01611800,2,bird,"gyrfalcon, gerfalcon, Falco rusticolus",4,28
+n01611969,2,bird,"kestrel, Falco tinnunculus",4,33
+n01612122,2,bird,"sparrow hawk, American kestrel, kestrel, Falco sparverius",4,40
+n01612275,2,bird,"pigeon hawk, merlin, Falco columbarius",4,26
+n01612476,2,bird,"hobby, Falco subbuteo",4,16
+n01612628,2,bird,caracara,4,27
+n01612955,2,bird,"Audubon's caracara, Polyborus cheriway audubonii",5,7
+n01613177,2,bird,"carancha, Polyborus plancus",5,23
+n01613294,2,bird,"eagle, bird of Jove",2,31
+n01613807,2,bird,eaglet,3,30
+n01614038,2,bird,"harpy, harpy eagle, Harpia harpyja",3,21
+n01614343,2,bird,"golden eagle, Aquila chrysaetos",3,36
+n01614556,2,bird,"tawny eagle, Aquila rapax",3,29
+n01614690,2,bird,ringtail,4,0
+n01614925,2,bird,"bald eagle, American eagle, Haliaeetus leucocephalus",3,28
+n01615121,2,bird,sea eagle,3,41
+n01615303,2,bird,"Kamchatkan sea eagle, Stellar's sea eagle, Haliaeetus pelagicus",4,26
+n01615458,2,bird,"ern, erne, grey sea eagle, gray sea eagle, European sea eagle, white-tailed sea eagle, Haliatus albicilla",4,37
+n01615703,2,bird,"fishing eagle, Haliaeetus leucorhyphus",4,35
+n01616086,2,bird,"osprey, fish hawk, fish eagle, sea eagle, Pandion haliaetus",3,32
+n01616318,2,bird,vulture,2,32
+n01616551,2,bird,"Aegypiidae, family Aegypiidae",3,0
+n01616764,2,bird,Old World vulture,3,2
+n01617095,2,bird,"griffon vulture, griffon, Gyps fulvus",4,29
+n01617443,2,bird,"bearded vulture, lammergeier, lammergeyer, Gypaetus barbatus",4,17
+n01617766,2,bird,"Egyptian vulture, Pharaoh's chicken, Neophron percnopterus",4,30
+n01618082,2,bird,"black vulture, Aegypius monachus",4,34
+n01618503,2,bird,"secretary bird, Sagittarius serpentarius",2,28
+n01618922,2,bird,"New World vulture, cathartid",3,16
+n01619310,2,bird,"buzzard, turkey buzzard, turkey vulture, Cathartes aura",4,38
+n01619536,2,bird,condor,4,30
+n01619835,2,bird,"Andean condor, Vultur gryphus",5,27
+n01620135,2,bird,"California condor, Gymnogyps californianus",5,40
+n01620414,2,bird,"black vulture, carrion crow, Coragyps atratus",4,33
+n01620735,2,bird,"king vulture, Sarcorhamphus papa",4,47
+n01621127,2,bird,"owl, bird of Minerva, bird of night, hooter",2,30
+n01621635,2,bird,owlet,3,35
+n01622120,2,bird,"little owl, Athene noctua",3,40
+n01622352,2,bird,horned owl,3,26
+n01622483,2,bird,"great horned owl, Bubo virginianus",4,31
+n01622779,2,bird,"great grey owl, great gray owl, Strix nebulosa",3,30
+n01622959,2,bird,"tawny owl, Strix aluco",3,39
+n01623110,2,bird,"barred owl, Strix varia",3,38
+n01623425,2,bird,"screech owl, Otus asio",3,17
+n01623615,2,bird,screech owl,3,25
+n01623706,2,bird,scops owl,3,30
+n01623880,2,bird,"spotted owl, Strix occidentalis",3,31
+n01624115,2,bird,"Old World scops owl, Otus scops",4,24
+n01624212,2,bird,"Oriental scops owl, Otus sunia",4,12
+n01624305,2,bird,hoot owl,3,10
+n01624537,2,bird,"hawk owl, Surnia ulula",3,26
+n01624833,2,bird,"long-eared owl, Asio otus",3,34
+n01625121,2,bird,"laughing owl, laughing jackass, Sceloglaux albifacies",3,6
+n01625562,2,bird,"barn owl, Tyto alba",3,36
+n01789386,2,bird,"gallinaceous bird, gallinacean",1,4
+n01789740,2,bird,"domestic fowl, fowl, poultry",2,29
+n01790171,2,bird,Dorking,3,0
+n01790304,2,bird,Plymouth Rock,3,12
+n01790398,2,bird,"Cornish, Cornish fowl",3,6
+n01790557,2,bird,Rock Cornish,3,1
+n01790711,2,bird,game fowl,3,15
+n01790812,2,bird,"cochin, cochin china",3,5
+n01791107,2,bird,"jungle fowl, gallina",2,25
+n01791314,2,bird,jungle cock,3,1
+n01791388,2,bird,jungle hen,3,2
+n01791463,2,bird,"red jungle fowl, Gallus gallus",3,27
+n01791625,2,bird,"chicken, Gallus gallus",3,29
+n01791954,2,bird,bantam,3,32
+n01792042,2,bird,"chick, biddy",4,34
+n01792158,2,bird,"cock, rooster",4,44
+n01792429,2,bird,cockerel,5,32
+n01792530,2,bird,capon,4,1
+n01792640,2,bird,"hen, biddy",4,32
+n01792808,2,bird,cackler,5,0
+n01792955,2,bird,"brood hen, broody, broody hen, setting hen, sitter",5,24
+n01793085,2,bird,mother hen,5,10
+n01793159,2,bird,layer,5,6
+n01793249,2,bird,pullet,5,29
+n01793340,2,bird,spring chicken,4,5
+n01793435,2,bird,Rhode Island red,4,27
+n01793565,2,bird,"Dominique, Dominick",4,0
+n01793715,2,bird,Orpington,4,39
+n01794158,2,bird,"turkey, Meleagris gallopavo",3,28
+n01794344,2,bird,"turkey cock, gobbler, tom, tom turkey",4,33
+n01794651,2,bird,"ocellated turkey, Agriocharis ocellata",2,12
+n01795088,2,bird,grouse,3,32
+n01795545,2,bird,black grouse,4,16
+n01795735,2,bird,"European black grouse, heathfowl, Lyrurus tetrix",5,7
+n01795900,2,bird,"Asian black grouse, Lyrurus mlokosiewiczi",5,0
+n01796019,2,bird,"blackcock, black cock",5,6
+n01796105,2,bird,"greyhen, grayhen, grey hen, gray hen, heath hen",5,4
+n01796340,2,bird,ptarmigan,4,22
+n01796519,2,bird,"red grouse, moorfowl, moorbird, moor-bird, moorgame, Lagopus scoticus",5,9
+n01796729,2,bird,moorhen,6,27
+n01796800,2,bird,moorcock,6,0
+n01797020,2,bird,"capercaillie, capercailzie, horse of the wood, Tetrao urogallus",4,38
+n01797307,2,bird,"spruce grouse, Canachites canadensis",4,36
+n01797601,2,bird,"sage grouse, sage hen, Centrocercus urophasianus",4,22
+n01797886,2,bird,"ruffed grouse, partridge, Bonasa umbellus",4,34
+n01798168,2,bird,"sharp-tailed grouse, sprigtail, sprig tail, Pedioecetes phasianellus",4,14
+n01798484,2,bird,"prairie chicken, prairie grouse, prairie fowl",4,28
+n01798706,2,bird,"greater prairie chicken, Tympanuchus cupido",5,19
+n01798839,2,bird,"lesser prairie chicken, Tympanuchus pallidicinctus",5,11
+n01798979,2,bird,"heath hen, Tympanuchus cupido cupido",5,9
+n01799302,2,bird,guan,2,7
+n01799679,2,bird,curassow,2,9
+n01800195,2,bird,piping guan,3,6
+n01800424,2,bird,chachalaca,2,14
+n01800633,2,bird,"Texas chachalaca, Ortilis vetula macalli",3,4
+n01801088,2,bird,"megapode, mound bird, mound-bird, mound builder, scrub fowl",2,0
+n01801479,2,bird,"mallee fowl, leipoa, lowan, Leipoa ocellata",3,2
+n01801672,2,bird,mallee hen,4,0
+n01801876,2,bird,"brush turkey, Alectura lathami",3,21
+n01802159,2,bird,"maleo, Macrocephalon maleo",3,3
+n01802721,2,bird,phasianid,3,0
+n01803078,2,bird,pheasant,4,30
+n01803362,2,bird,"ring-necked pheasant, Phasianus colchicus",5,37
+n01803641,2,bird,"afropavo, Congo peafowl, Afropavo congensis",5,3
+n01803893,2,bird,"argus, argus pheasant",5,5
+n01804163,2,bird,"golden pheasant, Chrysolophus pictus",5,42
+n01804478,2,bird,"bobwhite, bobwhite quail, partridge",5,29
+n01804653,2,bird,"northern bobwhite, Colinus virginianus",6,32
+n01804921,2,bird,Old World quail,5,6
+n01805070,2,bird,"migratory quail, Coturnix coturnix, Coturnix communis",6,15
+n01805321,2,bird,"monal, monaul",5,10
+n01805801,2,bird,"peafowl, bird of Juno",5,30
+n01806061,2,bird,"peachick, pea-chick",6,0
+n01806143,2,bird,peacock,6,37
+n01806297,2,bird,peahen,6,27
+n01806364,2,bird,"blue peafowl, Pavo cristatus",6,35
+n01806467,2,bird,"green peafowl, Pavo muticus",6,34
+n01806567,2,bird,quail,4,23
+n01806847,2,bird,"California quail, Lofortyx californicus",5,31
+n01807105,2,bird,tragopan,5,19
+n01807496,2,bird,partridge,4,20
+n01807828,2,bird,"Hungarian partridge, grey partridge, gray partridge, Perdix perdix",5,24
+n01808140,2,bird,"red-legged partridge, Alectoris ruffa",5,24
+n01808291,2,bird,"Greek partridge, rock partridge, Alectoris graeca",5,7
+n01808596,2,bird,"mountain quail, mountain partridge, Oreortyx picta palmeri",5,7
+n01809106,2,bird,"guinea fowl, guinea, Numida meleagris",3,46
+n01809371,2,bird,guinea hen,4,15
+n01809752,2,bird,"hoatzin, hoactzin, stinkbird, Opisthocomus hoazin",2,20
+n01810268,2,bird,"tinamou, partridge",3,35
+n01810700,2,bird,columbiform bird,2,2
+n01811243,2,bird,"dodo, Raphus cucullatus",3,8
+n01811542,2,bird,"solitaire, Pezophaps solitaria",3,0
+n01811909,2,bird,pigeon,3,35
+n01812187,2,bird,"pouter pigeon, pouter",4,6
+n01812337,2,bird,dove,4,33
+n01812662,2,bird,"rock dove, rock pigeon, Columba livia",4,22
+n01812866,2,bird,"band-tailed pigeon, band-tail pigeon, bandtail, Columba fasciata",4,19
+n01813088,2,bird,"wood pigeon, ringdove, cushat, Columba palumbus",4,35
+n01813385,2,bird,turtledove,5,40
+n01813532,2,bird,Streptopelia turtur,6,25
+n01813658,2,bird,"ringdove, Streptopelia risoria",6,11
+n01813948,2,bird,"Australian turtledove, turtledove, Stictopelia cuneata",5,31
+n01814217,2,bird,"mourning dove, Zenaidura macroura",5,48
+n01814370,2,bird,domestic pigeon,4,19
+n01814549,2,bird,squab,4,5
+n01814620,2,bird,fairy swallow,5,1
+n01814755,2,bird,"roller, tumbler, tumbler pigeon",5,23
+n01814921,2,bird,"homing pigeon, homer",5,29
+n01815036,2,bird,carrier pigeon,6,5
+n01815270,2,bird,"passenger pigeon, Ectopistes migratorius",4,1
+n01815601,2,bird,"sandgrouse, sand grouse",3,33
+n01816017,2,bird,"painted sandgrouse, Pterocles indicus",4,2
+n01816140,2,bird,"pin-tailed sandgrouse, pin-tailed grouse, Pterocles alchata",4,0
+n01816474,2,bird,"pallas's sandgrouse, Syrrhaptes paradoxus",4,0
+n01816887,2,bird,parrot,1,19
+n01817263,2,bird,popinjay,2,37
+n01817346,2,bird,"poll, poll parrot",2,26
+n01817953,2,bird,"African grey, African gray, Psittacus erithacus",2,31
+n01818299,2,bird,amazon,2,30
+n01818515,2,bird,macaw,2,34
+n01818832,2,bird,"kea, Nestor notabilis",2,32
+n01819115,2,bird,cockatoo,2,36
+n01819313,2,bird,"sulphur-crested cockatoo, Kakatoe galerita, Cacatua galerita",3,34
+n01819465,2,bird,"pink cockatoo, Kakatoe leadbeateri",3,24
+n01819734,2,bird,"cockateel, cockatiel, cockatoo parrot, Nymphicus hollandicus",2,40
+n01820052,2,bird,lovebird,2,28
+n01820348,2,bird,lory,2,24
+n01820546,2,bird,lorikeet,3,44
+n01820801,2,bird,"varied Lorikeet, Glossopsitta versicolor",4,7
+n01821076,2,bird,"rainbow lorikeet, Trichoglossus moluccanus",4,42
+n01821203,2,bird,"parakeet, parrakeet, parroket, paraquet, paroquet, parroquet",2,27
+n01821554,2,bird,"Carolina parakeet, Conuropsis carolinensis",3,5
+n01821869,2,bird,"budgerigar, budgereegah, budgerygah, budgie, grass parakeet, lovebird, shell parakeet, Melopsittacus undulatus",3,32
+n01822300,2,bird,"ring-necked parakeet, Psittacula krameri",3,27
+n01822602,2,bird,cuculiform bird,1,0
+n01823013,2,bird,cuckoo,2,28
+n01823414,2,bird,"European cuckoo, Cuculus canorus",3,16
+n01823740,2,bird,"black-billed cuckoo, Coccyzus erythropthalmus",3,12
+n01824035,2,bird,"roadrunner, chaparral cock, Geococcyx californianus",3,22
+n01824344,2,bird,ani,3,10
+n01824575,2,bird,coucal,3,20
+n01824749,2,bird,"crow pheasant, Centropus sinensis",4,12
+n01824862,2,bird,"pheasant coucal, pheasant cuckoo, Centropus phasianinus",4,0
+n01825278,2,bird,"touraco, turaco, turacou, turakoo",2,25
+n01825930,2,bird,coraciiform bird,1,0
+n01826364,2,bird,roller,2,31
+n01826680,2,bird,"European roller, Coracias garrulus",3,28
+n01826844,2,bird,ground roller,3,0
+n01827403,2,bird,kingfisher,2,33
+n01827793,2,bird,"Eurasian kingfisher, Alcedo atthis",3,41
+n01828096,2,bird,"belted kingfisher, Ceryle alcyon",3,35
+n01828556,2,bird,"kookaburra, laughing jackass, Dacelo gigas",3,31
+n01828970,2,bird,bee eater,2,36
+n01829413,2,bird,hornbill,2,31
+n01829869,2,bird,"hoopoe, hoopoo",2,27
+n01830042,2,bird,"Euopean hoopoe, Upupa epops",3,34
+n01830479,2,bird,wood hoopoe,2,6
+n01830915,2,bird,"motmot, momot",2,33
+n01831360,2,bird,tody,2,10
+n01831712,2,bird,apodiform bird,1,0
+n01832167,2,bird,swift,2,17
+n01832493,2,bird,"European swift, Apus apus",3,10
+n01832813,2,bird,"chimney swift, chimney swallow, Chateura pelagica",3,3
+n01833112,2,bird,"swiftlet, Collocalia inexpectata",3,3
+n01833415,2,bird,"tree swift, crested swift",2,0
+n01833805,2,bird,hummingbird,2,42
+n01834177,2,bird,Archilochus colubris,3,31
+n01834540,2,bird,thornbill,3,33
+n01834918,2,bird,caprimulgiform bird,1,0
+n01835276,2,bird,"goatsucker, nightjar, caprimulgid",2,26
+n01835769,2,bird,"European goatsucker, European nightjar, Caprimulgus europaeus",3,18
+n01835918,2,bird,"chuck-will's-widow, Caprimulgus carolinensis",3,3
+n01836087,2,bird,"whippoorwill, Caprimulgus vociferus",3,2
+n01836384,2,bird,"nighthawk, bullbat, mosquito hawk",3,0
+n01836673,2,bird,"poorwill, Phalaenoptilus nuttallii",3,1
+n01837072,2,bird,frogmouth,2,29
+n01837526,2,bird,"oilbird, guacharo, Steatornis caripensis",2,2
+n01838038,2,bird,piciform bird,1,0
+n01838598,2,bird,"woodpecker, peckerwood, pecker",2,37
+n01839086,2,bird,"green woodpecker, Picus viridis",3,41
+n01839330,2,bird,downy woodpecker,3,34
+n01839598,2,bird,flicker,3,37
+n01839750,2,bird,"yellow-shafted flicker, Colaptes auratus, yellowhammer",4,30
+n01839949,2,bird,"gilded flicker, Colaptes chrysoides",4,13
+n01840120,2,bird,"red-shafted flicker, Colaptes caper collaris",4,15
+n01840412,2,bird,"ivorybill, ivory-billed woodpecker, Campephilus principalis",3,15
+n01840775,2,bird,"redheaded woodpecker, redhead, Melanerpes erythrocephalus",3,22
+n01841102,2,bird,sapsucker,3,17
+n01841288,2,bird,"yellow-bellied sapsucker, Sphyrapicus varius",4,34
+n01841441,2,bird,"red-breasted sapsucker, Sphyrapicus varius ruber",4,27
+n01841679,2,bird,wryneck,3,10
+n01841943,2,bird,piculet,3,3
+n01842235,2,bird,barbet,2,31
+n01842504,2,bird,puffbird,2,15
+n01842788,2,bird,honey guide,2,2
+n01843065,2,bird,jacamar,2,24
+n01843383,2,bird,toucan,2,23
+n01843719,2,bird,toucanet,3,24
+n01844231,2,bird,trogon,1,27
+n01844551,2,bird,"quetzal, quetzal bird",2,20
+n01844746,2,bird,"resplendent quetzel, resplendent trogon, Pharomacrus mocino",3,16
+n01844917,2,bird,aquatic bird,1,30
+n01845132,2,bird,"waterfowl, water bird, waterbird",2,36
+n01845477,2,bird,anseriform bird,3,8
+n01846331,2,bird,duck,4,39
+n01847000,2,bird,drake,5,24
+n01847089,2,bird,quack-quack,5,40
+n01847170,2,bird,duckling,5,27
+n01847253,2,bird,diving duck,5,31
+n01847407,2,bird,"dabbling duck, dabbler",5,23
+n01847806,2,bird,"mallard, Anas platyrhynchos",5,34
+n01847978,2,bird,"black duck, Anas rubripes",5,26
+n01848123,2,bird,teal,5,36
+n01848323,2,bird,"greenwing, green-winged teal, Anas crecca",6,25
+n01848453,2,bird,"bluewing, blue-winged teal, Anas discors",6,24
+n01848555,2,bird,"garganey, Anas querquedula",6,26
+n01848648,2,bird,"widgeon, wigeon, Anas penelope",5,32
+n01848840,2,bird,"American widgeon, baldpate, Anas americana",6,22
+n01848976,2,bird,"shoveler, shoveller, broadbill, Anas clypeata",5,41
+n01849157,2,bird,"pintail, pin-tailed duck, Anas acuta",5,24
+n01849466,2,bird,sheldrake,5,30
+n01849676,2,bird,shelduck,6,31
+n01849863,2,bird,"ruddy duck, Oxyura jamaicensis",5,22
+n01850192,2,bird,"bufflehead, butterball, dipper, Bucephela albeola",5,45
+n01850373,2,bird,"goldeneye, whistler, Bucephela clangula",5,41
+n01850553,2,bird,"Barrow's goldeneye, Bucephala islandica",6,34
+n01850873,2,bird,"canvasback, canvasback duck, Aythya valisineria",5,25
+n01851038,2,bird,"pochard, Aythya ferina",5,39
+n01851207,2,bird,"redhead, Aythya americana",5,29
+n01851375,2,bird,"scaup, scaup duck, bluebill, broadbill",5,36
+n01851573,2,bird,"greater scaup, Aythya marila",6,24
+n01851731,2,bird,"lesser scaup, lesser scaup duck, lake duck, Aythya affinis",6,26
+n01851895,2,bird,wild duck,5,25
+n01852142,2,bird,"wood duck, summer duck, wood widgeon, Aix sponsa",5,25
+n01852329,2,bird,wood drake,6,26
+n01852400,2,bird,"mandarin duck, Aix galericulata",5,38
+n01852671,2,bird,"muscovy duck, musk duck, Cairina moschata",5,39
+n01852861,2,bird,sea duck,5,16
+n01853195,2,bird,"eider, eider duck",6,27
+n01853498,2,bird,"scoter, scooter",6,35
+n01853666,2,bird,"common scoter, Melanitta nigra",7,20
+n01853870,2,bird,"old squaw, oldwife, Clangula hyemalis",6,37
+n01854415,2,bird,"merganser, fish duck, sawbill, sheldrake",6,25
+n01854700,2,bird,"goosander, Mergus merganser",7,31
+n01854838,2,bird,"American merganser, Mergus merganser americanus",7,24
+n01855032,2,bird,"red-breasted merganser, Mergus serrator",7,21
+n01855188,2,bird,"smew, Mergus albellus",7,28
+n01855476,2,bird,"hooded merganser, hooded sheldrake, Lophodytes cucullatus",7,26
+n01855672,2,bird,goose,4,35
+n01856072,2,bird,gosling,5,54
+n01856155,2,bird,gander,5,32
+n01856380,2,bird,"Chinese goose, Anser cygnoides",5,27
+n01856553,2,bird,"greylag, graylag, greylag goose, graylag goose, Anser anser",5,32
+n01856890,2,bird,"blue goose, Chen caerulescens",5,24
+n01857079,2,bird,snow goose,6,37
+n01857325,2,bird,"brant, brant goose, brent, brent goose",5,32
+n01857512,2,bird,"common brant goose, Branta bernicla",6,34
+n01857632,2,bird,"honker, Canada goose, Canadian goose, Branta canadensis",5,35
+n01857851,2,bird,"barnacle goose, barnacle, Branta leucopsis",5,31
+n01858281,2,bird,coscoroba,3,17
+n01858441,2,bird,swan,2,27
+n01858780,2,bird,cob,3,24
+n01858845,2,bird,pen,3,39
+n01858906,2,bird,cygnet,3,40
+n01859190,2,bird,"mute swan, Cygnus olor",3,44
+n01859325,2,bird,"whooper, whooper swan, Cygnus cygnus",3,38
+n01859496,2,bird,"tundra swan, Cygnus columbianus",3,37
+n01859689,2,bird,"whistling swan, Cygnus columbianus columbianus",4,39
+n01859852,2,bird,"Bewick's swan, Cygnus columbianus bewickii",4,27
+n01860002,2,bird,"trumpeter, trumpeter swan, Cygnus buccinator",3,26
+n01860187,2,bird,"black swan, Cygnus atratus",3,45
+n01860497,2,bird,screamer,3,13
+n01860864,2,bird,"horned screamer, Anhima cornuta",4,5
+n01861148,2,bird,crested screamer,4,8
+n01861330,2,bird,"chaja, Chauna torquata",5,13
+n02000954,2,bird,"wading bird, wader",2,41
+n02002075,2,bird,stork,3,34
+n02002556,2,bird,"white stork, Ciconia ciconia",4,25
+n02002724,2,bird,"black stork, Ciconia nigra",4,41
+n02003037,2,bird,"adjutant bird, adjutant, adjutant stork, Leptoptilus dubius",4,26
+n02003204,2,bird,"marabou, marabout, marabou stork, Leptoptilus crumeniferus",4,39
+n02003577,2,bird,openbill,4,25
+n02003839,2,bird,"jabiru, Jabiru mycteria",4,26
+n02004131,2,bird,"saddlebill, jabiru, Ephippiorhynchus senegalensis",4,34
+n02004492,2,bird,"policeman bird, black-necked stork, jabiru, Xenorhyncus asiaticus",4,25
+n02004855,2,bird,"wood ibis, wood stork, flinthead, Mycteria americana",4,39
+n02005399,2,bird,"shoebill, shoebird, Balaeniceps rex",3,29
+n02005790,2,bird,ibis,3,31
+n02006063,2,bird,"wood ibis, wood stork, Ibis ibis",4,34
+n02006364,2,bird,"sacred ibis, Threskiornis aethiopica",4,26
+n02006656,2,bird,spoonbill,3,29
+n02006985,2,bird,"common spoonbill, Platalea leucorodia",4,24
+n02007284,2,bird,"roseate spoonbill, Ajaia ajaja",4,47
+n02007558,2,bird,flamingo,3,37
+n02008041,2,bird,heron,3,32
+n02008497,2,bird,"great blue heron, Ardea herodius",4,40
+n02008643,2,bird,"great white heron, Ardea occidentalis",4,33
+n02008796,2,bird,egret,4,36
+n02009229,2,bird,"little blue heron, Egretta caerulea",4,36
+n02009380,2,bird,"snowy egret, snowy heron, Egretta thula",5,27
+n02009508,2,bird,"little egret, Egretta garzetta",5,36
+n02009750,2,bird,"great white heron, Casmerodius albus",5,38
+n02009912,2,bird,"American egret, great white heron, Egretta albus",5,34
+n02010272,2,bird,"cattle egret, Bubulcus ibis",5,28
+n02010453,2,bird,"night heron, night raven",4,42
+n02010728,2,bird,"black-crowned night heron, Nycticorax nycticorax",5,41
+n02011016,2,bird,"yellow-crowned night heron, Nyctanassa violacea",5,25
+n02011281,2,bird,"boatbill, boat-billed heron, broadbill, Cochlearius cochlearius",4,26
+n02011460,2,bird,bittern,4,32
+n02011805,2,bird,"American bittern, stake driver, Botaurus lentiginosus",5,40
+n02011943,2,bird,"European bittern, Botaurus stellaris",5,19
+n02012185,2,bird,"least bittern, Ixobrychus exilis",5,35
+n02012849,2,bird,crane,3,38
+n02013177,2,bird,"whooping crane, whooper, Grus americana",4,31
+n02013567,2,bird,"courlan, Aramus guarauna",3,10
+n02013706,2,bird,"limpkin, Aramus pictus",3,34
+n02014237,2,bird,"crested cariama, seriema, Cariama cristata",3,14
+n02014524,2,bird,"chunga, seriema, Chunga burmeisteri",3,19
+n02014941,2,bird,rail,3,27
+n02015357,2,bird,"weka, maori hen, wood hen",4,25
+n02015554,2,bird,crake,4,26
+n02015797,2,bird,"corncrake, land rail, Crex crex",5,12
+n02016066,2,bird,"spotted crake, Porzana porzana",5,26
+n02016358,2,bird,"gallinule, marsh hen, water hen, swamphen",2,31
+n02016659,2,bird,"Florida gallinule, Gallinula chloropus cachinnans",3,10
+n02016816,2,bird,"moorhen, Gallinula chloropus",3,42
+n02016956,2,bird,purple gallinule,3,18
+n02017213,2,bird,"European gallinule, Porphyrio porphyrio",4,29
+n02017475,2,bird,"American gallinule, Porphyrula martinica",4,18
+n02017725,2,bird,"notornis, takahe, Notornis mantelli",4,32
+n02018027,2,bird,coot,4,26
+n02018207,2,bird,"American coot, marsh hen, mud hen, water hen, Fulica americana",5,29
+n02018368,2,bird,"Old World coot, Fulica atra",5,29
+n02018795,2,bird,bustard,3,37
+n02019190,2,bird,"great bustard, Otis tarda",4,20
+n02019438,2,bird,"plain turkey, Choriotis australis",4,0
+n02019929,2,bird,"button quail, button-quail, bustard quail, hemipode",3,17
+n02020219,2,bird,"striped button quail, Turnix sylvatica",4,0
+n02020345,2,bird,ortygan,3,0
+n02020578,2,bird,"plain wanderer, Pedionomus torquatus",3,2
+n02021050,2,bird,trumpeter,3,36
+n02021281,2,bird,"Brazilian trumpeter, Psophia crepitans",4,4
+n02021795,2,bird,"seabird, sea bird, seafowl",2,33
+n02022684,2,bird,"shorebird, shore bird, limicoline bird",3,43
+n02023341,2,bird,plover,4,25
+n02023855,2,bird,"piping plover, Charadrius melodus",5,35
+n02023992,2,bird,"killdeer, kildeer, killdeer plover, Charadrius vociferus",5,38
+n02024185,2,bird,"dotterel, dotrel, Charadrius morinellus, Eudromias morinellus",5,10
+n02024479,2,bird,golden plover,5,24
+n02024763,2,bird,"lapwing, green plover, peewit, pewit",5,26
+n02025043,2,bird,turnstone,5,48
+n02025239,2,bird,"ruddy turnstone, Arenaria interpres",6,30
+n02025389,2,bird,"black turnstone, Arenaria-Melanocephala",6,20
+n02026059,2,bird,sandpiper,4,20
+n02026629,2,bird,"surfbird, Aphriza virgata",4,17
+n02026948,2,bird,"European sandpiper, Actitis hypoleucos",5,36
+n02027075,2,bird,"spotted sandpiper, Actitis macularia",5,31
+n02027357,2,bird,"least sandpiper, stint, Erolia minutilla",5,32
+n02027492,2,bird,"red-backed sandpiper, dunlin, Erolia alpina",5,46
+n02027897,2,bird,"greenshank, Tringa nebularia",5,27
+n02028035,2,bird,"redshank, Tringa totanus",5,39
+n02028175,2,bird,yellowlegs,5,36
+n02028342,2,bird,"greater yellowlegs, Tringa melanoleuca",6,22
+n02028451,2,bird,"lesser yellowlegs, Tringa flavipes",6,23
+n02028727,2,bird,"pectoral sandpiper, jacksnipe, Calidris melanotos",5,28
+n02028900,2,bird,"knot, greyback, grayback, Calidris canutus",5,42
+n02029087,2,bird,"curlew sandpiper, Calidris Ferruginea",5,28
+n02029378,2,bird,"sanderling, Crocethia alba",5,36
+n02029706,2,bird,"upland sandpiper, upland plover, Bartramian sandpiper, Bartramia longicauda",5,28
+n02030035,2,bird,"ruff, Philomachus pugnax",5,41
+n02030224,2,bird,reeve,6,6
+n02030287,2,bird,tattler,5,22
+n02030568,2,bird,"Polynesian tattler, Heteroscelus incanus",6,7
+n02030837,2,bird,"willet, Catoptrophorus semipalmatus",6,40
+n02030996,2,bird,woodcock,4,17
+n02031298,2,bird,"Eurasian woodcock, Scolopax rusticola",5,7
+n02031585,2,bird,"American woodcock, woodcock snipe, Philohela minor",5,19
+n02031934,2,bird,snipe,4,33
+n02032222,2,bird,"whole snipe, Gallinago gallinago",5,26
+n02032355,2,bird,"Wilson's snipe, Gallinago gallinago delicata",5,32
+n02032480,2,bird,"great snipe, woodcock snipe, Gallinago media",5,35
+n02032769,2,bird,"jacksnipe, half snipe, Limnocryptes minima",5,5
+n02033041,2,bird,dowitcher,5,32
+n02033208,2,bird,"greyback, grayback, Limnodromus griseus",6,16
+n02033324,2,bird,"red-breasted snipe, Limnodromus scolopaceus",6,14
+n02033561,2,bird,curlew,4,29
+n02033779,2,bird,"European curlew, Numenius arquata",5,23
+n02033882,2,bird,"Eskimo curlew, Numenius borealis",5,2
+n02034129,2,bird,godwit,4,39
+n02034295,2,bird,"Hudsonian godwit, Limosa haemastica",5,21
+n02034661,2,bird,"stilt, stiltbird, longlegs, long-legs, stilt plover, Himantopus stilt",4,31
+n02034971,2,bird,"black-necked stilt, Himantopus mexicanus",5,41
+n02035210,2,bird,"black-winged stilt, Himantopus himantopus",5,34
+n02035402,2,bird,"white-headed stilt, Himantopus himantopus leucocephalus",5,7
+n02035656,2,bird,"kaki, Himantopus novae-zelandiae",5,0
+n02036053,2,bird,"stilt, Australian stilt",4,48
+n02036228,2,bird,"banded stilt, Cladorhyncus leucocephalum",5,7
+n02036711,2,bird,avocet,4,30
+n02037110,2,bird,"oystercatcher, oyster catcher",4,36
+n02037464,2,bird,phalarope,4,26
+n02037869,2,bird,"red phalarope, Phalaropus fulicarius",5,25
+n02038141,2,bird,"northern phalarope, Lobipes lobatus",5,6
+n02038466,2,bird,"Wilson's phalarope, Steganopus tricolor",5,24
+n02038993,2,bird,"pratincole, glareole",4,19
+n02039171,2,bird,courser,4,11
+n02039497,2,bird,"cream-colored courser, Cursorius cursor",5,5
+n02039780,2,bird,"crocodile bird, Pluvianus aegyptius",5,3
+n02040266,2,bird,"stone curlew, thick-knee, Burhinus oedicnemus",4,32
+n02040505,2,bird,coastal diving bird,3,2
+n02041085,2,bird,larid,4,24
+n02041246,2,bird,"gull, seagull, sea gull",5,42
+n02041678,2,bird,"mew, mew gull, sea mew, Larus canus",6,31
+n02041875,2,bird,"black-backed gull, great black-backed gull, cob, Larus marinus",6,39
+n02042046,2,bird,"herring gull, Larus argentatus",6,35
+n02042180,2,bird,"laughing gull, blackcap, pewit, pewit gull, Larus ridibundus",6,36
+n02042472,2,bird,"ivory gull, Pagophila eburnea",6,33
+n02042759,2,bird,kittiwake,6,29
+n02043063,2,bird,tern,5,38
+n02043333,2,bird,"sea swallow, Sterna hirundo",6,26
+n02043808,2,bird,skimmer,4,23
+n02044178,2,bird,jaeger,4,31
+n02044517,2,bird,"parasitic jaeger, arctic skua, Stercorarius parasiticus",5,29
+n02044778,2,bird,"skua, bonxie",5,37
+n02044908,2,bird,"great skua, Catharacta skua",6,24
+n02045369,2,bird,auk,3,18
+n02045596,2,bird,auklet,4,19
+n02045864,2,bird,"razorbill, razor-billed auk, Alca torda",4,36
+n02046171,2,bird,"little auk, dovekie, Plautus alle",4,21
+n02046442,2,bird,"great auk, Pinguinus impennis",4,0
+n02046759,2,bird,guillemot,4,20
+n02046939,2,bird,"black guillemot, Cepphus grylle",5,33
+n02047045,2,bird,"pigeon guillemot, Cepphus columba",5,22
+n02047260,2,bird,murre,5,28
+n02047411,2,bird,"common murre, Uria aalge",6,24
+n02047517,2,bird,"thick-billed murre, Uria lomvia",6,15
+n02047614,2,bird,puffin,3,45
+n02047975,2,bird,"Atlantic puffin, Fratercula arctica",4,34
+n02048115,2,bird,"horned puffin, Fratercula corniculata",4,28
+n02048353,2,bird,"tufted puffin, Lunda cirrhata",4,29
+n02048698,2,bird,gaviiform seabird,3,0
+n02049088,2,bird,"loon, diver",4,25
+n02049532,2,bird,podicipitiform seabird,3,1
+n02050004,2,bird,grebe,4,25
+n02050313,2,bird,"great crested grebe, Podiceps cristatus",5,33
+n02050442,2,bird,"red-necked grebe, Podiceps grisegena",5,29
+n02050586,2,bird,"black-necked grebe, eared grebe, Podiceps nigricollis",5,32
+n02050809,2,bird,"dabchick, little grebe, Podiceps ruficollis",5,27
+n02051059,2,bird,"pied-billed grebe, Podilymbus podiceps",5,30
+n02051474,2,bird,pelecaniform seabird,3,0
+n02051845,2,bird,pelican,4,33
+n02052204,2,bird,"white pelican, Pelecanus erythrorhynchos",5,38
+n02052365,2,bird,"Old world white pelican, Pelecanus onocrotalus",5,27
+n02052775,2,bird,"frigate bird, man-of-war bird",4,33
+n02053083,2,bird,gannet,4,35
+n02053425,2,bird,"solan, solan goose, solant goose, Sula bassana",5,32
+n02053584,2,bird,booby,5,29
+n02054036,2,bird,"cormorant, Phalacrocorax carbo",4,36
+n02054502,2,bird,"snakebird, anhinga, darter",4,50
+n02054711,2,bird,"water turkey, Anhinga anhinga",5,54
+n02055107,2,bird,"tropic bird, tropicbird, boatswain bird",4,28
+n02055658,2,bird,sphenisciform seabird,3,34
+n02055803,2,bird,penguin,4,33
+n02056228,2,bird,"Adelie, Adelie penguin, Pygoscelis adeliae",5,47
+n02056570,2,bird,"king penguin, Aptenodytes patagonica",5,56
+n02056728,2,bird,"emperor penguin, Aptenodytes forsteri",5,33
+n02057035,2,bird,"jackass penguin, Spheniscus demersus",5,34
+n02057330,2,bird,"rock hopper, crested penguin",5,38
+n02057731,2,bird,"pelagic bird, oceanic bird",3,24
+n02057898,2,bird,procellariiform seabird,4,0
+n02058221,2,bird,"albatross, mollymawk",4,36
+n02058594,2,bird,"wandering albatross, Diomedea exulans",5,37
+n02058747,2,bird,"black-footed albatross, gooney, gooney bird, goonie, goony, Diomedea nigripes",5,6
+n02059162,2,bird,petrel,4,15
+n02059541,2,bird,"white-chinned petrel, Procellaria aequinoctialis",5,1
+n02059852,2,bird,"giant petrel, giant fulmar, Macronectes giganteus",5,12
+n02060133,2,bird,"fulmar, fulmar petrel, Fulmarus glacialis",5,44
+n02060411,2,bird,shearwater,5,21
+n02060569,2,bird,"Manx shearwater, Puffinus puffinus",6,13
+n02060889,2,bird,storm petrel,5,39
+n02061217,2,bird,"stormy petrel, northern storm petrel, Hydrobates pelagicus",6,3
+n02061560,2,bird,"Mother Carey's chicken, Mother Carey's hen, Oceanites oceanicus",6,8
+n02061853,2,bird,diving petrel,4,10
+n02153203,2,bird,game bird,2,7
+n02511730,2,bird,twitterer,1,0
+n01322898,3,cat,lion cub,3,599
+n01323068,3,cat,tiger cub,3,537
+n02120997,3,cat,"feline, felid",0,684
+n02121620,3,cat,"cat, true cat",1,569
+n02121808,3,cat,"domestic cat, house cat, Felis domesticus, Felis catus",2,697
+n02122298,3,cat,"kitty, kitty-cat, puss, pussy, pussycat",3,527
+n02122430,3,cat,mouser,3,445
+n02122510,3,cat,alley cat,3,276
+n02122725,3,cat,"tom, tomcat",3,573
+n02122878,3,cat,"tabby, queen",3,488
+n02123045,3,cat,"tabby, tabby cat",3,590
+n02123159,3,cat,tiger cat,3,520
+n02123242,3,cat,"tortoiseshell, tortoiseshell-cat, calico cat",3,564
+n02123394,3,cat,Persian cat,3,602
+n02123478,3,cat,"Angora, Angora cat",3,396
+n02123597,3,cat,"Siamese cat, Siamese",3,640
+n02123917,3,cat,Burmese cat,3,458
+n02124075,3,cat,Egyptian cat,3,362
+n02124157,3,cat,"Maltese, Maltese cat",3,0
+n02124313,3,cat,"Abyssinian, Abyssinian cat",3,651
+n02124484,3,cat,"Manx, Manx cat",3,444
+n02124623,3,cat,wildcat,2,264
+n02125010,3,cat,sand cat,3,338
+n02125081,3,cat,"European wildcat, catamountain, Felis silvestris",3,382
+n02125311,3,cat,"cougar, puma, catamount, mountain lion, painter, panther, Felis concolor",3,533
+n02125494,3,cat,"ocelot, panther cat, Felis pardalis",3,432
+n02125689,3,cat,"jaguarundi, jaguarundi cat, jaguarondi, eyra, Felis yagouaroundi",3,128
+n02125872,3,cat,"kaffir cat, caffer cat, Felis ocreata",3,5
+n02126028,3,cat,"jungle cat, Felis chaus",3,253
+n02126139,3,cat,"serval, Felis serval",3,527
+n02126317,3,cat,"leopard cat, Felis bengalensis",3,35
+n02126465,3,cat,"tiger cat, Felis tigrina",3,0
+n02126640,3,cat,"margay, margay cat, Felis wiedi",3,334
+n02126787,3,cat,"manul, Pallas's cat, Felis manul",3,287
+n02127052,3,cat,"lynx, catamount",3,555
+n02127808,3,cat,"big cat, cat",1,517
+n02128385,3,cat,"leopard, Panthera pardus",2,539
+n02128598,3,cat,leopardess,3,80
+n02128669,3,cat,panther,3,217
+n02128757,3,cat,"snow leopard, ounce, Panthera uncia",2,558
+n02128925,3,cat,"jaguar, panther, Panthera onca, Felis onca",2,562
+n02129165,3,cat,"lion, king of beasts, Panthera leo",2,654
+n02129463,3,cat,lioness,3,455
+n02129530,3,cat,lionet,3,10
+n02129604,3,cat,"tiger, Panthera tigris",2,747
+n02129837,3,cat,Bengal tiger,3,588
+n02129923,3,cat,tigress,3,544
+n02129991,3,cat,liger,2,193
+n02130086,3,cat,"tiglon, tigon",2,80
+n02130308,3,cat,"cheetah, chetah, Acinonyx jubatus",2,531
+n02130545,3,cat,"saber-toothed tiger, sabertooth",2,30
+n02130925,3,cat,Smiledon californicus,3,0
+n02131211,3,cat,false saber-toothed tiger,3,0
+n01319339,4,deer,pollard,1,0
+n02399000,4,deer,ruminant,0,686
+n02401031,4,deer,bovid,1,177
+n02402010,4,deer,bovine,2,748
+n02407959,4,deer,"Old World buffalo, buffalo",2,687
+n02410509,4,deer,bison,2,967
+n02411206,4,deer,"musk ox, musk sheep, Ovibos moschatus",2,788
+n02411705,4,deer,sheep,2,715
+n02414578,4,deer,wild sheep,2,539
+n02416519,4,deer,"goat, caprine animal",2,743
+n02418064,4,deer,goat antelope,2,187
+n02419796,4,deer,antelope,2,728
+n02428842,4,deer,"forest goat, spindle horn, Pseudoryx nghetinhensis",2,156
+n02429456,4,deer,"pronghorn, prongbuck, pronghorn antelope, American antelope, Antilocapra americana",1,868
+n02430045,4,deer,"deer, cervid",1,965
+n02430748,4,deer,pricket,2,18
+n02430830,4,deer,fawn,2,851
+n02431122,4,deer,"red deer, elk, American elk, wapiti, Cervus elaphus",2,828
+n02431628,4,deer,"sambar, sambur, Cervus unicolor",2,321
+n02431785,4,deer,"wapiti, elk, American elk, Cervus elaphus canadensis",2,889
+n02431976,4,deer,"Japanese deer, sika, Cervus nipon, Cervus sika",2,718
+n02432291,4,deer,"Virginia deer, white tail, whitetail, white-tailed deer, whitetail deer, Odocoileus Virginianus",2,1348
+n02432511,4,deer,"mule deer, burro deer, Odocoileus hemionus",2,740
+n02432983,4,deer,"elk, European elk, moose, Alces alces",2,804
+n02433318,4,deer,"fallow deer, Dama dama",2,920
+n02433546,4,deer,"roe deer, Capreolus capreolus",2,981
+n02433925,4,deer,"caribou, reindeer, Greenland caribou, Rangifer tarandus",2,896
+n02434712,4,deer,brocket,2,91
+n02434954,4,deer,"muntjac, barking deer",2,689
+n02435216,4,deer,"musk deer, Moschus moschiferus",2,118
+n02435517,4,deer,"pere david's deer, elaphure, Elaphurus davidianus",2,178
+n02435853,4,deer,"chevrotain, mouse deer",1,117
+n02436224,4,deer,"kanchil, Tragulus kanchil",2,4
+n02436353,4,deer,"napu, Tragulus Javanicus",2,51
+n02436645,4,deer,"water chevrotain, water deer, Hyemoschus aquaticus",2,1
+n02439033,4,deer,"giraffe, camelopard, Giraffa camelopardalis",1,768
+n02439398,4,deer,"okapi, Okapia johnstoni",2,715
+n01322508,5,dog,"wolf pup, wolf cub",2,223
+n01322604,5,dog,puppy,2,282
+n02083346,5,dog,"canine, canid",0,340
+n02083672,5,dog,bitch,1,292
+n02083780,5,dog,brood bitch,2,8
+n02084071,5,dog,"dog, domestic dog, Canis familiaris",1,324
+n02084732,5,dog,"pooch, doggie, doggy, barker, bow-wow",2,262
+n02084861,5,dog,"cur, mongrel, mutt",2,295
+n02085019,5,dog,"feist, fice",3,70
+n02085118,5,dog,"pariah dog, pye-dog, pie-dog",3,15
+n02085272,5,dog,lapdog,2,165
+n02085374,5,dog,"toy dog, toy",2,271
+n02085620,5,dog,Chihuahua,3,365
+n02085782,5,dog,Japanese spaniel,3,88
+n02085936,5,dog,"Maltese dog, Maltese terrier, Maltese",3,264
+n02086079,5,dog,"Pekinese, Pekingese, Peke",3,350
+n02086240,5,dog,Shih-Tzu,3,516
+n02086346,5,dog,toy spaniel,3,56
+n02087046,5,dog,toy terrier,3,142
+n02087122,5,dog,hunting dog,2,244
+n02087314,5,dog,courser,3,65
+n02087394,5,dog,Rhodesian ridgeback,3,468
+n02087551,5,dog,"hound, hound dog",3,249
+n02089232,5,dog,"dachshund, dachsie, badger dog",3,294
+n02092468,5,dog,terrier,3,367
+n02098550,5,dog,"sporting dog, gun dog",3,258
+n02103406,5,dog,working dog,2,263
+n02103841,5,dog,"watchdog, guard dog",3,245
+n02104523,5,dog,"shepherd dog, sheepdog, sheep dog",3,295
+n02106854,5,dog,police dog,3,247
+n02107420,5,dog,Sennenhunde,3,204
+n02108089,5,dog,boxer,3,334
+n02108254,5,dog,mastiff,3,241
+n02108422,5,dog,bull mastiff,3,251
+n02108672,5,dog,"bulldog, English bulldog",3,312
+n02109047,5,dog,Great Dane,3,320
+n02109150,5,dog,guide dog,3,76
+n02109391,5,dog,hearing dog,3,7
+n02109525,5,dog,"Saint Bernard, St Bernard",3,299
+n02109687,5,dog,seizure-alert dog,3,2
+n02109811,5,dog,"sled dog, sledge dog",3,325
+n02109961,5,dog,"Eskimo dog, husky",3,306
+n02110341,5,dog,"dalmatian, coach dog, carriage dog",2,302
+n02110532,5,dog,liver-spotted dalmatian,3,7
+n02110806,5,dog,basenji,2,402
+n02110958,5,dog,"pug, pug-dog",2,257
+n02111129,5,dog,Leonberg,2,247
+n02111277,5,dog,"Newfoundland, Newfoundland dog",2,334
+n02111500,5,dog,Great Pyrenees,2,277
+n02111626,5,dog,spitz,2,243
+n02111889,5,dog,"Samoyed, Samoyede",3,352
+n02112018,5,dog,Pomeranian,3,313
+n02112137,5,dog,"chow, chow chow",3,252
+n02112350,5,dog,keeshond,3,254
+n02112497,5,dog,"griffon, Brussels griffon, Belgian griffon",2,240
+n02112706,5,dog,Brabancon griffon,3,53
+n02112826,5,dog,"corgi, Welsh corgi",2,271
+n02113023,5,dog,"Pembroke, Pembroke Welsh corgi",3,273
+n02113186,5,dog,"Cardigan, Cardigan Welsh corgi",3,317
+n02113335,5,dog,"poodle, poodle dog",2,273
+n02113624,5,dog,toy poodle,3,338
+n02113712,5,dog,miniature poodle,3,150
+n02113799,5,dog,standard poodle,3,373
+n02113892,5,dog,large poodle,3,70
+n02113978,5,dog,Mexican hairless,2,47
+n02114100,5,dog,wolf,1,278
+n02114367,5,dog,"timber wolf, grey wolf, gray wolf, Canis lupus",2,376
+n02114548,5,dog,"white wolf, Arctic wolf, Canis lupus tundrarum",2,215
+n02114712,5,dog,"red wolf, maned wolf, Canis rufus, Canis niger",2,233
+n02114855,5,dog,"coyote, prairie wolf, brush wolf, Canis latrans",2,337
+n02115012,5,dog,coydog,3,21
+n02115096,5,dog,"jackal, Canis aureus",1,231
+n02115335,5,dog,wild dog,1,294
+n02115641,5,dog,"dingo, warrigal, warragal, Canis dingo",2,230
+n02115913,5,dog,"dhole, Cuon alpinus",2,133
+n02116185,5,dog,"crab-eating dog, crab-eating fox, Dusicyon cancrivorus",2,15
+n02116450,5,dog,"raccoon dog, Nyctereutes procyonides",2,47
+n02116738,5,dog,"African hunting dog, hyena dog, Cape hunting dog, Lycaon pictus",2,235
+n02117135,5,dog,"hyena, hyaena",1,303
+n02117512,5,dog,"striped hyena, Hyaena hyaena",2,232
+n02117646,5,dog,"brown hyena, strand wolf, Hyaena brunnea",2,79
+n02117900,5,dog,"spotted hyena, laughing hyena, Crocuta crocuta",2,266
+n02118176,5,dog,"aardwolf, Proteles cristata",2,43
+n02118333,5,dog,fox,1,251
+n02118643,5,dog,vixen,2,72
+n02118707,5,dog,Reynard,2,0
+n02119022,5,dog,"red fox, Vulpes vulpes",2,399
+n02119247,5,dog,black fox,3,6
+n02119359,5,dog,silver fox,3,27
+n02119477,5,dog,"red fox, Vulpes fulva",2,276
+n02119634,5,dog,"kit fox, prairie fox, Vulpes velox",2,155
+n02119789,5,dog,"kit fox, Vulpes macrotis",2,172
+n02120079,5,dog,"Arctic fox, white fox, Alopex lagopus",2,208
+n02120278,5,dog,blue fox,3,7
+n02120505,5,dog,"grey fox, gray fox, Urocyon cinereoargenteus",2,214
+n01639765,6,frog,"frog, toad, toad frog, anuran, batrachian, salientian",0,731
+n01640846,6,frog,"true frog, ranid",1,998
+n01641206,6,frog,"wood-frog, wood frog, Rana sylvatica",2,552
+n01641391,6,frog,"leopard frog, spring frog, Rana pipiens",2,709
+n01641577,6,frog,"bullfrog, Rana catesbeiana",2,724
+n01641739,6,frog,"green frog, spring frog, Rana clamitans",2,686
+n01641930,6,frog,"cascades frog, Rana cascadae",2,225
+n01642097,6,frog,"goliath frog, Rana goliath",2,3
+n01642257,6,frog,"pickerel frog, Rana palustris",2,547
+n01642391,6,frog,"tarahumara frog, Rana tarahumarae",2,45
+n01642539,6,frog,"grass frog, Rana temporaria",2,680
+n01642943,6,frog,"leptodactylid frog, leptodactylid",1,17
+n01643255,6,frog,robber frog,1,26
+n01643507,6,frog,"barking frog, robber frog, Hylactophryne augusti",1,364
+n01643896,6,frog,"crapaud, South American bullfrog, Leptodactylus pentadactylus",1,835
+n01644373,6,frog,"tree frog, tree-frog",1,779
+n01644900,6,frog,"tailed frog, bell toad, ribbed toad, tailed toad, Ascaphus trui",1,677
+n01645466,6,frog,Liopelma hamiltoni,1,11
+n01645776,6,frog,true toad,1,811
+n01646292,6,frog,bufo,2,874
+n01646388,6,frog,"agua, agua toad, Bufo marinus",2,464
+n01646555,6,frog,"European toad, Bufo bufo",2,708
+n01646648,6,frog,"natterjack, Bufo calamita",2,659
+n01646802,6,frog,"American toad, Bufo americanus",2,652
+n01646902,6,frog,"Eurasian green toad, Bufo viridis",2,521
+n01647033,6,frog,"American green toad, Bufo debilis",2,55
+n01647180,6,frog,"Yosemite toad, Bufo canorus",2,126
+n01647303,6,frog,"Texas toad, Bufo speciosus",2,379
+n01647466,6,frog,"southwestern toad, Bufo microscaphus",2,154
+n01647640,6,frog,"western toad, Bufo boreas",2,603
+n01648139,6,frog,"obstetrical toad, midwife toad, Alytes obstetricans",1,307
+n01648356,6,frog,"midwife toad, Alytes cisternasi",1,138
+n01648620,6,frog,"fire-bellied toad, Bombina bombina",1,423
+n01649170,6,frog,"spadefoot, spadefoot toad",1,401
+n01649412,6,frog,"western spadefoot, Scaphiopus hammondii",2,166
+n01649556,6,frog,"southern spadefoot, Scaphiopus multiplicatus",2,198
+n01649726,6,frog,"plains spadefoot, Scaphiopus bombifrons",2,159
+n01650167,6,frog,"tree toad, tree frog, tree-frog",1,793
+n01650690,6,frog,"spring peeper, Hyla crucifer",2,572
+n01650901,6,frog,"Pacific tree toad, Hyla regilla",2,305
+n01651059,6,frog,"canyon treefrog, Hyla arenicolor",2,350
+n01651285,6,frog,chameleon tree frog,2,89
+n01651487,6,frog,cricket frog,2,154
+n01651641,6,frog,"northern cricket frog, Acris crepitans",3,160
+n01651778,6,frog,"eastern cricket frog, Acris gryllus",3,225
+n01652026,6,frog,chorus frog,2,790
+n01652297,6,frog,"lowland burrowing treefrog, northern casque-headed frog, Pternohyla fodiens",2,26
+n01653026,6,frog,"western narrow-mouthed toad, Gastrophryne olivacea",1,104
+n01653223,6,frog,"eastern narrow-mouthed toad, Gastrophryne carolinensis",1,288
+n01653509,6,frog,sheep frog,1,12
+n01653773,6,frog,tongueless frog,1,96
+n01654083,6,frog,"Surinam toad, Pipa pipa, Pipa americana",2,106
+n01654637,6,frog,"African clawed frog, Xenopus laevis",2,380
+n01654863,6,frog,South American poison toad,1,143
+n02374451,7,horse,"horse, Equus caballus",0,368
+n02375302,7,horse,roan,1,341
+n02375438,7,horse,"stablemate, stable companion",1,51
+n02375757,7,horse,gee-gee,1,90
+n02375862,7,horse,"eohippus, dawn horse",1,16
+n02376135,7,horse,mesohippus,1,0
+n02376423,7,horse,protohippus,1,0
+n02376918,7,horse,male horse,1,411
+n02377181,7,horse,"stallion, entire",2,358
+n02377291,7,horse,"stud, studhorse",3,398
+n02377388,7,horse,gelding,2,602
+n02377480,7,horse,"mare, female horse",1,549
+n02377603,7,horse,"broodmare, stud mare",2,395
+n02377703,7,horse,"saddle horse, riding horse, mount",1,380
+n02378149,7,horse,remount,2,52
+n02378299,7,horse,palfrey,2,4
+n02378415,7,horse,warhorse,2,31
+n02378541,7,horse,cavalry horse,3,266
+n02378625,7,horse,"charger, courser",3,122
+n02378755,7,horse,steed,3,84
+n02378870,7,horse,prancer,2,39
+n02378969,7,horse,hack,2,401
+n02379081,7,horse,cow pony,2,156
+n02379183,7,horse,quarter horse,2,356
+n02379329,7,horse,Morgan,2,349
+n02379430,7,horse,"Tennessee walker, Tennessee walking horse, Walking horse, Plantation walking horse",2,331
+n02379630,7,horse,American saddle horse,2,203
+n02379743,7,horse,Appaloosa,2,105
+n02379908,7,horse,"Arabian, Arab",2,437
+n02380052,7,horse,"Lippizan, Lipizzan, Lippizaner",2,152
+n02380335,7,horse,pony,1,363
+n02380464,7,horse,polo pony,1,317
+n02380583,7,horse,mustang,2,353
+n02380745,7,horse,"bronco, bronc, broncho",3,389
+n02381004,7,horse,buckskin,2,272
+n02381119,7,horse,"crowbait, crow-bait",2,1
+n02381261,7,horse,dun,2,320
+n02381364,7,horse,"grey, gray",2,389
+n02381460,7,horse,wild horse,1,323
+n02381609,7,horse,"tarpan, Equus caballus gomelini",2,304
+n02381744,7,horse,"warrigal, warragal",2,0
+n02381831,7,horse,"Przewalski's horse, Przevalski's horse, Equus caballus przewalskii, Equus caballus przevalskii",2,178
+n02382039,7,horse,"cayuse, Indian pony",2,350
+n02382132,7,horse,hack,1,201
+n02382204,7,horse,"hack, jade, nag, plug",1,380
+n02382338,7,horse,"plow horse, plough horse",2,258
+n02382437,7,horse,pony,1,366
+n02382635,7,horse,Shetland pony,2,353
+n02382750,7,horse,Welsh pony,2,466
+n02382850,7,horse,Exmoor,2,291
+n02382948,7,horse,"racehorse, race horse, bangtail",1,383
+n02383231,7,horse,thoroughbred,2,531
+n02384741,7,horse,steeplechaser,1,90
+n02385098,7,horse,pony,2,2
+n02385214,7,horse,yearling,2,349
+n02385348,7,horse,"two-year-old horse, two year old",2,0
+n02385461,7,horse,"three-year-old horse, three year old",2,0
+n02385580,7,horse,dark horse,2,9
+n02385676,7,horse,mudder,2,8
+n02385776,7,horse,nonstarter,2,0
+n02385898,7,horse,stalking-horse,1,1
+n02386014,7,horse,harness horse,1,326
+n02386141,7,horse,cob,2,333
+n02386224,7,horse,hackney,2,305
+n02386310,7,horse,workhorse,1,205
+n02386496,7,horse,"draft horse, draught horse, dray horse",2,389
+n02386746,7,horse,packhorse,2,43
+n02386853,7,horse,"carthorse, cart horse, drayhorse",3,397
+n02386968,7,horse,Clydesdale,3,396
+n02387093,7,horse,Percheron,3,225
+n02387254,7,horse,"farm horse, dobbin",2,383
+n02387346,7,horse,"shire, shire horse",3,418
+n02387452,7,horse,"pole horse, poler",3,0
+n02387581,7,horse,"wheel horse, wheeler",3,0
+n02387722,7,horse,"post horse, post-horse, poster",1,365
+n02387887,7,horse,coach horse,3,191
+n02387983,7,horse,pacer,1,37
+n02388143,7,horse,"pacer, pacemaker, pacesetter",2,129
+n02388276,7,horse,"trotting horse, trotter",2,326
+n02388453,7,horse,pole horse,3,56
+n02388588,7,horse,"stepper, high stepper",1,32
+n02388735,7,horse,chestnut,1,365
+n02388832,7,horse,liver chestnut,1,318
+n02388917,7,horse,bay,1,347
+n02389026,7,horse,sorrel,1,388
+n02389128,7,horse,palomino,1,395
+n02389261,7,horse,pinto,1,337
+n02737351,8,ship,ark,1,51
+n02792552,8,ship,"barge, flatboat, hoy, lighter",1,342
+n02843029,8,ship,"birchbark canoe, birchbark, birch bark",3,287
+n02858304,8,ship,boat,0,492
+n02918455,8,ship,bumboat,1,180
+n02932891,8,ship,"cabin cruiser, cruiser, pleasure boat, pleasure craft",2,512
+n02947660,8,ship,"canal boat, narrow boat, narrowboat",1,560
+n02951358,8,ship,canoe,2,480
+n02964295,8,ship,car-ferry,2,145
+n03061345,8,ship,cockleshell,2,245
+n03105306,8,ship,coracle,2,503
+n03199901,8,ship,"dinghy, dory, rowboat",2,477
+n03236423,8,ship,dredger,2,350
+n03254374,8,ship,"dugout canoe, dugout, pirogue",3,457
+n03329663,8,ship,"ferry, ferryboat",1,536
+n03344393,8,ship,fireboat,1,612
+n03436772,8,ship,gig,2,13
+n03436891,8,ship,gig,2,348
+n03447447,8,ship,gondola,1,487
+n03464628,8,ship,guard boat,1,120
+n03468570,8,ship,gunboat,1,54
+n03545470,8,ship,houseboat,2,488
+n03552749,8,ship,"hydrofoil, hydroplane",3,469
+n03602081,8,ship,"jolly boat, jolly",3,474
+n03603594,8,ship,junk,1,286
+n03609235,8,ship,kayak,3,504
+n03609786,8,ship,keelboat,2,8
+n03647423,8,ship,launch,2,46
+n03662601,8,ship,lifeboat,2,495
+n03687820,8,ship,longboat,1,0
+n03696445,8,ship,lugger,1,159
+n03703203,8,ship,"mackinaw, Mackinaw boat",1,86
+n03710079,8,ship,"mailboat, mail boat, packet, packet boat",1,9
+n03790230,8,ship,"motorboat, powerboat",1,504
+n03859170,8,ship,"outboard motorboat, outboard",2,415
+n03861430,8,ship,outrigger canoe,3,390
+n03939178,8,ship,pilot boat,1,429
+n03977592,8,ship,police boat,1,447
+n03981566,8,ship,pontoon,2,514
+n04024983,8,ship,punt,1,466
+n04037964,8,ship,racing boat,2,541
+n04038231,8,ship,racing gig,3,481
+n04038338,8,ship,"racing skiff, single shell",4,464
+n04095210,8,ship,river boat,1,501
+n04115456,8,ship,rowing boat,3,534
+n04133114,8,ship,sampan,3,150
+n04150273,8,ship,scow,2,5
+n04150371,8,ship,scow,1,83
+n04156720,8,ship,scull,4,0
+n04158807,8,ship,sea boat,1,486
+n04190997,8,ship,"shell, racing shell",3,267
+n04208760,8,ship,showboat,2,242
+n04229480,8,ship,skiff,2,511
+n04244997,8,ship,small boat,1,491
+n04273569,8,ship,speedboat,2,494
+n04308807,8,ship,steamboat,1,74
+n04363671,8,ship,surfboat,1,161
+n04409128,8,ship,"tender, ship's boat, pinnace, cutter",1,552
+n04495843,8,ship,"tugboat, tug, towboat, tower",1,530
+n04562122,8,ship,"water scooter, sea scooter, scooter",2,145
+n04574348,8,ship,whaleboat,2,88
+n04577139,8,ship,wherry,3,147
+n04577293,8,ship,"wherry, Norfolk wherry",2,166
+n04612504,8,ship,yawl,2,447
+n02871314,9,truck,bookmobile,2,1037
+n03173929,9,truck,"delivery truck, delivery van, panel truck",2,1277
+n03256166,9,truck,"dump truck, dumper, tipper truck, tipper lorry, tip truck, tipper",1,1118
+n03345487,9,truck,"fire engine, fire truck",1,1290
+n03417042,9,truck,"garbage truck, dustcart",1,1106
+n03632852,9,truck,"ladder truck, aerial ladder truck",2,1279
+n03648667,9,truck,laundry truck,2,2
+n03690473,9,truck,"lorry, camion",1,621
+n03764822,9,truck,milk float,2,655
+n03796401,9,truck,moving van,2,642
+n03884639,9,truck,pantechnicon,3,305
+n03896419,9,truck,passenger van,2,1120
+n03930630,9,truck,"pickup, pickup truck",1,1394
+n03977966,9,truck,"police van, police wagon, paddy wagon, patrol wagon, wagon, black Maria",2,1150
+n04263139,9,truck,sound truck,1,0
+n04388372,9,truck,tandem trailer,2,0
+n04399269,9,truck,technical,2,0
+n04461696,9,truck,"tow truck, tow car, wrecker",1,1231
+n04465666,9,truck,tractor,1,1299
+n04467665,9,truck,"trailer truck, tractor trailer, trucking rig, rig, articulated lorry, semi",1,1251
+n04474035,9,truck,"transporter, car transporter",1,986
+n04490091,9,truck,"truck, motortruck",0,1583
+n04520170,9,truck,van,1,1654
