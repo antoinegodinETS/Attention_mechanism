@@ -16,6 +16,10 @@ Timing: ``epoch_time_s`` is the training part of an epoch, data loading included
 ``compute_time_s = epoch_time_s - data_wait_s``. Mechanisms are compared on the compute time;
 the loader-inclusive time is reported beside it (a starved loader is a property of the node).
 
+Peak memory: ``peak_mem_mib`` is the allocator's allocated peak (``max_memory_allocated``), the
+memory tensors actually used; ``peak_mem_reserved_mib`` is the reserved peak
+(``max_memory_reserved``), which also counts the allocator's cache and fragmentation.
+
 Interruption: SIGUSR1 (Slurm's warning before the time limit, ``--signal=B:USR1@300``) stops
 the run cleanly. If the current epoch is expected to end within ``stop_grace_s`` it is finished
 and checkpointed first; otherwise the partial epoch is dropped and ``last.pt`` (the previous
@@ -63,6 +67,7 @@ from .utils import (
     derive_seed,
     host_info,
     peak_memory_mib,
+    peak_reserved_memory_mib,
     read_json,
     read_jsonl,
     reset_peak_memory,
@@ -411,7 +416,7 @@ class Trainer:
         n_params = sum(p.numel() for p in model.parameters())
 
         state = {"epoch": 0, "global_step": 0, "train_time_s": 0.0, "data_wait_s": 0.0, "eval_time_s": 0.0, "wall_time_s": 0.0,
-                 "peak_mem_mib": None, "best_val_acc": None, "best_epoch": None, "chunks": 0,
+                 "peak_mem_mib": None, "peak_mem_reserved_mib": None, "best_val_acc": None, "best_epoch": None, "chunks": 0,
                  "last_val": None}
         if self.ckpt_path.exists():
             ckpt = torch.load(self.ckpt_path, map_location=dev, weights_only=False)
@@ -485,6 +490,7 @@ class Trainer:
             data_wait = min(batches.wait_s, epoch_time)
             compute_time = epoch_time - data_wait
             peak = peak_memory_mib(dev)
+            peak_reserved = peak_reserved_memory_mib(dev)
             eval_timer = Timer(dev)
             val_loss, val_acc = evaluate(model, val_loader, normalize, dev, self.use_amp)
             eval_time = eval_timer.elapsed()
@@ -496,6 +502,7 @@ class Trainer:
             state["eval_time_s"] += eval_time
             if peak is not None:
                 state["peak_mem_mib"] = max(state["peak_mem_mib"] or 0.0, peak)
+                state["peak_mem_reserved_mib"] = max(state.get("peak_mem_reserved_mib") or 0.0, peak_reserved)
             if state["best_val_acc"] is None or val_acc > state["best_val_acc"]:
                 state["best_val_acc"], state["best_epoch"] = val_acc, epoch + 1
             state["last_val"] = {"loss": val_loss, "acc": val_acc}
@@ -514,6 +521,7 @@ class Trainer:
                 "eval_time_s": eval_time,
                 "images_per_s": seen / epoch_time if epoch_time > 0 else None,
                 "peak_mem_mib": peak,
+                "peak_mem_reserved_mib": peak_reserved,
                 "time": time.time(),
             }
             append_jsonl(self.metrics_path, record)
@@ -582,6 +590,7 @@ class Trainer:
             "eval_time_s": state["eval_time_s"],
             "wall_time_s": state["wall_time_s"],
             "peak_mem_mib": state["peak_mem_mib"],
+            "peak_mem_reserved_mib": state.get("peak_mem_reserved_mib"),
             "chunks": state["chunks"],
             "device": str(dev),
             "gpu": torch.cuda.get_device_name(dev) if dev.type == "cuda" else None,

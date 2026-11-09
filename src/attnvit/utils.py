@@ -74,9 +74,20 @@ def host_info() -> dict:
 
 
 def peak_memory_mib(device: torch.device) -> float | None:
+    """Peak memory handed out by the CUDA caching allocator to tensors (``max_memory_allocated``)."""
     if device.type != "cuda":
         return None
     return torch.cuda.max_memory_allocated(device) / 2**20
+
+
+def peak_reserved_memory_mib(device: torch.device) -> float | None:
+    """Peak memory the CUDA caching allocator reserved from the driver (``max_memory_reserved``).
+
+    It is at least the allocated peak; the gap is cached, fragmented blocks.
+    """
+    if device.type != "cuda":
+        return None
+    return torch.cuda.max_memory_reserved(device) / 2**20
 
 
 def reset_peak_memory(device: torch.device) -> None:

@@ -39,7 +39,7 @@ FIELDS = [
     "timestamp", "device", "gpu", "torch", "mechanism", "res", "patch", "tokens", "params",
     "batch_size", "micro_batch", "accum_steps", "amp_fp16", "attn_kernel", "sdpa_backend", "status",
     "step_ms_median", "step_ms_p10", "step_ms_p90", "eval_ms_median", "images_per_s", "peak_mem_mib",
-    "steps_per_epoch", "est_epoch_s", "est_run_h_100ep", "est_run_h_50ep",
+    "peak_mem_reserved_mib", "steps_per_epoch", "est_epoch_s", "est_run_h_100ep", "est_run_h_50ep",
 ]
 
 
@@ -96,6 +96,7 @@ def measure(cfg, device, *, steps: int, warmup: int, eval_iters: int, train_imag
         times = [_timed(step, device) for _ in range(steps)]
         if device.type == "cuda":
             row["peak_mem_mib"] = round(torch.cuda.max_memory_allocated(device) / 2**20, 1)
+            row["peak_mem_reserved_mib"] = round(torch.cuda.max_memory_reserved(device) / 2**20, 1)
 
         model.eval()
         xe = batches[0][0][: cfg.eval_batch_size]

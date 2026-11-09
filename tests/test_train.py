@@ -13,7 +13,7 @@ from attnvit.data.augment import MixupCutmix, Normalize
 from attnvit.data import data_root
 from attnvit.data.synthetic import SyntheticImages
 from attnvit.train import Trainer, TimedIterator, build_model, load_datasets, smoke_check, train_step
-from attnvit.utils import read_json, read_jsonl
+from attnvit.utils import peak_memory_mib, peak_reserved_memory_mib, read_json, read_jsonl
 
 from conftest import NO_AUGMENT
 
@@ -48,6 +48,7 @@ def test_overfits_256_images(tiny_cfg, tmp_path):
     assert s["final_val_acc"] >= 0.95, s  # synthetic val = the 256 training images
     assert s["steps"] == 20 * 8 and s["epochs"] == 20
     assert s["head"] == "cls" and s["peak_mem_mib"] is None and s["test_acc"] is None
+    assert s["peak_mem_reserved_mib"] is None  # no CUDA
     assert s["train_time_s"] > 0 and s["time_per_epoch_s"] == pytest.approx(s["train_time_s"] / 20)
     assert len(read_jsonl(trainer.metrics_path)) == 20
     assert (trainer.run_dir / "config.yaml").exists()
@@ -225,3 +226,12 @@ def test_summary_records_the_cpu_side(tiny_cfg, tmp_path, monkeypatch):
     trainer, _ = train(tiny_cfg("optim.epochs=1", "tag=noslurm"), tmp_path)
     s = read_json(trainer.summary_path)
     assert s["slurm_cpus_per_task"] is None and s["slurm_job_id"] is None
+
+
+def test_peak_memory_reports_allocated_and_reserved(monkeypatch):
+    monkeypatch.setattr(torch.cuda, "max_memory_allocated", lambda device=None: 3 * 2**20)
+    monkeypatch.setattr(torch.cuda, "max_memory_reserved", lambda device=None: 5 * 2**20)
+    cuda = torch.device("cuda", 0)  # never touched: the torch.cuda queries are faked
+    assert (peak_memory_mib(cuda), peak_reserved_memory_mib(cuda)) == (3.0, 5.0)
+    cpu = torch.device("cpu")
+    assert peak_memory_mib(cpu) is None and peak_reserved_memory_mib(cpu) is None
