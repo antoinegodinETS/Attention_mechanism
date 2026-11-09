@@ -1,0 +1,11 @@
+# Phase 6: final training on CIFAR-10-HR at 160 px / P4 (40x40 = 1,600 tokens), windows attention,
+# 3 seeds x 100 epochs with the CIFAR-10 hyperparameters (configs/final/windows.yaml). Batch 128
+# fits on an H100 without accumulation (calibration peak 10-14 GB), so the effective batch
+# stays 128 with optim.accum_steps=1. One queue per mechanism, one Rorqual job each, submitted
+# cheapest first: windows, axial, full. Run ids: cifar10_hr-160-p4-windows-final-s<seed>.
+#     python -m attnvit.queue configs/queue/phase6_hr160_windows.txt
+# On Rorqual: sbatch --export=ALL,SYS819_MECH=windows "$SYS819_REPO/scripts/rorqual/final160.sbatch"
+
+configs/final/windows.yaml seed=0 data.name=cifar10_hr data.res=160
+configs/final/windows.yaml seed=1 data.name=cifar10_hr data.res=160
+configs/final/windows.yaml seed=2 data.name=cifar10_hr data.res=160

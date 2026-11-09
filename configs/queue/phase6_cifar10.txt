@@ -1,0 +1,17 @@
+# Phase 6: final training on CIFAR-10 at 32 px / P4, 3 mechanisms x 3 seeds x 100 epochs.
+# Each line is a configs/final/<mechanism>.yaml (chosen by the phase 5 search) with only the
+# seed changed: train on the same 45k split, validate on the 5k split every epoch, evaluate
+# the test split once after epoch 100. Seed-major order, so one seed of every mechanism
+# finishes first. Run ids: cifar10-32-p4-<mechanism>-final-s<seed>.
+#     python -m attnvit.queue configs/queue/phase6_cifar10.txt
+# On Rorqual: sbatch --export=ALL,SYS819_COND=cifar10 "$SYS819_REPO/scripts/rorqual/final32.sbatch"
+
+configs/final/full.yaml seed=0
+configs/final/windows.yaml seed=0
+configs/final/axial.yaml seed=0
+configs/final/full.yaml seed=1
+configs/final/windows.yaml seed=1
+configs/final/axial.yaml seed=1
+configs/final/full.yaml seed=2
+configs/final/windows.yaml seed=2
+configs/final/axial.yaml seed=2

@@ -138,3 +138,28 @@ def test_finished_run_is_freed_before_the_next_one(tmp_path, monkeypatch):
     finally:
         gc.enable()
     assert alive_at_start == [0, 0]
+
+
+def test_phase6_queues_cover_the_27_final_runs():
+    from conftest import REPO_ROOT
+
+    from attnvit.config import load_config, to_dict
+
+    qdir = REPO_ROOT / "configs" / "queue"
+    files = ["phase6_cifar10.txt", "phase6_hr32.txt"] + [f"phase6_hr160_{m}.txt" for m in ("windows", "axial", "full")]
+    ids = []
+    for name in files:
+        for e in parse_queue(qdir / name):
+            mech = e.cfg.model.mechanism
+            final = to_dict(load_config(REPO_ROOT / "configs" / "final" / f"{mech}.yaml"))
+            got = to_dict(e.cfg)
+            # Only the seed and the dataset differ from the configuration chosen by the search.
+            assert got["seed"] in (0, 1, 2)
+            got["seed"], got["data"]["name"], got["data"]["res"] = final["seed"], final["data"]["name"], final["data"]["res"]
+            assert got == final, e.run_id
+            assert e.cfg.eval_test and e.cfg.optim.batch_size == 128 and e.cfg.optim.epochs == 100
+            ids.append(e.run_id)
+    expected = [f"{d}-{r}-p4-{m}-final-s{s}" for d, r in (("cifar10", 32), ("cifar10_hr", 32))
+                for s in (0, 1, 2) for m in ("full", "windows", "axial")]
+    expected += [f"cifar10_hr-160-p4-{m}-final-s{s}" for m in ("windows", "axial", "full") for s in (0, 1, 2)]
+    assert ids == expected
