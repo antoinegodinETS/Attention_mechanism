@@ -6,6 +6,7 @@ import hashlib
 import json
 import os
 import random
+import socket
 import time
 from pathlib import Path
 
@@ -52,6 +53,24 @@ class Timer:
 
     def elapsed(self) -> float:
         return self._now() - self.start
+
+
+def usable_cpu_count() -> int:
+    """CPUs this process may run on (the Slurm allocation, not the whole node)."""
+    if hasattr(os, "sched_getaffinity"):
+        return len(os.sched_getaffinity(0))
+    return os.cpu_count() or 1
+
+
+def host_info() -> dict:
+    """The CPU side of a run: usable CPUs, Slurm allocation and host name."""
+    cpus_per_task = os.environ.get("SLURM_CPUS_PER_TASK")
+    return {
+        "usable_cpus": usable_cpu_count(),
+        "slurm_cpus_per_task": int(cpus_per_task) if cpus_per_task and cpus_per_task.isdigit() else cpus_per_task,
+        "slurm_job_id": os.environ.get("SLURM_JOB_ID"),
+        "hostname": socket.gethostname(),
+    }
 
 
 def peak_memory_mib(device: torch.device) -> float | None:

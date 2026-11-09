@@ -2,6 +2,7 @@
 
 import os
 import signal
+import socket
 import time
 
 import pytest
@@ -208,3 +209,19 @@ def test_data_wait_and_compute_time_are_logged(tiny_cfg, tmp_path, monkeypatch):
     assert s["compute_time_s"] == pytest.approx(sum(r["compute_time_s"] for r in rows))
     assert s["data_wait_s"] + s["compute_time_s"] == pytest.approx(s["train_time_s"])
     assert s["compute_time_per_epoch_s"] == pytest.approx(s["compute_time_s"] / 2)
+
+
+def test_summary_records_the_cpu_side(tiny_cfg, tmp_path, monkeypatch):
+    monkeypatch.setenv("SLURM_CPUS_PER_TASK", "8")
+    monkeypatch.setenv("SLURM_JOB_ID", "123456")
+    trainer, _ = train(tiny_cfg("optim.epochs=1"), tmp_path)
+    s = read_json(trainer.summary_path)
+    assert s["num_workers"] == 0
+    assert s["usable_cpus"] == len(os.sched_getaffinity(0))
+    assert (s["slurm_cpus_per_task"], s["slurm_job_id"]) == (8, "123456")
+    assert s["hostname"] == socket.gethostname()
+    monkeypatch.delenv("SLURM_CPUS_PER_TASK")
+    monkeypatch.delenv("SLURM_JOB_ID")
+    trainer, _ = train(tiny_cfg("optim.epochs=1", "tag=noslurm"), tmp_path)
+    s = read_json(trainer.summary_path)
+    assert s["slurm_cpus_per_task"] is None and s["slurm_job_id"] is None
