@@ -172,6 +172,10 @@ optimisation recipe) plus `key=value` overrides. Each run gets the id
 `<dataset>-<res>-p<P>-<mech>-<tag>-s<seed>` and a directory under `$SYS819_RUNS` (default
 `~/runs/sys819`, outside the repository) holding `config.yaml`, `metrics.jsonl`, `last.pt` and,
 once complete, `summary.json`. Running the same command again resumes from `last.pt`.
+`model.mechanism` picks the attention: `full` (CLS head), `windows` (shifted windows, M = 4, set
+by `model.attn.window_size`, which must divide the patch grid) or `axial` (column then row pass),
+the last two with average pooling. `axial_shared`, axial with one projection set shared by both
+passes, is the optional parameter-matched ablation.
 Training time is split into `data_wait_s` (blocked on the DataLoader) and `compute_time_s`; compare
 mechanisms on the compute time. `peak_mem_mib` is the allocator's allocated peak, with the reserved
 peak in `peak_mem_reserved_mib`. `summary.json` also records the CPU side of the run (`num_workers`,
@@ -194,6 +198,7 @@ On Rorqual (after `source scripts/rorqual/env.sh`):
 ```bash
 sbatch scripts/rorqual/calibrate.sbatch   # full H100, ~5 min: results/calibration.csv + 160 px decision
 sbatch scripts/rorqual/sanity.sbatch      # 3g.40gb MIG slice: 100-epoch CIFAR-10 baseline, resubmits itself
+sbatch scripts/rorqual/smoke.sbatch       # 3g.40gb MIG slice: 2-epoch smoke runs of full, windows and axial
 ```
 
-Both copy CIFAR-10 from `$SYS819_DATA_STORE` to the node-local `$SLURM_TMPDIR` first.
+Each copies CIFAR-10 from `$SYS819_DATA_STORE` to the node-local `$SLURM_TMPDIR` first.

@@ -98,3 +98,15 @@ def test_signal_between_runs_stops_the_queue(tmp_path, monkeypatch):
     assert run_queue(q, root=root, log=lambda m: None) == 3
     assert not root.exists() or not any(root.iterdir())
     assert signal.getsignal(signal.SIGUSR1) is signal.SIG_DFL
+
+
+def test_phase3_smoke_queue_covers_the_three_mechanisms():
+    from conftest import REPO_ROOT
+
+    entries = parse_queue(REPO_ROOT / "configs" / "queue" / "phase3_smoke.txt")
+    assert [e.run_id for e in entries] == [
+        f"{data}-{res}-p4-{mech}-smoke-s0"
+        for data, res in (("cifar10", 32), ("synthetic", 160))
+        for mech in ("full", "windows", "axial")
+    ]
+    assert all(e.cfg.optim.epochs == 2 for e in entries)

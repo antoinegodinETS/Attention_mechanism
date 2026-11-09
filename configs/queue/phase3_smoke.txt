@@ -1,0 +1,16 @@
+# Phase 3: 2-epoch GPU smoke runs of the three mechanisms, seed 0. They only check that each
+# mechanism trains end to end on the GPU (fp16, the efficient SDPA kernel, the shift mask);
+# their accuracy and times are not results. Run with:
+#     python -m attnvit.queue configs/queue/phase3_smoke.txt
+# On Rorqual: sbatch "$SYS819_REPO/scripts/rorqual/smoke.sbatch".
+
+# CIFAR-10 at 32 px / P4: 8x8 grid, M = 4 windows (4 windows per image).
+configs/base.yaml tag=smoke seed=0 optim.epochs=2 model.mechanism=full
+configs/base.yaml tag=smoke seed=0 optim.epochs=2 model.mechanism=windows
+configs/base.yaml tag=smoke seed=0 optim.epochs=2 model.mechanism=axial
+
+# 160 px / P4 on synthetic images (no dataset needed): the 40x40 grid of the 160 px condition
+# (100 windows per image) at the full batch of 128.
+configs/base.yaml tag=smoke seed=0 optim.epochs=2 data.name=synthetic data.res=160 model.mechanism=full
+configs/base.yaml tag=smoke seed=0 optim.epochs=2 data.name=synthetic data.res=160 model.mechanism=windows
+configs/base.yaml tag=smoke seed=0 optim.epochs=2 data.name=synthetic data.res=160 model.mechanism=axial
