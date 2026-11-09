@@ -1,0 +1,295 @@
+{
+ "dataset": "cifar10_hr",
+ "n_images": 60000,
+ "resolution": 160,
+ "classes": [
+  "airplane",
+  "automobile",
+  "bird",
+  "cat",
+  "deer",
+  "dog",
+  "frog",
+  "horse",
+  "ship",
+  "truck"
+ ],
+ "counts": {
+  "train": [
+   4500,
+   4500,
+   4500,
+   4500,
+   4500,
+   4500,
+   4500,
+   4500,
+   4500,
+   4500
+  ],
+  "val": [
+   500,
+   500,
+   500,
+   500,
+   500,
+   500,
+   500,
+   500,
+   500,
+   500
+  ],
+  "test": [
+   1000,
+   1000,
+   1000,
+   1000,
+   1000,
+   1000,
+   1000,
+   1000,
+   1000,
+   1000
+  ]
+ },
+ "balance_tolerance": 0.0,
+ "balance": {
+  "train": {
+   "min": 4500,
+   "max": 4500,
+   "ratio": 1.0,
+   "balanced": true
+  },
+  "val": {
+   "min": 500,
+   "max": 500,
+   "ratio": 1.0,
+   "balanced": true
+  },
+  "test": {
+   "min": 1000,
+   "max": 1000,
+   "ratio": 1.0,
+   "balanced": true
+  }
+ },
+ "balanced": true,
+ "grid_rows": [
+  74,
+  184,
+  338,
+  1212,
+  1384,
+  2297,
+  2862,
+  3821,
+  5747,
+  6943,
+  7017,
+  7341,
+  7518,
+  7777,
+  8170,
+  8705,
+  9099,
+  9361,
+  9401,
+  9789,
+  10348,
+  11435,
+  12803,
+  12880,
+  14656,
+  15226,
+  15574,
+  15862,
+  16267,
+  16409,
+  16513,
+  16936,
+  18607,
+  19748,
+  20604,
+  21093,
+  21164,
+  21246,
+  21775,
+  21935,
+  22827,
+  23645,
+  24109,
+  24888,
+  25071,
+  25525,
+  26496,
+  26698,
+  27218,
+  27378,
+  28021,
+  28186,
+  28474,
+  29803,
+  30211,
+  31000,
+  31763,
+  31856,
+  32176,
+  33011,
+  34080,
+  34517,
+  35370,
+  35438,
+  36408,
+  36892,
+  37818,
+  38561,
+  38611,
+  38803,
+  40256,
+  40479,
+  40718,
+  40974,
+  42141,
+  42794,
+  43330,
+  43361,
+  43937,
+  44732
+ ],
+ "release": "winter21",
+ "manifest": "data_splits/cifar10_hr_manifest.csv.gz",
+ "manifest_sha256": "664e6c8c39b2b71ea3c9b508dd7bbee64ec305282823d1adc84c175912d0ba0d",
+ "candidates_per_class": [
+  25551,
+  40976,
+  812069,
+  56236,
+  35861,
+  103381,
+  34363,
+  73836,
+  50779,
+  21939
+ ],
+ "missing_or_empty_synsets": 36,
+ "filter": [
+  {
+   "candidates": 25551,
+   "examined": 7629,
+   "accepted": 6600,
+   "small": 1029,
+   "corrupt": 0
+  },
+  {
+   "candidates": 40976,
+   "examined": 7210,
+   "accepted": 6600,
+   "small": 610,
+   "corrupt": 0
+  },
+  {
+   "candidates": 812069,
+   "examined": 7449,
+   "accepted": 6600,
+   "small": 849,
+   "corrupt": 0
+  },
+  {
+   "candidates": 56236,
+   "examined": 7469,
+   "accepted": 6600,
+   "small": 869,
+   "corrupt": 0
+  },
+  {
+   "candidates": 35861,
+   "examined": 7945,
+   "accepted": 6600,
+   "small": 1345,
+   "corrupt": 0
+  },
+  {
+   "candidates": 103381,
+   "examined": 7452,
+   "accepted": 6600,
+   "small": 852,
+   "corrupt": 0
+  },
+  {
+   "candidates": 34363,
+   "examined": 7914,
+   "accepted": 6600,
+   "small": 1314,
+   "corrupt": 0
+  },
+  {
+   "candidates": 73836,
+   "examined": 7788,
+   "accepted": 6600,
+   "small": 1188,
+   "corrupt": 0
+  },
+  {
+   "candidates": 50779,
+   "examined": 7496,
+   "accepted": 6600,
+   "small": 896,
+   "corrupt": 0
+  },
+  {
+   "candidates": 21939,
+   "examined": 7406,
+   "accepted": 6600,
+   "small": 806,
+   "corrupt": 0
+  }
+ ],
+ "dedupe": {
+  "hash": "imagehash.phash (64 bit)",
+  "threshold": 4,
+  "replaced": 388,
+  "replaced_per_split": {
+   "val": 125,
+   "test": 263
+  },
+  "reserve_used_per_class": [
+   64,
+   11,
+   13,
+   13,
+   55,
+   12,
+   162,
+   38,
+   8,
+   12
+  ],
+  "within_split_near_pairs_initial": 734
+ },
+ "stats": {
+  "160": {
+   "mean": [
+    0.4754,
+    0.4666,
+    0.4223
+   ],
+   "std": [
+    0.2593,
+    0.2552,
+    0.273
+   ]
+  },
+  "32": {
+   "mean": [
+    0.4754,
+    0.4666,
+    0.4223
+   ],
+   "std": [
+    0.2402,
+    0.2366,
+    0.2561
+   ]
+  }
+ }
+}
