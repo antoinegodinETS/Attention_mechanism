@@ -11,9 +11,10 @@ The full plan, phases and decisions are in [`documentation/project-plan.md`](doc
 ## Layout
 
 ```
-src/attnvit/       package: data/ (datasets, get_dataset), models/ (from phase 2 on)
-configs/           experiment configs
-scripts/           check_env.py, dataset builders; rorqual/ and nibi/ hold the cluster scripts
+src/attnvit/       package: data/ (datasets, get_dataset, augment), models/ (ViT, attention),
+                   train.py, queue.py, config.py
+configs/           base.yaml (the reference recipe) and queue/ (one run per line)
+scripts/           check_env, calibrate, status, dataset builders; rorqual/ and nibi/ hold the cluster scripts
 data_splits/       committed split indices, synset mapping and manifests (see its README)
 tests/             CPU-only pytest suite
 results/ figures/  committed summaries and generated figures
@@ -75,18 +76,20 @@ Flash attention is expected to be unavailable on Turing.
 
 ### Rorqual (Digital Research Alliance of Canada, H100)
 
-On a login node, from the repository root (keep the clone in `$HOME` or project space, and large
-data in project or scratch space; scratch is purged):
+On a login node, from the repository clone (`~/SYS819`; keep large data in project space,
+scratch is purged after 60 days):
 
 ```bash
 bash scripts/rorqual/setup_env.sh                   # venv in ~/venvs/sys819-attention, Alliance wheels
-sbatch --account=def-<sponsor> scripts/rorqual/check_env.sbatch
+source scripts/rorqual/env.sh                       # account def-chdesa, paths, helpers
+sbatch scripts/rorqual/check_env.sbatch
 ```
 
-Placeholders to replace: `def-<sponsor>` is your allocation account (see `sshare -U`), and the
-`python/3.11` module version in both scripts should be checked with `module avail python`
-(override with `PYTHON_MODULE=python/3.X`). The job requests one H100 (`--gpus=h100:1`) for 15
-minutes and writes `sys819-check-env-<jobid>.out` in the submit directory.
+`scripts/rorqual/env.sh` is the one place the allocation account is set (`SBATCH_ACCOUNT`), along
+with the venv, the data store (`$SYS819_DATA_STORE`, project space) and the runs root
+(`$SYS819_RUNS`, project space). Source it before every `sbatch`. Check the `python/3.11` module
+version with `module avail python` (override with `PYTHON_MODULE=python/3.X`). Jobs write
+`<job-name>-<jobid>.out` in the submit directory.
 
 ## Datasets
 
@@ -160,3 +163,32 @@ download anything.
 `pytest` runs the whole CIFAR-10-HR pipeline on a synthetic ImageNet tree (it needs `imagehash`,
 installed with the `dev` extra). It also checks the committed split files. The `get_dataset`
 tests on real CIFAR-10 are skipped when `$SYS819_DATA` lacks it.
+
+## Training
+
+Runs are configured by `configs/base.yaml` (the reference model and the fixed augmentation and
+optimisation recipe) plus `key=value` overrides. Each run gets the id
+`<dataset>-<res>-p<P>-<mech>-<tag>-s<seed>` and a directory under `$SYS819_RUNS` (default
+`~/runs/sys819`, outside the repository) holding `config.yaml`, `metrics.jsonl`, `last.pt` and,
+once complete, `summary.json`. Running the same command again resumes from `last.pt`.
+
+```bash
+python -m attnvit.train configs/base.yaml tag=try seed=0 optim.epochs=2     # one run
+python -m attnvit.queue configs/queue/phase2_sanity.txt                    # every line of a queue
+python scripts/status.py configs/queue/phase2_sanity.txt                   # done / partial / pending
+python scripts/calibrate.py                                                # step times -> results/calibration.csv
+```
+
+The queue smoke-tests every pending run (one optimizer step) before training, skips runs that
+have a `summary.json` and resumes partial ones. On SIGUSR1 (Slurm's time-limit warning) a run
+stops cleanly with its last checkpoint and the queue exits with status 3.
+`data.name=synthetic` trains on random images without any dataset (tests and smoke runs).
+
+On Rorqual (after `source scripts/rorqual/env.sh`):
+
+```bash
+sbatch scripts/rorqual/calibrate.sbatch   # full H100, ~5 min: results/calibration.csv + 160 px decision
+sbatch scripts/rorqual/sanity.sbatch      # 3g.40gb MIG slice: 100-epoch CIFAR-10 baseline, resubmits itself
+```
+
+Both copy CIFAR-10 from `$SYS819_DATA_STORE` to the node-local `$SLURM_TMPDIR` first.
