@@ -1,7 +1,8 @@
 #!/bin/bash
-# Phase 2 calibration on one full Rorqual H100: times 50 training steps per registered mechanism
-# at 32 px / P4, 160 px / P4 and 160 px / P8, writes results/calibration.csv in the repository
-# clone and prints the 160 px block projection against the 40 GPU-hour decision rule.
+# Calibration on one full Rorqual H100: times 50 training steps of each study mechanism (full,
+# windows, axial) at 32 px / P4, 160 px / P4 and 160 px / P8, writes results/calibration.csv in
+# the repository clone (replacing the previous table) and prints the 160 px block projection
+# against the 40 GPU-hour decision rule.
 # A full H100 (not a MIG slice): the plan takes every time and memory number on one H100 type.
 #
 # Submit from a login node (the account comes from env.sh):

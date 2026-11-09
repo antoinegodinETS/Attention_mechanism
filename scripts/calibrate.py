@@ -1,6 +1,7 @@
 """Time real training steps per mechanism and project the 160 px GPU budget.
 
-For every registered attention mechanism and every setting (default 32 px / P4, 160 px / P4
+For each of the study's attention mechanisms (full, windows, axial; ``--mechanisms`` picks
+others, such as the ``axial_shared`` ablation) and every setting (default 32 px / P4, 160 px / P4
 and 160 px / P8) this builds the reference model from ``configs/base.yaml`` and times
 ``--steps`` full optimizer steps (fp16 autocast + GradScaler, mixup/cutmix, AdamW: the same
 ``train_step`` the training loop uses) on synthetic uint8 batches already on the GPU, after
@@ -10,7 +11,7 @@ included (see ``--loader-check``). An out-of-memory error is recorded as a resul
 
 It writes ``results/calibration.csv`` and prints the projected GPU-hours of the 9-run 160 px
 block (3 mechanisms x 3 seeds) at 100 and 50 epochs against the plan's 40-hour decision rule.
-Mechanisms not registered yet (phase 3) are projected with the slowest measured one.
+A study mechanism left out of the measurement is projected with the slowest measured one.
 
 Usage: python scripts/calibrate.py [--out results/calibration.csv] [--loader-check]
 """
@@ -34,7 +35,8 @@ from attnvit.train import build_model, build_optimizer, train_step
 from attnvit.utils import resolve_device, synchronize
 
 DEFAULT_SETTINGS = "32:4,160:4,160:8"
-STUDY_MECHANISMS = 3  # full, shifted windows, axial
+STUDY = ("full", "windows", "axial")  # the 3 mechanisms of the study; axial_shared is an ablation
+STUDY_MECHANISMS = len(STUDY)
 FIELDS = [
     "timestamp", "device", "gpu", "torch", "mechanism", "res", "patch", "tokens", "params",
     "batch_size", "micro_batch", "accum_steps", "amp_fp16", "attn_kernel", "sdpa_backend", "status",
@@ -196,7 +198,8 @@ def main(argv=None) -> int:
     p = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     p.add_argument("--config", default=str(REPO_ROOT / "configs" / "base.yaml"))
     p.add_argument("--set", dest="overrides", action="append", default=[], metavar="KEY=VALUE")
-    p.add_argument("--mechanisms", default="all", help="comma list or 'all' registered")
+    p.add_argument("--mechanisms", default="study",
+                   help="comma list, 'study' (%s) or 'all' registered" % ",".join(STUDY))
     p.add_argument("--settings", default=DEFAULT_SETTINGS, help="res:patch list (default %(default)s)")
     p.add_argument("--batch-size", type=int, default=128, help="effective batch (plan: 128)")
     p.add_argument("--accum", type=int, default=1, help="micro-batches per step (1 on an H100)")
@@ -214,7 +217,15 @@ def main(argv=None) -> int:
     args = p.parse_args(argv)
 
     device = resolve_device(args.device)
-    mechs = sorted(MECHANISMS) if args.mechanisms == "all" else args.mechanisms.split(",")
+    if args.mechanisms == "study":
+        mechs = list(STUDY)
+    elif args.mechanisms == "all":
+        mechs = sorted(MECHANISMS)
+    else:
+        mechs = args.mechanisms.split(",")
+    unknown = [m for m in mechs if m not in MECHANISMS]
+    if unknown:
+        p.error(f"unknown mechanism(s) {', '.join(unknown)}; registered: {', '.join(sorted(MECHANISMS))}")
     gpu = torch.cuda.get_device_name(device) if device.type == "cuda" else ""
     print(f"device {device} {gpu} | torch {torch.__version__} | mechanisms {', '.join(mechs)}")
     if device.type != "cuda":
@@ -233,11 +244,11 @@ def main(argv=None) -> int:
             rows.append(row)
             if row["status"] == "ok":
                 peak = f"{row['peak_mem_mib']:.0f} MiB" if row.get("peak_mem_mib") is not None else "-"
-                print(f"{mech:8s} {res:3d} px P{patch} N={row['tokens']:5d}  step {row['step_ms_median']:8.2f} ms "
+                print(f"{mech:12s} {res:3d} px P{patch} N={row['tokens']:5d}  step {row['step_ms_median']:8.2f} ms "
                       f"(p10 {row['step_ms_p10']:.2f}, p90 {row['step_ms_p90']:.2f})  peak {peak}  "
                       f"epoch ~{row['est_epoch_s']:.1f} s  run ~{row['est_run_h_100ep']:.2f} h @100ep")
             else:
-                print(f"{mech:8s} {res:3d} px P{patch}  OUT OF MEMORY")
+                print(f"{mech:12s} {res:3d} px P{patch}  OUT OF MEMORY")
 
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)

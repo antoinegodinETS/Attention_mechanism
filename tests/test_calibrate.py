@@ -18,9 +18,12 @@ def test_calibrate_writes_csv_on_cpu(script, tmp_path, capsys):
         argv += ["--set", s]
     assert cal.main(argv) == 0
     rows = list(csv.DictReader(open(out)))
-    assert [(r["mechanism"], r["res"], r["patch"]) for r in rows] == [("full", "32", "8"), ("full", "64", "8")]
+    # By default the study's three mechanisms, not the axial_shared ablation.
+    assert [(r["mechanism"], r["res"], r["patch"]) for r in rows] == [
+        (m, res, "8") for res in ("32", "64") for m in ("full", "windows", "axial")]
     assert all(r["status"] == "ok" and float(r["step_ms_median"]) > 0 for r in rows)
-    assert rows[0]["micro_batch"] == "4" and rows[0]["tokens"] == "16" and rows[1]["tokens"] == "64"
+    assert rows[0]["micro_batch"] == "4" and rows[0]["tokens"] == "16" and rows[3]["tokens"] == "64"
+    assert int(rows[2]["params"]) > int(rows[1]["params"])  # axial: two projection sets per block
     assert rows[0]["steps_per_epoch"] == str(45000 // 8)
     assert "not on a GPU" in capsys.readouterr().out
 
@@ -33,7 +36,7 @@ def test_block_projection_and_decision(script):
         {"mechanism": "full", "res": 32, "patch": 4, "status": "ok", "est_run_h_100ep": 0.2, "est_run_h_50ep": 0.1},
     ]
     proj = cal.block_projection(rows)
-    # Only full is registered: 3 seeds x 3 mechanisms, the two missing ones at full's cost.
+    # Only full measured: 3 seeds x 3 mechanisms, the two missing ones at full's cost.
     assert proj[(4, 100)]["hours"] == 18.0 and proj[(4, 100)]["stand_ins"] == 2
     assert proj[(8, 100)]["hours"] == pytest.approx(2.7)
     assert cal.decide(proj).startswith("option 1")
@@ -41,3 +44,9 @@ def test_block_projection_and_decision(script):
     assert cal.decide(proj, budget_h=5).startswith("option 3")
     rows[0]["status"] = "oom"
     assert math.isinf(cal.block_projection(rows)[(4, 50)]["hours"])
+
+
+def test_calibrate_rejects_unknown_mechanism(script, tmp_path):
+    cal = script("calibrate")
+    with pytest.raises(SystemExit):
+        cal.main(["--device", "cpu", "--mechanisms", "full,nope", "--out", str(tmp_path / "c.csv")])
