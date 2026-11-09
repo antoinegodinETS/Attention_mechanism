@@ -255,7 +255,7 @@ class ImageArrayDataset(Dataset):
         )
 
 
-# -- datasets built by the scripts (Imagenette-160, CIFAR-10-HR) --------------------------
+# -- datasets built by a script (CIFAR-10-HR) ---------------------------------------------
 # Layout under <data root>/<name>/:
 #   images_160.npy, images_32.npy   uint8 (N, R, R, 3), rows ordered train, val, test
 #   labels.npy                      int64 (N,)

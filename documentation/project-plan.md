@@ -17,7 +17,7 @@ The GPU budget at 160 px is the deciding constraint.
 
 1. Run a cost benchmark that needs no training first; it tests H1 and H2 directly.
 2. Time real training steps on the RTX 2060 early in S10, then pick the 160 px schedule with a fixed rule (see [Compute budget](#compute-budget)).
-3. Build CIFAR-10-HR with a time box: if it is not ready by Fri Nov 13, fall back to Imagenette-160 plus a 32 px copy.
+3. Build CIFAR-10-HR on the Nibi cluster from the Alliance's copy of ImageNet-21K (Winter 2021 release, `/datashare/imagenet/winter21_whole`; access confirmed Nov 9), aiming to finish by Fri Nov 13.
 4. Use each technique as its original paper does: a CLS token for full attention (ViT), global average pooling for shifted windows (Swin) and axial attention. Keep a flat (isotropic) Swin-style model with no patch merging, so that otherwise only the attention block changes.
 
 ## The project as documented
@@ -157,19 +157,18 @@ Effort is in focused working days (d) for one person; "GPU" means a run started 
 
 **Done when:** `pytest` runs on both PCs and `check_env.py` confirms CUDA, fp16 and memory-efficient SDPA on the GPU PC.
 
-### Phase 1: Data (S10; CIFAR-10 ~0.5 d; CIFAR-10-HR 2–4 d, time-boxed to Fri Nov 13)
+### Phase 1: Data (S10; CIFAR-10 ~0.5 d; CIFAR-10-HR 2–4 d, target Fri Nov 13)
 
 - [ ] **CIFAR-10:** torchvision loader, fixed seeded stratified 45k/5k split, committed index file, fast in-memory loader.
-- [ ] **CIFAR-10-HR** (on the main PC):
+- [ ] **CIFAR-10-HR** (built on Nibi from the Alliance's ImageNet-21K copy; see `documentation/data.md`):
     1. Synset mapping, starting from CINIC-10's published list; commit it.
-    2. Acquisition: ImageNet-21K needs an approved image-net.org account and is about 1 TB. Extract only the needed synsets. Check access, bandwidth and disk on day 1; record the release used.
+    2. Acquisition: read the needed synset folders in place from the Alliance's ImageNet-21K copy on Nibi (`/datashare/imagenet/winter21_whole`, opt-in after an image-net.org registration; access confirmed Nov 9), so nothing is downloaded. Record the release used (winter21).
     3. Filter (short side ≥ 160 px), resize, center-crop to 160×160, drop corrupt files.
     4. Sample 6,000 per class with a fixed seed; keep a manifest.
     5. Split 5,000 train / 1,000 test per class, then 10 % of train as validation.
     6. Deduplicate across splits with a perceptual hash.
     7. Write the 160 px array (~4.6 GB, as a memmap) and the 32 px copy (~184 MB).
     8. QA: per-class counts, a sample grid, balanced histogram.
-- **Fallback:** if not built by Nov 13, use Imagenette-160 (9,469 train, 3,925 val) plus a 32 px copy. Report 1 already discusses Imagenette, so the switch is easy to justify.
 
 **Done when:** both datasets load through one `get_dataset(name, res, split)` API with committed splits and QA outputs.
 
@@ -240,7 +239,7 @@ All experiments must finish by Nov 27 to leave S13 and S14 for writing.
 
 | Week | Main PC (CPU) | GPU PC (runs started by hand) | Milestone |
 | --- | --- | --- | --- |
-| S10 Nov 9–13 | Phases 0 → 2 → 3 code and tests; CIFAR-10-HR acquisition and build | `check_env`, calibration (by Wed Nov 11), baseline sanity run | 160 px decision; CIFAR-10-HR built or fallback chosen (Fri Nov 13) |
+| S10 Nov 9–13 | Phases 0 → 2 → 3 code and tests; CIFAR-10-HR acquisition and build | `check_env`, calibration (by Wed Nov 11), baseline sanity run | 160 px decision; CIFAR-10-HR built on Nibi (Fri Nov 13) |
 | S11 Nov 16–20 | Phase 4 script; analysis scaffolding | Cost benchmark; HP search (overnight); CIFAR-10 finals | Hyperparameters frozen by about Wed Nov 18 |
 | S12 Nov 23–27 | Aggregation and figure scripts; start the report | HR-32 finals; HR-160 finals (multi-day) | All runs done by about Fri Nov 27 |
 | S13 Nov 30–Dec 4 | Figures; presentation | Re-runs or the optional ablation only | Presentation |
@@ -313,11 +312,11 @@ Not recommended: `flash-attn` (needs a newer GPU than the RTX 2060), `fvcore` fo
 
 ## Risks
 
-The two biggest risks are ImageNet-21K access and the 160 px GPU time; both have a fallback decided in S10.
+The biggest risk is the 160 px GPU time, with a fallback decided in S10. ImageNet-21K access, the other big risk, is settled: CIFAR-10-HR is built from the Alliance's copy on Nibi (access confirmed Nov 9).
 
 | Risk | Likelihood | Impact | Mitigation |
 | --- | --- | --- | --- |
-| No ImageNet-21K access, or the download is too large or slow | High | Blocks CIFAR-10-HR | Time box to Nov 13, then Imagenette-160 |
+| The CIFAR-10-HR build on Nibi is delayed (queue, missing synsets, too few usable images) | Low | Delays CIFAR-10-HR | Run the counts-only mapping step first; the build reports per-class counts and resumes after interruptions |
 | 160 px runs do not fit the calendar | High at P4 / 100 epochs | Missing headline result | Calibrate in S10 and apply the decision rule; cheapest mechanism first |
 | Out of memory on 6 GB at 160 px | Medium | Runs crash | Memory-efficient SDPA, batch 32 × accumulation 4, activation checkpointing last |
 | Bug in the shift mask or axial reshape | Medium | Wrong conclusions | Phase 3 unit tests and the reference oracle |

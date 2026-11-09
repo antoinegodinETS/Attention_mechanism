@@ -5,7 +5,6 @@ name           res (px)    splits (train / val / test, trainval = train + val)
 =============  ==========  ===============================================================
 ``cifar10``    32          45,000 / 5,000 / 10,000
 ``cifar10_hr`` 32, 160     45,000 / 5,000 / 10,000 (ImageNet-21K, built on demand)
-``imagenette`` 32, 160     ~8,522 / ~947 / 3,925 (imagenette2-160; test = official val)
 =============  ==========  ===============================================================
 
 Datasets live under ``$SYS819_DATA`` (default ``~/data/sys819``), never in the repository.
@@ -25,7 +24,7 @@ from .common import (
     splits_dir,
 )
 
-DATASETS = ("cifar10", "cifar10_hr", "imagenette")
+DATASETS = ("cifar10", "cifar10_hr")
 
 
 def get_dataset(
@@ -54,10 +53,6 @@ def get_dataset(
         from .cifar10_hr import get_cifar10_hr
 
         return get_cifar10_hr(split, res, root=root, splits=splits, transform=transform, in_memory=in_memory)
-    if name == "imagenette":
-        from .imagenette import get_imagenette
-
-        return get_imagenette(split, res, root=root, splits=splits, transform=transform, in_memory=in_memory)
     raise ValueError(f"unknown dataset {name!r}; expected one of {DATASETS}")
 
 

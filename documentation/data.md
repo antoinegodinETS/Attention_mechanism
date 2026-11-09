@@ -1,32 +1,26 @@
 # Data (phase 1)
 
-Written 2026-11-09. How the three datasets are obtained, built and loaded, and what was checked
+Written 2026-11-09. How the two datasets are obtained, built and loaded, and what was checked
 about ImageNet-21K access for CIFAR-10-HR.
 
 ## The datasets at a glance
 
-All three load through `attnvit.data.get_dataset(name, res, split)`; items are
+Both load through `attnvit.data.get_dataset(name, res, split)`; items are
 `(uint8 tensor (3, res, res), int label)`. Data lives under `$SYS819_DATA` (default
 `~/data/sys819`), never in the repository.
 
 | `name` | `res` | train / val / test (trainval = train + val) | Committed split record | Status |
 | --- | --- | --- | --- | --- |
 | `cifar10` | 32 | 45,000 / 5,000 / 10,000 | `data_splits/cifar10_val_idx.json` | built on the main PC |
-| `imagenette` | 32, 160 | 8,522 / 947 / 3,925 | `data_splits/imagenette_val.json` | built on the main PC |
 | `cifar10_hr` | 32, 160 | 45,000 / 5,000 / 10,000 | `data_splits/cifar10_hr_manifest.csv.gz` | pipeline ready; build on Nibi |
 
 - **CIFAR-10**: torchvision's pickled batches, held in memory. Validation is 500 seeded random
   images per class of the official training set (`numpy.random.default_rng([0, class])`).
-- **Imagenette-160** (the fallback): the fastai `imagenette2-160.tgz` archive (SHA-256
-  `64d0c485…db02fe5`). Every image already has a 160 px short side; it is center-cropped to
-  160×160 and box-filtered to 32×32. Our test split is the official `val` folder; our val split is
-  a seeded stratified 10 % of the official `train` folder. Classes are not exactly balanced
-  (772–894 train images per class).
 - **CIFAR-10-HR**: the ten CIFAR-10 classes from ImageNet-21K, 6,000 images per class (4,500
   train, 500 val, 1,000 test), 160×160 plus a 32×32 copy, built by `scripts/build_cifar10_hr.py`.
 
-Per-channel mean and std (train split) are stored in each built dataset's `build_info.json` and
-exposed as `ds.mean`, `ds.std` and `ds.normalizer()`.
+Per-channel mean and std (train split) are stored in CIFAR-10-HR's `build_info.json` (CIFAR-10
+uses the usual published values) and exposed as `ds.mean`, `ds.std` and `ds.normalizer()`.
 
 ## CIFAR-10-HR build pipeline
 

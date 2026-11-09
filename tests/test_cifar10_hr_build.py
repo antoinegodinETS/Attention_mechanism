@@ -9,11 +9,13 @@ dedupe, output shapes, resumability and the get_dataset loader.
 import csv
 import gzip
 import io
+import pickle
 import tarfile
 
 import numpy as np
 import pandas as pd
 import pytest
+import torch
 from conftest import REPO_ROOT, load_script
 from PIL import Image
 
@@ -201,6 +203,17 @@ def test_get_dataset_on_built_hr(built):
     (other / "cifar10_hr_manifest.csv.gz").write_bytes(gzip.compress(b"index,split\n"))
     with pytest.raises(ValueError, match="checksum"):
         get_dataset("cifar10_hr", 32, "train", root=base / "data", splits=other)
+
+
+def test_memmap_dataset_pickles_without_the_array(built):
+    _, base, _ = built
+    ds = get_dataset("cifar10_hr", 160, "train", root=base / "data", splits=base / "splits")
+    assert "memmap" in repr(ds)
+    blob = pickle.dumps(ds)
+    assert len(blob) < 100_000, "a memmap-backed dataset must not pickle its pixels"
+    clone = pickle.loads(blob)
+    a, b = ds[5], clone[5]
+    assert torch.equal(a[0], b[0]) and a[1] == b[1]
 
 
 def test_qa_outputs(built):

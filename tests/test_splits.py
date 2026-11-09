@@ -1,14 +1,11 @@
 """Committed split files: stratification, determinism and disjointness (CPU only, no data needed
 except where marked)."""
 
-import csv
-from collections import Counter
-
 import numpy as np
 import pytest
 
-from attnvit.data import cifar10, imagenette
-from attnvit.data.common import REPO_ROOT, read_json, splits_dir, stratified_split
+from attnvit.data import cifar10
+from attnvit.data.common import read_json, splits_dir, stratified_split
 
 SPLITS = splits_dir()
 
@@ -56,29 +53,3 @@ def test_cifar10_split_matches_data_and_is_reproducible():
     assert len(train) == 45000
     assert not set(train.tolist()) & set(val.tolist())
     assert np.bincount(labels[train], minlength=10).tolist() == [4500] * 10
-
-
-def test_imagenette_split_file_structure():
-    spec = read_json(SPLITS / imagenette.SPLIT_FILE)
-    files = spec["val_files"]
-    assert len(files) == spec["n_val"] == len(set(files))
-    assert all(f.startswith("train/") for f in files), "val must come from the official train folder"
-    per_class = Counter(f.split("/")[1] for f in files)
-    assert [per_class[w] for w in imagenette.WNIDS] == spec["val_per_class"]
-    assert spec["n_official_train"] == 9469
-    assert sum(spec["val_per_class"]) == 947
-    # val is round(10 %) of each class of the official train folder (train + val in the QA table).
-    table = (REPO_ROOT / "results" / "data_qa" / "imagenette_counts.csv").read_text().splitlines()
-    qa = list(csv.DictReader(table))[:10]
-    for row, n_val in zip(qa, spec["val_per_class"]):
-        assert int(row["val"]) == n_val == round(0.1 * (int(row["train"]) + int(row["val"])))
-
-
-def test_imagenette_split_reproducible_from_file_list():
-    """Recompute the split from a synthetic list with the committed per-class sizes' generator."""
-    files = [f"train/{w}/{w}_{k}.JPEG" for w in imagenette.WNIDS for k in range(40)]
-    labels = np.repeat(np.arange(10), 40)
-    a = imagenette.stratified_val_files(files, labels)
-    b = imagenette.stratified_val_files(list(reversed(files)), labels[::-1])
-    assert a == b, "the split must not depend on the input order"
-    assert Counter(f.split("/")[1] for f in a) == {w: 4 for w in imagenette.WNIDS}

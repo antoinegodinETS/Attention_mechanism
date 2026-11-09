@@ -6,7 +6,6 @@ write these files; they are verified, never silently regenerated.
 | File | What | Made by |
 | --- | --- | --- |
 | `cifar10_val_idx.json` | 5,000 validation indices (500 per class) into torchvision's CIFAR-10 training set; train is the other 45,000. Holds the seed, method and a SHA-256 of the training labels. | `scripts/make_cifar10_split.py` |
-| `imagenette_val.json` | 947 validation files: a stratified 10 % of the official `imagenette2-160` train folder (seed 0); our test split is the official val folder. | `scripts/build_imagenette.py` |
 | `cinic10_synsets-to-cifar-10-classes.txt` | Verbatim copy of CINIC-10's synset-to-CIFAR-10-class list (see below). | downloaded |
 | `cifar10_hr_synsets.csv` | The same mapping as one row per synset: `synset, label, class, words, depth, cinic_images`. | `scripts/make_hr_synsets.py` |
 | `cifar10_hr_manifest.csv.gz` | Not present yet. Written by `scripts/build_cifar10_hr.py`: one row per CIFAR-10-HR image (array row, split, label, synset, source file, phash). Commit it after the build. | `scripts/build_cifar10_hr.py` |
