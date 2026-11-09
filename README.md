@@ -12,9 +12,10 @@ The full plan, phases and decisions are in [`documentation/project-plan.md`](doc
 
 ```
 src/attnvit/       package: data/ (datasets, get_dataset, augment), models/ (ViT, attention),
-                   train.py, queue.py, config.py
+                   train.py, queue.py, config.py, cost.py (analytic and counted FLOPs)
 configs/           base.yaml (the reference recipe) and queue/ (one run per line)
-scripts/           check_env, calibrate, status, dataset builders; rorqual/ and nibi/ hold the cluster scripts
+scripts/           check_env, calibrate, benchmark_cost, make_cost_figure, status, dataset builders;
+                   rorqual/ and nibi/ hold the cluster scripts
 data_splits/       committed split indices, synset mapping and manifests (see its README)
 tests/             CPU-only pytest suite
 results/ figures/  committed summaries and generated figures
@@ -186,7 +187,16 @@ python -m attnvit.train configs/base.yaml tag=try seed=0 optim.epochs=2     # on
 python -m attnvit.queue configs/queue/phase2_sanity.txt                    # every line of a queue
 python scripts/status.py configs/queue/phase2_sanity.txt                   # done / partial / pending
 python scripts/calibrate.py                                                # step times -> results/calibration.csv
+python scripts/benchmark_cost.py                                           # phase 4 -> results/cost_benchmark.csv
+python scripts/make_cost_figure.py                                         # CSV -> figures/cost_vs_tokens.png
 ```
+
+The cost benchmark (phase 4) needs no training and no dataset. Per mechanism and setting (32 to
+160 px at P4, plus 160 px / P8) it records the forward FLOPs counted by `FlopCounterMode` next to
+the analytic count (Report 1 attention formulas plus the MLP, patch embedding and head), the
+forward plus backward time per image (median of 50 synchronised steps after 10 warm-up steps,
+fp16, batch 128 for every case), the eval forward time, and the peak memory under SDPA and under
+the naive kernel that materialises the attention matrix. Out of memory is recorded as `oom`.
 
 The queue smoke-tests every pending run (one optimizer step) before training, skips runs that
 have a `summary.json` and resumes partial ones. On SIGUSR1 (Slurm's time-limit warning) a run
@@ -197,8 +207,9 @@ On Rorqual (after `source scripts/rorqual/env.sh`):
 
 ```bash
 sbatch scripts/rorqual/calibrate.sbatch   # full H100, ~5 min: results/calibration.csv + 160 px decision
+sbatch scripts/rorqual/benchmark_cost.sbatch  # full H100: results/cost_benchmark.csv + figures/cost_vs_tokens.png
 sbatch scripts/rorqual/sanity.sbatch      # 3g.40gb MIG slice: 100-epoch CIFAR-10 baseline, resubmits itself
 sbatch scripts/rorqual/smoke.sbatch       # 3g.40gb MIG slice: 2-epoch smoke runs of full, windows and axial
 ```
 
-Each copies CIFAR-10 from `$SYS819_DATA_STORE` to the node-local `$SLURM_TMPDIR` first.
+Each except the cost benchmark copies CIFAR-10 from `$SYS819_DATA_STORE` to the node-local `$SLURM_TMPDIR` first.
