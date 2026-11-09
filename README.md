@@ -244,3 +244,34 @@ for m in full windows axial; do
 done
 for m in full windows axial; do python scripts/status.py configs/queue/phase5_hpsearch_$m.txt; done
 ```
+
+## Final training (phase 6)
+
+27 runs of 100 epochs: 3 mechanisms x 3 seeds (0, 1, 2) on CIFAR-10, CIFAR-10-HR at 32 px and
+CIFAR-10-HR at 160 px. Every run starts from `configs/final/<mechanism>.yaml`, the configuration
+chosen by the search. A queue line changes only the seed and the dataset. Each run trains on the
+45k split, validates on the 5k split every epoch and evaluates the test split once after the
+last epoch. Run ids are `<dataset>-<res>-p4-<mechanism>-final-s<seed>`.
+
+```bash
+python -m attnvit.queue configs/queue/phase6_cifar10.txt         # also phase6_hr32.txt, phase6_hr160_<mech>.txt
+```
+
+On Rorqual every phase 6 job uses a full H100 (16 cores), so reported time and memory are
+comparable. CIFAR-10-HR must first be in `$SYS819_DATA_STORE/cifar10_hr` (see 'Datasets').
+Submit in the plan's order: CIFAR-10, then HR-32, then HR-160 with the cheapest mechanism first.
+
+```bash
+source ~/SYS819/scripts/rorqual/env.sh
+sbatch --job-name=sys819-final-cifar10 --export=ALL,SYS819_COND=cifar10 "$SYS819_REPO/scripts/rorqual/final32.sbatch"
+sbatch --job-name=sys819-final-hr32 --export=ALL,SYS819_COND=hr32 "$SYS819_REPO/scripts/rorqual/final32.sbatch"
+for m in windows axial full; do
+    sbatch --job-name=sys819-final-hr160-$m --export=ALL,SYS819_MECH=$m "$SYS819_REPO/scripts/rorqual/final160.sbatch"
+done
+sys819_activate   # status.py needs the venv
+for q in "$SYS819_REPO"/configs/queue/phase6_*.txt; do python "$SYS819_REPO/scripts/status.py" "$q"; done
+```
+
+The 32 px jobs (9 runs each, about 1.5 h) have a 3 h limit. Each HR-160 job (one mechanism, 3 runs,
+3-4.5 h) has an 8 h limit. Like the other queue jobs, each one resubmits itself if it hits its
+limit.

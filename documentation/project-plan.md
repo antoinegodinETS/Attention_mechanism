@@ -194,19 +194,33 @@ Effort is in focused working days (d) for one person; "GPU" means a run started 
 
 ### Phase 4: Cost benchmark, no training (Mon Nov 16, ~1 d plus ~1 GPU-hour)
 
-- [ ] FLOPs from `FlopCounterMode` next to the Report 1 formulas.
-- [ ] Forward plus backward time per image (synchronised, warm-up, median of 50 steps).
-- [ ] Peak memory under SDPA (training setting) and naive attention (shows N² memory; out-of-memory is recorded as a result).
-- [ ] Resolutions 32, 64, 96, 128 and 160 px at P4, plus P8 at 160.
+- [x] FLOPs from `FlopCounterMode` next to the Report 1 formulas.
+- [x] Forward plus backward time per image (synchronised, warm-up, median of 50 steps).
+- [x] Peak memory under SDPA (training setting) and naive attention (shows N² memory; out-of-memory is recorded as a result).
+- [x] Resolutions 32, 64, 96, 128 and 160 px at P4, plus P8 at 160.
 
 **Done when:** `results/cost_benchmark.csv` exists and the cost-vs-N figure is drafted; H1 and H2 can be stated with measured numbers.
 
+**Done (Nov 9, Rorqual job 26203994, one full H100):** `results/cost_benchmark.csv` and `figures/cost_vs_tokens.png`. At 160 px / P4 (1,600 tokens), full / windows / axial: forward 26.2 / 8.7 / 13.7 GFLOPs; training 1.06 / 0.74 / 0.80 ms per image; peak memory 10.2 / 10.3 / 13.7 GB with the efficient SDPA kernel and 67.4 / 10.8 / 16.2 GB with the naive kernel.
+
 ### Phase 5: Hyperparameter search on CIFAR-10 (S11, ~3–5 GPU-hours overnight)
 
-- [ ] Random search, 8 trials per mechanism, shared space and seed list (trial i gets the same configuration for every mechanism), 30 epochs each on the 45k/5k split.
+- [x] Random search, 8 trials per mechanism, shared space and seed list (trial i gets the same configuration for every mechanism), 30 epochs each on the 45k/5k split.
 - Space: learning rate log-uniform 3e-4 to 3e-3; weight decay log-uniform 0.01 to 0.1; drop-path in {0, 0.05, 0.1}; warmup in {5, 10} epochs. Fixed: architecture, augmentation, batch 128, optimizer.
 
 **Done when:** all 24 trials are in `results/hpsearch_cifar10.csv` and one chosen configuration per mechanism is in `configs/final/`.
+
+**Done (Nov 9, Rorqual jobs 26204000–26204002, 1g.10gb slices):** all 24 trials are in `results/hpsearch_cifar10.csv`; `configs/final/` holds the selected configurations, unchanged for phase 6:
+
+| Mechanism | Trial | Learning rate | Weight decay | Drop-path | Warmup | Val acc (epoch 30) |
+| --- | --- | --- | --- | --- | --- | --- |
+| full | 5 | 1.12e-3 | 0.084 | 0 | 10 | 77.0 % |
+| windows | 3 | 9.01e-4 | 0.0953 | 0.1 | 10 | 72.6 % |
+| axial | 3 | 9.01e-4 | 0.0953 | 0.1 | 10 | 75.1 % |
+
+Stability: full attention trained in all 8 trials (72.6–77.0 %). Windows collapsed to about 28 % in 2 of 8 trials (lr 1.87e-3 and 2.13e-3). Axial collapsed to near chance (13–19 %) in 5 of 8 trials: every trial with lr ≥ 1.0e-3 except trial 5 (lr 1.12e-3, warmup 10). The collapse happens as the warmup passes roughly 1.3e-3 (axial trial 1 had 33.7 % validation accuracy at epoch 2, then fell to chance). Each selected setting lies inside its mechanism's stable range. The report should state this sensitivity to the learning rate as a finding.
+
+The search runs' `peak_mem_mib` values rise by one model plus its gradients per trial (full 517 → 640 MiB), because the queue kept the previous run's model alive. The queue now frees each run before starting the next. Search memory is not reported; phase 6 numbers come from the fixed queue.
 
 ### Phase 6: Final training (S11–S12, the critical path)
 
@@ -218,6 +232,22 @@ Effort is in focused working days (d) for one person; "GPU" means a run started 
 - Order: CIFAR-10 first (cheap, early results for the presentation), then HR-32, then HR-160 cheapest mechanism first; the optional axial ablation if time allows.
 
 **Done when:** all 27 runs have a `summary.json` with test accuracy, training time, time per epoch and peak memory.
+
+**Launch (Rorqual, account def-chdesa, full H100 per job).** Queues in `configs/queue/phase6_*.txt` start from `configs/final/<mechanism>.yaml` and override only the seed and the dataset. Run ids: `<dataset>-<res>-p4-<mechanism>-final-s<seed>`. Batch 128 fits at 160 px (calibration peak 10–14 GB of 80), so there is no accumulation. CIFAR-10-HR must be in `$SYS819_DATA_STORE/cifar10_hr` (rsync from Nibi, see `documentation/data.md`). The jobs copy only the array they need to the node-local disk.
+
+```bash
+source ~/SYS819/scripts/rorqual/env.sh
+cd "$SYS819_REPO"
+sbatch --job-name=sys819-final-cifar10 --export=ALL,SYS819_COND=cifar10 scripts/rorqual/final32.sbatch   # 9 runs, ~1.5 GPU-h
+sbatch --job-name=sys819-final-hr32 --export=ALL,SYS819_COND=hr32 scripts/rorqual/final32.sbatch         # 9 runs, ~1.5 GPU-h
+for m in windows axial full; do                                                                          # ~3.0 / 3.3 / 4.4 GPU-h
+    sbatch --job-name=sys819-final-hr160-$m --export=ALL,SYS819_MECH=$m scripts/rorqual/final160.sbatch
+done
+sys819_activate   # status.py needs the venv
+for q in configs/queue/phase6_*.txt; do python scripts/status.py "$q"; done
+```
+
+The five jobs can run in parallel; they are submitted in the plan's order. Total is about 15 H100 GPU-hours. Each job resubmits itself if it reaches its time limit (3 h at 32 px, 8 h at 160 px), and resubmitting one by hand is always safe.
 
 ### Phase 7: Evaluation and figures (end S12 to start S13, ~1.5 d)
 
