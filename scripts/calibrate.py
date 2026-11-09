@@ -32,7 +32,7 @@ from attnvit.config import REPO_ROOT, load_config
 from attnvit.data.augment import MixupCutmix, Normalize
 from attnvit.models.attention import MECHANISMS
 from attnvit.train import build_model, build_optimizer, train_step
-from attnvit.utils import resolve_device, synchronize
+from attnvit.utils import resolve_device, timed
 
 DEFAULT_SETTINGS = "32:4,160:4,160:8"
 STUDY = ("full", "windows", "axial")  # the 3 mechanisms of the study; axial_shared is an ablation
@@ -51,14 +51,6 @@ def parse_settings(text: str) -> list[tuple[int, int]]:
         res, patch = item.split(":")
         out.append((int(res), int(patch)))
     return out
-
-
-def _timed(fn, device) -> float:
-    synchronize(device)
-    t0 = time.perf_counter()
-    fn()
-    synchronize(device)
-    return time.perf_counter() - t0
 
 
 def measure(cfg, device, *, steps: int, warmup: int, eval_iters: int, train_images: int,
@@ -95,7 +87,7 @@ def measure(cfg, device, *, steps: int, warmup: int, eval_iters: int, train_imag
             step()
         if device.type == "cuda":
             torch.cuda.reset_peak_memory_stats(device)
-        times = [_timed(step, device) for _ in range(steps)]
+        times = [timed(step, device) for _ in range(steps)]
         if device.type == "cuda":
             row["peak_mem_mib"] = round(torch.cuda.max_memory_allocated(device) / 2**20, 1)
             row["peak_mem_reserved_mib"] = round(torch.cuda.max_memory_reserved(device) / 2**20, 1)
@@ -109,7 +101,7 @@ def measure(cfg, device, *, steps: int, warmup: int, eval_iters: int, train_imag
                 model(normalize(xe))
 
         forward()
-        eval_times = [_timed(forward, device) for _ in range(eval_iters)]
+        eval_times = [timed(forward, device) for _ in range(eval_iters)]
     except torch.OutOfMemoryError:
         row["status"] = "oom"
         return row

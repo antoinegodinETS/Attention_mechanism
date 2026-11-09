@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import gc
 import hashlib
 import json
 import os
@@ -38,6 +39,22 @@ def resolve_device(name: str = "auto") -> torch.device:
 def synchronize(device: torch.device) -> None:
     if device.type == "cuda":
         torch.cuda.synchronize(device)
+
+
+def timed(fn, device: torch.device) -> float:
+    """Seconds taken by ``fn()``, with the device synchronised before and after."""
+    synchronize(device)
+    t0 = time.perf_counter()
+    fn()
+    synchronize(device)
+    return time.perf_counter() - t0
+
+
+def free_device_memory(device: torch.device) -> None:
+    """Collect garbage and return cached CUDA blocks, e.g. between benchmark cases or after an OOM."""
+    gc.collect()
+    if device.type == "cuda":
+        torch.cuda.empty_cache()
 
 
 class Timer:
