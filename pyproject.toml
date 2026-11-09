@@ -22,7 +22,8 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest", "timm"]
+# imagehash (perceptual-hash dedupe of CIFAR-10-HR) is in dev too, so the CPU suite covers the build.
+dev = ["pytest", "timm", "imagehash"]
 data = ["imagehash"]
 
 [tool.setuptools.packages.find]
