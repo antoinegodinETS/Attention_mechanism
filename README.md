@@ -81,6 +81,7 @@ scratch is purged after 60 days):
 
 ```bash
 bash scripts/rorqual/setup_env.sh                   # venv in ~/venvs/sys819-attention, Alliance wheels
+                                                    # (imagehash >= 4.3 from PyPI if the wheelhouse is older)
 source scripts/rorqual/env.sh                       # account def-chdesa, paths, helpers
 sbatch scripts/rorqual/check_env.sbatch
 ```
@@ -171,6 +172,10 @@ optimisation recipe) plus `key=value` overrides. Each run gets the id
 `<dataset>-<res>-p<P>-<mech>-<tag>-s<seed>` and a directory under `$SYS819_RUNS` (default
 `~/runs/sys819`, outside the repository) holding `config.yaml`, `metrics.jsonl`, `last.pt` and,
 once complete, `summary.json`. Running the same command again resumes from `last.pt`.
+Training time is split into `data_wait_s` (blocked on the DataLoader) and `compute_time_s`; compare
+mechanisms on the compute time. `peak_mem_mib` is the allocator's allocated peak, with the reserved
+peak in `peak_mem_reserved_mib`. `summary.json` also records the CPU side of the run (`num_workers`,
+`usable_cpus`, `slurm_cpus_per_task`, `slurm_job_id`, `hostname`).
 
 ```bash
 python -m attnvit.train configs/base.yaml tag=try seed=0 optim.epochs=2     # one run
