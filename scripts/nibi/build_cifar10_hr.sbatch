@@ -4,8 +4,7 @@
 #
 # Prerequisites (README, "CIFAR-10-HR"): an image-net.org account, the Alliance ImageNet
 # opt-in, access to Nibi, and the project venv (bash scripts/rorqual/setup_env.sh works on Nibi
-# too; add imagehash with `pip install imagehash` if the wheelhouse lacks it, Nibi nodes have
-# internet access).
+# too; it installs imagehash >= 4.3, from PyPI when the wheelhouse only has the broken 4.1.0).
 #
 # Submit from the repository root on a Nibi login node:
 #     sbatch --account=def-<sponsor> scripts/nibi/build_cifar10_hr.sbatch
@@ -41,6 +40,11 @@ cd "${SLURM_SUBMIT_DIR:-.}"
 echo "host $(hostname)  job ${SLURM_JOB_ID:-none}  cpus ${SLURM_CPUS_PER_TASK:-?}  $(date -Is)"
 echo "source $SOURCE  release $RELEASE  data root $SYS819_DATA  steps $STEPS"
 python -c "import imagehash, attnvit" || { echo "imagehash or attnvit missing in $VENV_DIR"; exit 1; }
+python - <<'PY' || { echo "imagehash < 4.3 in $VENV_DIR: rerun bash scripts/rorqual/setup_env.sh"; exit 1; }
+import importlib.metadata as md, sys
+v = md.version("imagehash")
+sys.exit(0 if tuple(int(p) for p in v.split(".")[:2] if p.isdigit()) >= (4, 3) else 1)
+PY
 # /datashare is an NFS3 mount: a user in more than 16 Unix groups may be refused access.
 ls "$SOURCE/n02691156" >/dev/null || { echo "cannot read $SOURCE (opt-in done? group limit?)"; exit 1; }
 mkdir -p "$SYS819_DATA"

@@ -23,8 +23,9 @@ dependencies = [
 
 [project.optional-dependencies]
 # imagehash (perceptual-hash dedupe of CIFAR-10-HR) is in dev too, so the CPU suite covers the build.
-dev = ["pytest", "timm", "imagehash"]
-data = ["imagehash"]
+# imagehash < 4.3 calls PIL.Image.ANTIALIAS, which Pillow 10 removed.
+dev = ["pytest", "timm", "imagehash>=4.3"]
+data = ["imagehash>=4.3"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
