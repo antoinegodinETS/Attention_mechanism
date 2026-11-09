@@ -17,6 +17,7 @@ interrupted the queue (resubmit to continue), 1 if any run failed.
 from __future__ import annotations
 
 import argparse
+import gc
 import shlex
 import sys
 import traceback
@@ -108,6 +109,9 @@ def _run_queue(path, root, smoke, extra_overrides, log, stop: StopSignals) -> in
             log(f"FAILED    {e.run_id}\n{traceback.format_exc()}")
             status = "failed"
         results[e.run_id] = status
+        # A Trainer is a reference cycle (its log closure): collect it now so its model and
+        # gradients do not count towards the next run's peak memory.
+        gc.collect()
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
         if status == "interrupted":

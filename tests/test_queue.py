@@ -110,3 +110,31 @@ def test_phase3_smoke_queue_covers_the_three_mechanisms():
         for mech in ("full", "windows", "axial")
     ]
     assert all(e.cfg.optim.epochs == 2 for e in entries)
+
+
+def test_finished_run_is_freed_before_the_next_one(tmp_path, monkeypatch):
+    # A Trainer refers to itself through its log closure, so only the cyclic garbage collector
+    # frees its model. On a GPU a model still alive when the next run starts inflates that run's
+    # peak memory (each phase 5 trial peaked about one model + gradients above the one before).
+    import gc
+    import weakref
+
+    import attnvit.queue as queue_mod
+
+    models, alive_at_start = [], []
+
+    class RecordingTrainer(Trainer):
+        def run(self, *args, **kwargs):
+            alive_at_start.append(sum(r() is not None for r in models))
+            status = super().run(*args, **kwargs)
+            models.append(weakref.ref(self.model))
+            return status
+
+    monkeypatch.setattr(queue_mod, "Trainer", RecordingTrainer)
+    q = write_queue(tmp_path / "q.txt", [tiny_line("tag=a"), tiny_line("tag=b")])
+    gc.disable()  # the collector must not free the cycle by chance
+    try:
+        assert run_queue(q, root=tmp_path / "runs", smoke=False, log=lambda m: None) == 0
+    finally:
+        gc.enable()
+    assert alive_at_start == [0, 0]
