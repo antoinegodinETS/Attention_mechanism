@@ -15,7 +15,8 @@ src/attnvit/       package: data/ (datasets, get_dataset, augment), models/ (ViT
                    train.py, queue.py, config.py, cost.py (analytic and counted FLOPs)
 configs/           base.yaml (the reference recipe), queue/ (one run per line), search/ (the phase 5
                    trial list) and final/ (the configuration chosen per mechanism)
-scripts/           check_env, calibrate, benchmark_cost, make_cost_figure, status, dataset builders;
+scripts/           check_env, calibrate, benchmark_cost, make_cost_figure, collect_runs,
+                   aggregate_results, status, dataset builders;
                    rorqual/ and nibi/ hold the cluster scripts
 data_splits/       committed split indices, synset mapping and manifests (see its README)
 tests/             CPU-only pytest suite
@@ -275,3 +276,30 @@ for q in "$SYS819_REPO"/configs/queue/phase6_*.txt; do python "$SYS819_REPO/scri
 The 32 px jobs (9 runs each, about 1.5 h) have a 3 h limit. Each HR-160 job (one mechanism, 3 runs,
 3-4.5 h) has an 8 h limit. Like the other queue jobs, each one resubmits itself if it hits its
 limit.
+
+## Results and figures (phase 7)
+
+Two steps. `collect_runs.py` turns finished run folders (each with `config.yaml`, `metrics.jsonl`
+and `summary.json`) into two small committed CSVs; raw run folders and checkpoints stay out of
+the repository. A folder without `summary.json` is still training and is skipped.
+
+```bash
+python scripts/collect_runs.py /path/to/final-runs        # or set $SYS819_RUNS and omit the path
+                                                          # -> results/final_runs.csv, results/final_curves.csv
+PYTHONPATH=src python scripts/aggregate_results.py        # regenerates every table and figure below
+```
+
+`aggregate_results.py` reads only committed CSVs (`results/final_runs.csv`, `final_curves.csv`,
+`cost_benchmark.csv`, `hpsearch_cifar10.csv`) and writes:
+
+- `results/main_table.csv` / `.md`: test accuracy mean ± std over seeds per mechanism and
+  condition, training time, peak memory, parameters, forward GFLOPs, and the selected
+  hyperparameters;
+- `results/hypotheses.csv` / `.md`: the H1-H4 verdicts with the measured numbers behind each,
+  H3/H4 per condition (thresholds are stated at the top of the Markdown file);
+- `figures/cost_vs_tokens.png`, `accuracy_by_mechanism.png`, `accuracy_vs_cost.png`,
+  `val_curves.png` and `attention_keys.png`.
+
+A condition with no finished run shows as pending (fewer than 3 seeds: partial), and H3/H4 stay
+provisional until every condition is complete. When the remaining runs land, re-run both
+commands; no code change is needed.

@@ -251,10 +251,12 @@ The five jobs can run in parallel; they are submitted in the plan's order. Total
 
 ### Phase 7: Evaluation and figures (end S12 to start S13, ~1.5 d)
 
-- [ ] `aggregate_results.py` builds the main table (mean ± std per mechanism and condition) and an H1–H4 verdict table.
-- [ ] Figures from the CSVs only: cost vs tokens N (log-log, with analytic curves); accuracy by mechanism for the three conditions; accuracy vs GFLOPs and vs training time; validation curves per mechanism; a diagram of which keys each query sees.
+- [x] `aggregate_results.py` builds the main table (mean ± std per mechanism and condition) and an H1–H4 verdict table.
+- [x] Figures from the CSVs only: cost vs tokens N (log-log, with analytic curves); accuracy by mechanism for the three conditions; accuracy vs GFLOPs and vs training time; validation curves per mechanism; a diagram of which keys each query sees.
 
 **Done when:** every number and figure regenerates from committed CSVs with one command.
+
+**Status (Nov 10, 21 of 27 runs):** `scripts/collect_runs.py` brings finished run folders into `results/final_runs.csv` and `results/final_curves.csv`; `PYTHONPATH=src python scripts/aggregate_results.py` regenerates `results/main_table.{csv,md}`, `results/hypotheses.{csv,md}` and the five figures in `figures/`. HR-160 axial and full show as pending and H3/H4 as provisional; when they land, re-run the collector on the run folder and the aggregate (no code change). The H1/H2 verdicts rest on the phase 4 benchmark and are final.
 
 ### Phase 8: Written deliverables (S13–S14, ~3–4 d)
 
