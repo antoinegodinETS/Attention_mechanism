@@ -1,0 +1,10 @@
+condition,condition_label,res,tokens,mechanism,status,n_seeds,seeds,test_acc_mean,test_acc_std,best_val_acc_mean,train_time_min_mean,train_time_min_std,time_per_epoch_s_mean,peak_mem_gib_max,params_m,gflops_fwd,bench_train_ms_per_image,gpu
+cifar10-32,CIFAR-10 32 px,32,64,full,complete,3,0 1 2,88.8067,0.1626,88.5067,6.5787,0.0252,3.9472,0.5049,2.6976,0.3754,0.0772,NVIDIA H100 80GB HBM3
+cifar10-32,CIFAR-10 32 px,32,64,windows,complete,3,0 1 2,86.1300,0.1873,85.6200,8.1826,0.0338,4.9095,0.5003,2.6972,0.3480,0.0912,NVIDIA H100 80GB HBM3
+cifar10-32,CIFAR-10 32 px,32,64,axial,complete,3,0 1 2,86.8533,0.0808,86.3333,10.1384,0.0528,6.0831,0.6708,4.0312,0.5179,0.1140,NVIDIA H100 80GB HBM3
+cifar10_hr-32,CIFAR-10-HR 32 px,32,64,full,complete,3,0 1 2,71.4367,0.2173,71.1600,6.7124,0.0258,4.0275,0.5049,2.6976,0.3754,0.0772,NVIDIA H100 80GB HBM3
+cifar10_hr-32,CIFAR-10-HR 32 px,32,64,windows,complete,3,0 1 2,69.8967,0.0252,69.9867,8.2918,0.0122,4.9751,0.5003,2.6972,0.3480,0.0912,NVIDIA H100 80GB HBM3
+cifar10_hr-32,CIFAR-10-HR 32 px,32,64,axial,complete,3,0 1 2,70.4500,0.3651,70.9267,10.2197,0.0245,6.1318,0.6708,4.0312,0.5179,0.1140,NVIDIA H100 80GB HBM3
+cifar10_hr-160,CIFAR-10-HR 160 px,160,1600,full,pending,0,,,,,,,,,,26.2451,1.0595,
+cifar10_hr-160,CIFAR-10-HR 160 px,160,1600,windows,complete,3,0 1 2,80.8433,0.5452,80.4267,56.1791,0.0230,33.7074,10.1261,2.9921,8.6999,0.7403,NVIDIA H100 80GB HBM3
+cifar10_hr-160,CIFAR-10-HR 160 px,160,1600,axial,pending,0,,,,,,,,,,13.6544,0.7987,
