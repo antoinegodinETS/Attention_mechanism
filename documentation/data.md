@@ -1,7 +1,7 @@
 # Data (phase 1)
 
-Written 2026-11-09. How the two datasets are obtained, built and loaded, and what was checked
-about ImageNet-21K access for CIFAR-10-HR.
+How the two datasets were obtained, built and loaded. Both were built on 2026-11-09: CIFAR-10 on a
+PC, CIFAR-10-HR on Nibi from ImageNet-21K winter21.
 
 ## The datasets at a glance
 
@@ -9,10 +9,10 @@ Both load through `attnvit.data.get_dataset(name, res, split)`; items are
 `(uint8 tensor (3, res, res), int label)`. Data lives under `$SYS819_DATA` (default
 `~/data/sys819`), never in the repository.
 
-| `name` | `res` | train / val / test (trainval = train + val) | Committed split record | Status |
+| `name` | `res` | train / val / test (trainval = train + val) | Committed split record | Built |
 | --- | --- | --- | --- | --- |
-| `cifar10` | 32 | 45,000 / 5,000 / 10,000 | `data_splits/cifar10_val_idx.json` | built on the main PC |
-| `cifar10_hr` | 32, 160 | 45,000 / 5,000 / 10,000 | `data_splits/cifar10_hr_manifest.csv.gz` | pipeline ready; build on Nibi |
+| `cifar10` | 32 | 45,000 / 5,000 / 10,000 | `data_splits/cifar10_val_idx.json` | on a PC |
+| `cifar10_hr` | 32, 160 | 45,000 / 5,000 / 10,000 | `data_splits/cifar10_hr_manifest.csv.gz` | on Nibi (winter21) |
 
 - **CIFAR-10**: torchvision's pickled batches, held in memory. Validation is 500 seeded random
   images per class of the official training set (`numpy.random.default_rng([0, class])`).
@@ -60,147 +60,100 @@ The CPU test suite runs the whole pipeline on a synthetic source tree
 (`tests/test_cifar10_hr_build.py`). The tree has real synset ids, images of varied sizes
 (some under 160 px), one corrupt file, planted duplicates and one synset stored as a tar.
 
-## Getting ImageNet-21K: the Nibi route (primary)
+## The build on Nibi
 
-The Alliance keeps a copy of ImageNet on **Nibi only**, in `/datashare/imagenet/`, an NFS3
-mount. That copy includes the full ImageNet-21K **Winter 2021** release (`winter21_whole`:
-13,153,500 images in 19,167 classes, one folder per synset). Source: the Alliance wiki page
-"ImageNet", marked as a draft. `docs.alliancecan.ca` blocks automated access, so it was read
-from the Wayback Machine snapshot of 2025-11-21:
-<https://web.archive.org/web/20251121224538/https://docs.alliancecan.ca/wiki/ImageNet>.
-The captain checked it on Nibi on 2026-11-09:
+### Source
 
-- `ls /datashare/imagenet/` lists `DownSampled  ILSVRC2012  tiny-imagenet-200  winter21_whole`.
-- `ls /datashare/imagenet/winter21_whole | wc -l` gives 19167.
-- Synset folders hold flat files such as `n02691156/n02691156_10000.JPEG`; `n02691156`
-  (airplane) holds 1,434 files.
-- The wiki tree also shows a `tars/` entry; the count above suggests there is none, and the build
-  does not use it.
+The Alliance keeps a copy of ImageNet on **Nibi only**, in `/datashare/imagenet/` (an NFS3 mount;
+the ImageNet page of the Alliance wiki says it is "available only on Nibi"). It includes the full
+ImageNet-21K **Winter 2021** release, `winter21_whole`: 13,153,500 images in 19,167 classes, one
+folder of flat files per synset (for example `n02691156/n02691156_10000.JPEG`). Source: the
+Alliance wiki page "ImageNet", read from the Wayback Machine snapshot of 2025-11-21
+(<https://web.archive.org/web/20251121224538/https://docs.alliancecan.ca/wiki/ImageNet>), and
+checked on Nibi on 2026-11-09 (`ls /datashare/imagenet/winter21_whole | wc -l` gives 19167).
+Nibi nodes have internet access; Rorqual's compute nodes do not, so the arrays were built on Nibi
+and copied to Rorqual.
 
-The archived Nibi wiki page (snapshot 2026-10-29,
-<https://web.archive.org/web/20261029135549/https://docs.alliancecan.ca/wiki/Nibi>) gives:
+Access needs three things, all granted on 2026-11-09: an approved image-net.org account (terms of
+access for non-commercial research and education), the ImageNet opt-in on CCDB
+(<https://ccdb.computecanada.ca/services/opt_in>), and Nibi access in CCDB (*Resources → Access
+Systems*). The wiki warns that a user in more than 16 Unix groups may be refused the NFS3 mount.
 
-- login node `nibi.alliancecan.ca`, which is also the node for rsync and scp;
-- **all Nibi nodes have internet access**;
-- `/scratch` has a 1 TB soft quota per user with a 60-day grace period;
-- CPU nodes have 192 cores and about 750 GB of memory.
+### Steps
 
-**Rorqual**: its archived page (snapshot 2026-11-02) does not mention ImageNet or `/datashare`,
-and the ImageNet page says the dataset is "available only on Nibi". Rorqual's compute nodes have
-no internet access, so the arrays are built on Nibi and copied over.
-
-### Steps for the captain
-
-1. **image-net.org account**: sign up at <https://image-net.org/download.php>, log in and accept
-   the terms of access (non-commercial research and education). The full-dataset download
-   requires an approved account. **Done** (access confirmed 2026-11-09).
-2. **Alliance opt-in**: on CCDB, open <https://ccdb.computecanada.ca/services/opt_in> and opt in
-   to the ImageNet dataset. This confirms the image-net.org registration. **Done** (access to
-   `/datashare/imagenet` confirmed).
-3. **Nibi access**: request access to Nibi in CCDB (*Resources → Access Systems*) if it is not
-   active yet. **Done** (login on `l3.nibi` as `godinets` confirmed). The wiki warns that a user
-   in more than 16 Unix groups may be refused access to the NFS3 mount.
-4. **Environment on Nibi** (login node, once): clone the repository and create the venv.
-   `scripts/rorqual/setup_env.sh` follows the standard Alliance software stack and is expected to
-   work on Nibi too. The wheelhouse ships `imagehash` 4.1.0, which calls `PIL.Image.ANTIALIAS`
-   (removed in Pillow 10) and crashes the build; the script then upgrades `imagehash` alone to
-   >= 4.3 from PyPI (Nibi login nodes have internet access).
+1. **Environment** (Nibi login node, once). `scripts/rorqual/setup_env.sh` works on Nibi too. The
+   wheelhouse ships `imagehash` 4.1.0, which calls `PIL.Image.ANTIALIAS` (removed in Pillow 10);
+   the script upgrades `imagehash` alone to >= 4.3 from PyPI, and the build job checks it.
 
    ```bash
    git clone <repo-url> ~/src/Attention_mechanism && cd ~/src/Attention_mechanism
    bash scripts/rorqual/setup_env.sh                  # or PYTHON_MODULE=python/3.X bash ...
-   source ~/venvs/sys819-attention/bin/activate && python -c "import imagehash; print(imagehash.__version__)"  # >= 4.3
    ```
 
-5. **Quick check** (lists the candidates and prints per-class counts and missing synsets, then
-   stops; read `sys819-build-hr-<jobid>.out` and
+2. **Counts only** (the mapping step; read `sys819-build-hr-<jobid>.out` and
    `$SCRATCH/sys819-data/cifar10_hr/work/synsets_report.csv`):
 
    ```bash
    sbatch --account=def-<sponsor> --export=ALL,STEPS=mapping scripts/nibi/build_cifar10_hr.sbatch
    ```
 
-6. **Full build** (resumes after the mapping step; 16 cores, 32 GB, 4 h requested):
+3. **Full build** (resumes after the mapping step; 16 cores, 32 GB, 4 h requested):
 
    ```bash
    sbatch --account=def-<sponsor> scripts/nibi/build_cifar10_hr.sbatch
    ```
 
    Equivalent direct call: `python scripts/build_cifar10_hr.py --source
-   /datashare/imagenet/winter21_whole --release winter21 --workers 16`.
-7. **Commit the split record** from the Nibi clone (or copy the files to your PC clone):
-   `data_splits/cifar10_hr_manifest.csv.gz`, `results/data_qa/cifar10_hr_*` and
-   `figures/data_qa/cifar10_hr_*`.
-8. **Copy the arrays** (run on the destination, which pulls through the Nibi login node;
-   `--exclude work` skips the 5 GB of intermediate files):
+   /datashare/imagenet/winter21_whole --release winter21 --workers 16`. The data root is
+   `$SYS819_DATA`, by default `$SCRATCH/sys819-data` (falling back to `/scratch/$USER`).
+4. **Commit the split record** from the Nibi clone: `data_splits/cifar10_hr_manifest.csv.gz`,
+   `results/data_qa/cifar10_hr_*` and `figures/data_qa/cifar10_hr_*`. A rebuild must reproduce the
+   committed manifest; the loader refuses arrays whose manifest checksum differs.
+5. **Copy the arrays** (run on the destination, which pulls through the Nibi login node;
+   `--exclude work` skips the intermediate files):
 
    ```bash
-   # main PC or GPU PC (WSL):
-   rsync -av --progress --exclude work <user>@nibi.alliancecan.ca:<nibi-data-root>/cifar10_hr/ ~/data/sys819/cifar10_hr/
-   # Rorqual login node (rorqual.alliancecan.ca), into project space:
+   # Rorqual login node, into project space:
    rsync -av --progress --exclude work <user>@nibi.alliancecan.ca:<nibi-data-root>/cifar10_hr/ \
        ~/links/projects/<account>/$USER/sys819-data/cifar10_hr/
+   # a PC (WSL):
+   rsync -av --progress --exclude work <user>@nibi.alliancecan.ca:<nibi-data-root>/cifar10_hr/ ~/data/sys819/cifar10_hr/
    ```
 
-   `<nibi-data-root>` is the `SYS819_DATA` printed at the top of the job log (default
-   `$SCRATCH/sys819-data`). Logins from one cluster to another may ask for multifactor
-   authentication; the Globus collections `alliancecan#nibi` and `alliancecan#rorqual` are the
-   alternative.
+   `<nibi-data-root>` is the `SYS819_DATA` printed at the top of the job log. Logins from one
+   cluster to another may ask for multifactor authentication; the Globus collections
+   `alliancecan#nibi` and `alliancecan#rorqual` are the alternative.
 
-**Not verified on Nibi** (no cluster access from this machine): the Python module version, that
-`$SCRATCH` is set (the job falls back to `/scratch/$USER`), and the runtime and memory figures.
-The wheelhouse's `imagehash` is 4.1.0, too old (see step 4).
+### What the build produced
 
-### Release and synset coverage
+From `results/data_qa/cifar10_hr_qa.json` (release `winter21`, manifest SHA-256 `664e6c8c…`):
 
-CINIC-10 mapped synsets of the **fall11** release (21,841 synsets, 14,197,122 images, the counts
-image-net.org still shows). **winter21** removed 2,674 synsets in the 2019 cleanup, mostly in the
-*person* subtree (<https://www.image-net.org/update-sep-17-2019.php>, read through the Wayback
-Machine). None of the ten classes is under *person*, so few mapped synsets should be missing.
-The exact winter21 synset list is not public: the copy on Hugging Face (`timm/imagenet-w21-wds`)
-is gated. The mapping step therefore reports missing and empty synsets on the real tree.
+- **Synsets**: 36 of the 1,359 mapped synsets are missing or empty in winter21. Candidate files per
+  class range from 21,939 (truck) to 812,069 (bird).
+- **Filter**: about 7,200–7,950 candidates were examined per class to accept 6,600; 8.5–16.9 %
+  were dropped for a short side under 160 px, none for being corrupt.
+- **Dedupe**: 388 cross-split near-duplicates (phash, Hamming distance ≤ 4) were replaced, 125 in
+  val and 263 in test, using 8–162 reserve images per class.
+- **Result**: 60,000 images, exactly 4,500 / 500 / 1,000 per class for train / val / test.
+  Train-split mean (0.4754, 0.4666, 0.4223); std (0.2593, 0.2552, 0.2730) at 160 px and
+  (0.2402, 0.2366, 0.2561) at 32 px.
 
-Offline evidence that 6,000 usable images per class exist: `timm`'s
-`imagenet21k_miil_w21_synsets.txt` lists the 10,450 winter21 classes that Ridnik et al. (2021,
-*ImageNet-21K Pretraining for the Masses*) kept after dropping classes with fewer than 500
-images. Of the mapped synsets it contains, per class: airplane 21, automobile 29, bird 679, cat 42,
-deer 25, dog 72, frog 29, horse 59, ship 42, truck 19. So even the smallest class (truck) has at
-least 19 × 500 = 9,500 images before the 160 px filter. CINIC-10 also reports at least 21,939
-fall11 images per class. ImageNet photos are mostly larger than 160 px on the short side, so the
-filter should keep most of them; the filter step prints the real rejection counts.
-
-The build records `--release winter21` in `build_info.json` and in the QA JSON.
+CINIC-10 mapped synsets of the **fall11** release; winter21 removed 2,674 synsets in the 2019
+cleanup, mostly in the *person* subtree (<https://www.image-net.org/update-sep-17-2019.php>),
+which none of the ten classes is under.
 
 ### Resources
 
-- **Disk** under `$SYS819_DATA/cifar10_hr`: 4.6 GB + 184 MB of arrays, plus about 5.1 GB in
-  `work/pool` (6,600 crops per class) and the candidate list. `--drop-pool` deletes the pool after
-  a successful write.
-- **Reads**: only the visited images, roughly 70,000–80,000 JPEGs (about 10 GB) from the NFS
-  mount, instead of the 1.1 TB release.
-- **Memory**: bounded by design (chunked statistics and hashing); 32 GB is a safe request.
-- **Time**: on the main PC, decoding and cropping a 500×375 JPEG takes about 3 ms per core and
-  the phash about 2 ms (measured 2026-11-09). Filter and dedupe should therefore take minutes on
-  16 cores, plus NFS read time; listing about 1,359 folders over NFS may take longer. 4 h is
-  requested, with generous margin.
+- **Disk** under `$SYS819_DATA/cifar10_hr`: 4.6 GB + 184 MB of arrays, plus about 5 GB in
+  `work/` (6,600 crops per class in `work/pool` and the candidate list). `--drop-pool` deletes the
+  pool after a successful write.
+- **Reads**: only the examined images (about 75,000 JPEGs) from the NFS mount, instead of the
+  1.1 TB release.
+- **Memory**: bounded by design (chunked statistics and hashing); 32 GB was requested.
 
-## Alternative: manual download from image-net.org (short)
+## Alternative: manual download (not used)
 
-Without Nibi, an approved image-net.org account gives the full-release archives from the
-download page after login: `fall11_whole.tar` (about 1.3 TB) or the newer `winter21_whole.tar.gz`
-(about 1.1 TB). They are commonly described as a tar of per-synset tars (`n02691156.tar`, ...).
-**Not verified**: image-net.org refused connections from this machine, and the file list is only
-shown after login.
-
-To keep only the needed synsets, stream the archive once and extract the 1,359 member tars
-(`data_splits/cifar10_hr_synsets.csv`). The whole archive is read but not stored:
-
-```bash
-cut -d, -f1 data_splits/cifar10_hr_synsets.csv | tail -n +2 | sed 's/$/.tar/' > /tmp/hr_members.txt
-# Member names may carry a leading directory; check with `tar -tzf <archive> | head` first.
-curl -u <user> -L <archive-url> | tar -xzf - -C /path/to/in21k_subset -T /tmp/hr_members.txt
-python scripts/build_cifar10_hr.py --source /path/to/in21k_subset --release winter21
-```
-
-The build reads per-synset `<wnid>.tar` files in place, so they need not be unpacked. The
-per-synset download API that CINIC-10 used (through ImageNet_Utils) may no longer exist.
+Without Nibi, an approved image-net.org account gives the full-release archive
+(`winter21_whole.tar.gz`, about 1.1 TB), commonly described as a tar of per-synset tars. Extract
+only the 1,359 synset tars listed in `data_splits/cifar10_hr_synsets.csv` and point `--source` at
+them; the build reads per-synset `<wnid>.tar` files in place. This route was never tried.
