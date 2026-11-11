@@ -10,9 +10,9 @@ Test accuracy (%) is the mean ± sample standard deviation over 3 seeds, evaluat
 | CIFAR-10-HR 32 px | full | 3/3 | 71.44 ± 0.22 | 6.7 ± 0.0 | 0.50 | 2.70 | 0.38 |
 | CIFAR-10-HR 32 px | windows | 3/3 | 69.90 ± 0.03 | 8.3 ± 0.0 | 0.50 | 2.70 | 0.35 |
 | CIFAR-10-HR 32 px | axial | 3/3 | 70.45 ± 0.37 | 10.2 ± 0.0 | 0.67 | 4.03 | 0.52 |
-| CIFAR-10-HR 160 px | full | 0/3 (pending) | pending | pending | pending |  | 26.25 |
+| CIFAR-10-HR 160 px | full | 3/3 | 81.01 ± 0.71 | 77.1 ± 0.0 | 9.95 | 2.99 | 26.25 |
 | CIFAR-10-HR 160 px | windows | 3/3 | 80.84 ± 0.55 | 56.2 ± 0.0 | 10.13 | 2.99 | 8.70 |
-| CIFAR-10-HR 160 px | axial | 0/3 (pending) | pending | pending | pending |  | 13.65 |
+| CIFAR-10-HR 160 px | axial | 3/3 | 81.67 ± 1.08 | 60.4 ± 0.0 | 13.45 | 4.33 | 13.65 |
 
 ## Selected hyperparameters
 

@@ -224,12 +224,14 @@ The search runs' `peak_mem_mib` values rise by one model plus its gradients per 
 
 ### Phase 6: Final training (S11–S12, the critical path)
 
-- [ ] 3 mechanisms × 3 seeds × 100 epochs on CIFAR-10.
-- [ ] The same on CIFAR-10-HR 32 px.
-- [ ] CIFAR-10-HR 160 px under the decision rule.
+- [x] 3 mechanisms × 3 seeds × 100 epochs on CIFAR-10.
+- [x] The same on CIFAR-10-HR 32 px.
+- [x] CIFAR-10-HR 160 px under the decision rule.
 - Reuse the CIFAR-10 hyperparameters for both HR conditions; keep the effective batch at 128 with accumulation at 160 px.
 - Retrain on the same 90 % split, evaluate once on test at the final epoch, no early stopping.
 - Order: CIFAR-10 first (cheap, early results for the presentation), then HR-32, then HR-160 cheapest mechanism first; the optional axial ablation if time allows.
+
+**Done (Nov 11):** all 27 runs finished on Rorqual (full H100s); HR-160 took 77 / 56 / 60 min per run for full / windows / axial.
 
 **Done when:** all 27 runs have a `summary.json` with test accuracy, training time, time per epoch and peak memory.
 
@@ -256,7 +258,7 @@ The five jobs can run in parallel; they are submitted in the plan's order. Total
 
 **Done when:** every number and figure regenerates from committed CSVs with one command.
 
-**Status (Nov 10, 21 of 27 runs):** `scripts/collect_runs.py` brings finished run folders into `results/final_runs.csv` and `results/final_curves.csv`; `PYTHONPATH=src python scripts/aggregate_results.py` regenerates `results/main_table.{csv,md}`, `results/hypotheses.{csv,md}` and the five figures in `figures/`. HR-160 axial and full show as pending and H3/H4 as provisional; when they land, re-run the collector on the run folder and the aggregate (no code change). The H1/H2 verdicts rest on the phase 4 benchmark and are final.
+**Status (Nov 11, 27 of 27 runs):** `scripts/collect_runs.py` brings finished run folders into `results/final_runs.csv` and `results/final_curves.csv`; `PYTHONPATH=src python scripts/aggregate_results.py` regenerates `results/main_table.{csv,md}`, `results/hypotheses.{csv,md}` and the five figures in `figures/`. Every condition has 3/3 seeds and all H1-H4 verdicts are final.
 
 ### Phase 8: Written deliverables (S13–S14, ~3–4 d)
 
